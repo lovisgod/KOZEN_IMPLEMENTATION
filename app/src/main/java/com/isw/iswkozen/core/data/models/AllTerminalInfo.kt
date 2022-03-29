@@ -1,0 +1,103 @@
+package com.isw.iswkozen.core.data.models
+
+import com.isw.iswkozen.core.data.utilsData.Constants
+import org.simpleframework.xml.*
+
+@Root(name = "allTerminalInfo", strict = false)
+data class AllTerminalInfo (
+        @field:Element(name = "responseCode", required = false)
+        var responseCode: String = "",
+
+        @field:Element(name = "responseMessage", required = false)
+        var responseMessage: String = "",
+
+        @field:ElementList(name = "terminalAllowedTxTypes", inline=true, required = false)
+//        var terminalAllowedTxTypes: List<TerminalAllowedTxTypes>? = null,
+        var terminalAllowedTxTypes: List<String>? = null,
+
+        @field:Element(name = "terminalInfoBySerials", required = false)
+        var terminalInfo: TerminalInfo? = null,
+
+        @field:Element(name = "tmsRouteTypeConfig", required = false)
+        var tmsRouteTypeConfig: TmsRouteTypeConfig? = null
+)
+
+@Root(name = "terminalInfoBySerials", strict = false)
+class TerminalInfo(
+
+        @field:Element(name = "terminalCode", required = false)
+        var terminalCode: String = "Terminal",
+
+        @field:Element(name = "cardAcceptorId", required = false)
+        var cardAcceptorId: String = "000000000000000",
+
+        @field:Element(name = "merchantId", required = false)
+        var merchantId: String = "000000000000000",
+
+        @field:Element(name = "merchantName", required = false)
+        var merchantName: String = "Railway Operator",
+
+        @field:Element(name = "merchantAddress1", required = false)
+        var merchantAddress1: String = "merchantAddress1",
+
+        @field:Element(name = "merchantAddress2", required = false)
+        var merchantAddress2: String = "merchantAddress2",
+
+        @field:Element(name = "merchantPhoneNumber", required = false)
+        var merchantPhoneNumber: String = "08000000000",
+
+        @field:Element(name = "merchantEmail", required = false)
+        var merchantEmail: String = "sample@interswitchng.com",
+
+        @field:Element(name = "merchantState", required = false)
+        var merchantState: String = "Lagos state",
+
+        @field:Element(name = "tmsRouteType", required = false)
+        var tmsRouteType: String = "",
+
+        @field:Element(name = "merchantCity", required = false)
+        var merchantCity: String = "Lagos",
+
+        @field:Element(name = "qtbMerchantCode", required = false)
+        var qtbMerchantCode: String? = "",
+
+        @field:Element(name = "qtbMerchantAlias", required = false)
+        var qtbMerchantAlias: String? = "",
+
+        @field:Element(name = "cardAcceptorNameLocation", required = false)
+        var cardAcceptorNameLocation: String = "",
+
+        @field:Element(name = "merchantCategoryCode", required = false)
+        var merchantCategoryCode: String = "0840",
+
+        var  terminalCountryCode: String = "0840",
+        var  transCurrencyCode: String = "0840",
+        var transCurrencyExp: String = "02",
+        var terminalType: String = "22",
+        var terminalCapabilities: String = "E0F8C8",
+        var terminalExtCapabilities: String = "F000F0F001",
+        var terminalEntryMode: String = "05"
+)
+
+@Root(name = "terminalAllowedTxTypes", strict = false)
+class TerminalAllowedTxTypes(
+        @field:Element(name = "applicationDescription", required = false)
+        var applicationDescription: String = ""
+)
+
+@Root(name = "tmsRouteTypeConfig", strict = false)
+class TmsRouteTypeConfig(
+
+        @field:Element(name = "port", required = false)
+        var port: String = "${Constants.ISW_DEFAULT_TERMINAL_PORT}",
+
+        @field:Element(name = "ip", required = false)
+        var ip: String = "${Constants.ISW_DEFAULT_TERMINAL_IP}",
+
+        @field:Element(name = "key", required = false)
+        var key: String = "${Constants.getCMS(false)}",
+
+        @field:Element(name = "name", required = false)
+        var name: String = "")
+
+
