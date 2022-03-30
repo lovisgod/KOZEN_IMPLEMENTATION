@@ -10,7 +10,7 @@ import org.koin.dsl.module.module
 val applayerModule = module {
 
 
-    single { IswDataRepo(get()) }
+    single { IswDataRepo(get(), get()) }
 
     viewModel { IswKozenViewModel(get()) }
 

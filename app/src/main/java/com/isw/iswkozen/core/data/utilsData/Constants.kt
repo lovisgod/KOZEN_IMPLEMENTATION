@@ -4,6 +4,8 @@ import com.isw.iswkozen.BuildConfig
 
 object Constants {
 
+    internal const val EXCEPTION_CODE = 9000
+
     // URL END POINTS
     internal const val CODE_END_POINT = "till.json"
     internal const val TRANSACTION_STATUS_QR = "transactions/qr"

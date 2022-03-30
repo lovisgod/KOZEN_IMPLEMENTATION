@@ -1,9 +1,13 @@
 package com.isw.iswkozen.views.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.utilsData.Constants
+import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.views.repo.IswDataRepo
 import kotlinx.coroutines.*
 
@@ -21,6 +25,9 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     private val _terminalSetupStatus = MutableLiveData<Boolean>()
     val terminalSetupStatus: LiveData<Boolean> = _terminalSetupStatus
+
+    private val _keyMStatus = MutableLiveData<Int>()
+    val keyMStatus: LiveData<Int> = _keyMStatus
 
 
     fun setupTerminal () {
@@ -40,6 +47,50 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                 var loaded = dataRepo.loadAllConfig()
                 println("terminalConfigLoaded: ${loaded}")
                 _terminalSetupStatus.postValue(loaded)
+            }
+
+        }
+    }
+
+
+     fun writePinKey() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.writePinKey()
+                println("key result: ${result}")
+                _keyMStatus.postValue(result)
+            }
+
+        }
+    }
+
+
+     fun  writeDukptKey()  {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.writeDukptKey()
+                println("key result: ${result}")
+                _keyMStatus.postValue(result)
+            }
+
+        }
+    }
+
+     fun readterminalDetails() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.readterminalDetails()
+                println("terminalConfigLoaded: ${result}")
+            }
+        }
+    }
+
+     fun eraseKeys()  {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.eraseKeys()
+                println("key result: ${result}")
+                _keyMStatus.postValue(result)
             }
 
         }

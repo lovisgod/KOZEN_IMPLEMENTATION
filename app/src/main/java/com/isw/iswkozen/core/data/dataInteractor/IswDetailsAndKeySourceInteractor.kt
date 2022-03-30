@@ -1,22 +1,16 @@
 package com.isw.iswkozen.core.data.dataInteractor
 
 import com.isw.iswkozen.core.data.datasource.IswConfigDataSource
+import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
 import com.isw.iswkozen.core.data.models.TerminalInfo
 
-class IswConfigSourceInteractor(var iswConfigDataSource: IswConfigDataSource) {
-
-    suspend fun loadTerminal(terminalData: TerminalInfo) = iswConfigDataSource.loadTerminal(terminalData)
-    suspend fun loadAid() = iswConfigDataSource.loadAid()
-    suspend fun loadCapk () = iswConfigDataSource.loadCapk()
-    suspend fun loadVisa() = iswConfigDataSource.loadVisa()
-    suspend fun loadExceptionFile() = iswConfigDataSource.loadExceptionFile()
-    suspend fun loadRevocationIPK() = iswConfigDataSource.loadRevocationIPK()
-    suspend fun loadUnionPay() = iswConfigDataSource.loadUnionPay()
-    suspend fun loadMasterCard() = iswConfigDataSource.loadMasterCard()
-    suspend fun loadDiscover() = iswConfigDataSource.loadDiscover()
-    suspend fun loadAmex() = iswConfigDataSource.loadAmex()
-    suspend fun loadMir() = iswConfigDataSource.loadMir()
-    suspend fun loadVisaDRL() = iswConfigDataSource.loadVisaDRL()
-    suspend fun loadAmexDRL() = iswConfigDataSource.loadAmexDRL()
-    suspend fun loadService() = iswConfigDataSource.loadService()
+class IswDetailsAndKeySourceInteractor(var iswDetailsAndKeyDataSource: IswDetailsAndKeyDataSource) {
+    suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String) =
+        iswDetailsAndKeyDataSource.writeDukPtKey(keyIndex, keyData, KsnData)
+    suspend fun writePinKey(keyIndex: Int, keyData: String) =
+        iswDetailsAndKeyDataSource.writePinKey(keyIndex, keyData)
+    suspend fun readTerminalInfo() =
+        iswDetailsAndKeyDataSource.readTerminalInfo()
+    suspend fun eraseKey() =
+        iswDetailsAndKeyDataSource.eraseKey()
 }

@@ -27,4 +27,7 @@ object KeysUtils {
         fun testCMS() = "DBEECACCB4210977ACE73A1D873CA59F" //EPMS=DBEECACCB4210977ACE73A1D873CA59F
     }
 
+    const val PINKEY_INDEX = 2
+    const val DUKPTKEY_INDEX = 1
+
 }

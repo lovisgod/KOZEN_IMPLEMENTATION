@@ -1,22 +1,14 @@
 package com.isw.iswkozen.core.data.datasource
 
+import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
 
 
-interface IswConfigDataSource {
-    suspend fun loadTerminal(terminalData: TerminalInfo)
-    suspend fun loadAid()
-    suspend fun loadCapk ()
-    suspend fun loadVisa()
-    suspend fun loadExceptionFile()
-    suspend fun loadRevocationIPK()
-    suspend fun loadUnionPay()
-    suspend fun loadMasterCard()
-    suspend fun loadDiscover()
-    suspend fun loadAmex()
-    suspend fun loadMir()
-    suspend fun loadVisaDRL()
-    suspend fun loadAmexDRL()
-    suspend fun loadService()
+interface IswDetailsAndKeyDataSource {
+//    suspend fun downloadTerminalDetails(terminalData: IswTerminalModel)
+    suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int
+    suspend fun writePinKey(keyIndex: Int, keyData: String): Int
+    suspend fun readTerminalInfo():TerminalInfo
+    suspend fun eraseKey(): Int
 
 }
