@@ -2,9 +2,13 @@ package com.isw.iswkozen.core.data.dataInteractor
 
 import com.isw.iswkozen.core.data.datasource.IswConfigDataSource
 import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
+import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.network.AuthInterface
 
-class IswDetailsAndKeySourceInteractor(var iswDetailsAndKeyDataSource: IswDetailsAndKeyDataSource) {
+class IswDetailsAndKeySourceInteractor(
+    var iswDetailsAndKeyDataSource: IswDetailsAndKeyDataSource,
+    ) {
     suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String) =
         iswDetailsAndKeyDataSource.writeDukPtKey(keyIndex, keyData, KsnData)
     suspend fun writePinKey(keyIndex: Int, keyData: String) =
@@ -13,4 +17,10 @@ class IswDetailsAndKeySourceInteractor(var iswDetailsAndKeyDataSource: IswDetail
         iswDetailsAndKeyDataSource.readTerminalInfo()
     suspend fun eraseKey() =
         iswDetailsAndKeyDataSource.eraseKey()
+
+    suspend fun saveTerminalInfo(data: TerminalInfo) =
+        iswDetailsAndKeyDataSource.saveTerminalInfo(data)
+
+    suspend fun downloadTerminalDetails(data: IswTerminalModel) =
+        iswDetailsAndKeyDataSource.downloadTerminalDetails(data)
 }

@@ -1,9 +1,18 @@
 package com.isw.iswkozen
 
+import android.Manifest
+import android.annotation.TargetApi
+import android.app.AlertDialog
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import com.isw.iswkozen.core.utilities.DeviceUtils.requestPermissionsCompat
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.standalone.KoinComponent
@@ -16,6 +25,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
     lateinit var dukptKeyBtn: Button
     lateinit var pinKeyBtn: Button
     lateinit var readTermInfoBtn: Button
+    lateinit var downloadTermInfoBtn: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +36,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         dukptKeyBtn = findViewById(R.id.dukpy_key)
         pinKeyBtn = findViewById(R.id.pinkey)
         readTermInfoBtn = findViewById(R.id.read_term_info)
+        downloadTermInfoBtn = findViewById(R.id.downl_term_info)
+
+
+        checkPermission()
 
         handleClicks()
+    }
+
+
+    private fun hasReadPhonePermissions(): Boolean {
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    fun checkPermission() {
+
+        if (hasReadPhonePermissions()) {
+           Toast.makeText(this, "permissions granted", Toast.LENGTH_LONG)
+        }  else {
+          requestPermission()
+        }
+
+        // Wait for permission result
+    }
+
+    private fun requestPermission() {
+        // Request the permission. The result will be received in onRequestPermissionResult().
+        requestPermissionsCompat(arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE), 4, this)
     }
 
 
@@ -40,6 +76,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         dukptKeyBtn.setOnClickListener(this)
         pinKeyBtn.setOnClickListener(this)
         readTermInfoBtn.setOnClickListener(this)
+        downloadTermInfoBtn.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -58,6 +95,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
             readTermInfoBtn -> {
                 viewmodel.readterminalDetails()
+            }
+
+            downloadTermInfoBtn -> {
+                viewmodel.dowloadDetails()
+                viewmodel.downloadterminalDetailsStatus.observe(this, Observer {
+                   println("download successful => $it")
+                })
             }
         }
     }

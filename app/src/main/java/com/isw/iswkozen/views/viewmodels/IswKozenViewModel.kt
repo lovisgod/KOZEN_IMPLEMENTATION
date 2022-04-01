@@ -26,6 +26,9 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     private val _terminalSetupStatus = MutableLiveData<Boolean>()
     val terminalSetupStatus: LiveData<Boolean> = _terminalSetupStatus
 
+    private val _downloadterminalDetailsStatus = MutableLiveData<Boolean>()
+    val downloadterminalDetailsStatus: LiveData<Boolean> = _downloadterminalDetailsStatus
+
     private val _keyMStatus = MutableLiveData<Int>()
     val keyMStatus: LiveData<Int> = _keyMStatus
 
@@ -39,6 +42,18 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
            }
 
        }
+    }
+
+
+    fun dowloadDetails () {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var downloaded = dataRepo.downloadTerminalDetails()
+                println("terminalDetailsLoaded: ${downloaded}")
+                _downloadterminalDetailsStatus.postValue(downloaded)
+            }
+
+        }
     }
 
     fun loadAllConfig () {
@@ -80,7 +95,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var result = dataRepo.readterminalDetails()
-                println("terminalConfigLoaded: ${result}")
+                println("terminalConfigLoaded: ${result?.terminalCode}")
             }
         }
     }

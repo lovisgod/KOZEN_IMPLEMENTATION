@@ -4,7 +4,8 @@ object ExportModules {
 
     val ConfigModule = configModule
     val applayermodule = applayerModule
+    val networkmodule = networkModule
 
-    val modules = listOf(ConfigModule, applayermodule)
+    val modules = listOf(networkmodule, ConfigModule, applayermodule)
 
 }

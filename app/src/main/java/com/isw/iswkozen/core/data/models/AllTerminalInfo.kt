@@ -1,8 +1,12 @@
 package com.isw.iswkozen.core.data.models
 
+import android.os.Parcelable
+import androidx.versionedparcelable.VersionedParcelize
 import com.isw.iswkozen.core.data.utilsData.Constants
+import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.*
 
+@Parcelize
 @Root(name = "allTerminalInfo", strict = false)
 data class AllTerminalInfo (
         @field:Element(name = "responseCode", required = false)
@@ -20,8 +24,9 @@ data class AllTerminalInfo (
 
         @field:Element(name = "tmsRouteTypeConfig", required = false)
         var tmsRouteTypeConfig: TmsRouteTypeConfig? = null
-)
+): Parcelable
 
+@Parcelize
 @Root(name = "terminalInfoBySerials", strict = false)
 class TerminalInfo(
 
@@ -77,7 +82,15 @@ class TerminalInfo(
         var terminalCapabilities: String = "E0F8C8",
         var terminalExtCapabilities: String = "F000F0F001",
         var terminalEntryMode: String = "05"
-)
+): Parcelable {
+        override fun toString(): String {
+                """code: ${terminalCode}
+                   capailty: ${terminalCapabilities}
+                   name: ${merchantName}
+                """.trimIndent()
+                return super.toString()
+        }
+}
 
 @Root(name = "terminalAllowedTxTypes", strict = false)
 class TerminalAllowedTxTypes(
@@ -85,6 +98,7 @@ class TerminalAllowedTxTypes(
         var applicationDescription: String = ""
 )
 
+@Parcelize
 @Root(name = "tmsRouteTypeConfig", strict = false)
 class TmsRouteTypeConfig(
 
@@ -98,6 +112,6 @@ class TmsRouteTypeConfig(
         var key: String = "${Constants.getCMS(false)}",
 
         @field:Element(name = "name", required = false)
-        var name: String = "")
+        var name: String = ""): Parcelable
 
 

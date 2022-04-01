@@ -4,7 +4,9 @@ import com.isw.iswkozen.BuildConfig
 
 object Constants {
 
+    val TOKEN: String = "TOKEN"
     internal const val EXCEPTION_CODE = 9000
+    internal const val TERMINAL_INFO_KEY = "TERMINAL_INFO_KEY"
 
     // URL END POINTS
     internal const val CODE_END_POINT = "till.json"
@@ -131,7 +133,7 @@ object Constants {
 
 
     val ISW_KIMONO_BASE_URL: String get() {
-        return if(checkEmv()) Test.ISW_KIMONO_BASE_URL
+        return if(!checkEmv()) Test.ISW_KIMONO_BASE_URL
         else Production.ISW_KIMONO_BASE_URL
     }
 

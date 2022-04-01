@@ -1,20 +1,25 @@
 package com.isw.iswkozen.views.repo
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
+import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.utilities.DeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
-                  val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
-                  val dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+                  val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor) {
 
+
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     // keys wite, download and parameter downloads
 
@@ -59,6 +64,31 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
+    suspend fun downloadTerminalDetails(): Boolean {
+        try {
+            return withContext(dispatcher) {
+                println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
+                var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
+                iswDetailsAndKeySourceInteractor.downloadTerminalDetails(data)
+
+                // read the data
+                var info = readterminalDetails()
+
+                println("info =>  ${info.toString()}")
+                println("info =>  ${info?.terminalCode}")
+                if (info != null) {
+
+                    // load the details into the terminal
+                    loadTerminal(info)
+                }
+                true
+            }
+        } catch (e:Exception) {
+            Log.e("term data down error", e.stackTraceToString())
+            return  false
+        }
+    }
+
     suspend fun eraseKeys() : Int {
         try {
             return withContext(dispatcher) {
@@ -74,6 +104,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
         try {
             return withContext(dispatcher) {
+
                 iswConfigSourceInteractor.loadTerminal(terminalData)
                 return@withContext true
             }
