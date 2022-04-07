@@ -4,16 +4,23 @@ import com.google.gson.Gson
 import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.utilsData.Constants.ISW_TOKEN_URL
 import com.isw.iswkozen.core.data.utilsData.Constants.TERMINAL_INFO_KEY
+import com.isw.iswkozen.core.data.utilsData.Constants.TOKEN
 import com.isw.iswkozen.core.network.AuthInterface
+import com.isw.iswkozen.core.network.kimonoInterface
+import com.isw.iswkozen.core.network.models.TokenRequestModel
 import com.isw.iswkozen.core.network.models.convertConfigResponseToAllTerminalInfo
 import com.isw.iswkozen.core.utilities.HexUtil
+import com.isw.iswkozen.core.utilities.ISWGeneralException
 import com.pixplicity.easyprefs.library.Prefs
 import com.pos.sdk.security.POIHsmManage
 import com.pos.sdk.security.PedKcvInfo
 import com.pos.sdk.security.PedKeyInfo
+import kotlin.jvm.Throws
+import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTypeDeserializer
 
-class IswDetailsAndKeysImpl(val authInterface: AuthInterface): IswDetailsAndKeyDataSource {
+class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
     override suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int {
         val kcvInfo = PedKcvInfo(0, ByteArray(5))
         return POIHsmManage.getDefault().PedWriteTIK(
@@ -49,6 +56,24 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface): IswDetailsAndKeyD
                }
            }
        }
+    }
+
+    @Throws (ISWGeneralException::class)
+    override suspend fun getISWToken(tokenRequestModel: TokenRequestModel) {
+        var response = kimonoInterface.getISWToken(tokenRequestModel).run()
+        if (response.isSuccessful) {
+            if (response.body() != null) {
+                var tokenData = response.body()
+                tokenData?.token.let {
+                    if (!it.isNullOrEmpty()) {
+                        println("token gotten: => ${it}")
+                        Prefs.putString(TOKEN, it)
+                    }
+                }
+            }
+        } else {
+         throw ISWGeneralException()
+        }
     }
 
 

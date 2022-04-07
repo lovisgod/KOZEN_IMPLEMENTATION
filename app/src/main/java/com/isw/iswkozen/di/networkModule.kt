@@ -85,7 +85,7 @@ val networkModule = module {
 
         clientBuilder.addInterceptor(logger)
         // add auth interceptor for max services
-        clientBuilder.addInterceptor(authInterceptor)
+//        clientBuilder.addInterceptor(authInterceptor)
 
         // add client to retrofit builder
         val client = clientBuilder.build()

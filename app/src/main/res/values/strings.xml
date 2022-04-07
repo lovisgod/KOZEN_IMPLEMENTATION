@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">ISWKozen</string>
+    <string name="btn_cal_00">00</string>
+    <string name="btn_cal_0">0</string>
+    <string name="btn_cal_1">1</string>
+    <string name="btn_cal_2">2</string>
+    <string name="btn_cal_3">3</string>
+    <string name="btn_cal_4">4</string>
+    <string name="btn_cal_5">5</string>
+    <string name="btn_cal_6">6</string>
+    <string name="btn_cal_7">7</string>
+    <string name="btn_cal_8">8</string>
+    <string name="btn_cal_9">9</string>
+    <string name="btn_esc">Esc</string>
+    <string name="btn_confirm">Confirm</string>
+
+    <string name="cancel_payments">Cancel Payment</string>
+    <string name="print_receipt">Print Receipt</string>
+    <string name="new_payment">New Payment</string>
 </resources>

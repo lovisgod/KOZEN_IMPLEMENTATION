@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
     lateinit var pinKeyBtn: Button
     lateinit var readTermInfoBtn: Button
     lateinit var downloadTermInfoBtn: Button
+    lateinit var getISWToken: Button
+    lateinit var startTransactionBtn: Button
+    lateinit var getTransactionDataBtn: Button
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +41,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         pinKeyBtn = findViewById(R.id.pinkey)
         readTermInfoBtn = findViewById(R.id.read_term_info)
         downloadTermInfoBtn = findViewById(R.id.downl_term_info)
+        getISWToken = findViewById(R.id.get_token)
+        startTransactionBtn = findViewById(R.id.start_trans)
+        getTransactionDataBtn = findViewById(R.id.get_transaction_data)
+
 
 
         checkPermission()
@@ -77,6 +85,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         pinKeyBtn.setOnClickListener(this)
         readTermInfoBtn.setOnClickListener(this)
         downloadTermInfoBtn.setOnClickListener(this)
+        getISWToken.setOnClickListener(this)
+        startTransactionBtn.setOnClickListener(this)
+        getTransactionDataBtn.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -102,6 +113,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
                 viewmodel.downloadterminalDetailsStatus.observe(this, Observer {
                    println("download successful => $it")
                 })
+            }
+
+            getISWToken -> {
+                viewmodel.getISWToken()
+            }
+
+            startTransactionBtn -> {
+                viewmodel.startTransaction(100, 0, 0, this)
+            }
+
+            getTransactionDataBtn -> {
+                viewmodel.getTransactionData()
             }
         }
     }

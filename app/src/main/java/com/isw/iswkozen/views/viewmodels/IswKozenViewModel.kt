@@ -1,5 +1,6 @@
 package com.isw.iswkozen.views.viewmodels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +46,18 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     }
 
 
+    fun getISWToken () {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var teminalInfo = dataRepo.readterminalDetails()
+                var loaded = teminalInfo?.let { dataRepo.getISWToken(it) }
+                println("getToken: ${loaded}")
+            }
+
+        }
+    }
+
+
     fun dowloadDetails () {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
@@ -54,6 +67,31 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
             }
 
         }
+    }
+
+    fun startTransaction( amount: Long,
+                          amountOther: Long,
+                          transType: Int, context: Context) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var status = dataRepo.startTransaction(
+                    amount = amount, amountOther = amountOther, transType = transType,
+                    contextX = context
+                )
+                println("startTransactionStatus: ${status}")
+            }
+        }
+
+    }
+
+    fun getTransactionData( ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var transactionData = dataRepo.getTransactionData()
+                println("transactionData: ${transactionData}")
+            }
+        }
+
     }
 
     fun loadAllConfig () {

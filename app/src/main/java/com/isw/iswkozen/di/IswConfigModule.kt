@@ -10,9 +10,13 @@ import org.koin.dsl.module.module
 
 val configModule = module {
     single { IswDataConfig() }
-    single { IswDetailsAndKeysImpl( get() ) }
+    single { IswDetailsAndKeysImpl( get(), get() ) }
     factory<IswConfigDataSource> { return@factory IswDataConfig() }
-    factory<IswDetailsAndKeyDataSource> { return@factory IswDetailsAndKeysImpl( get() ) }
+    factory<IswDetailsAndKeyDataSource> {
+        return@factory IswDetailsAndKeysImpl(
+            get(),
+            get()
+        ) }
 
     single { IswConfigSourceInteractor(get()) }
     single { IswDetailsAndKeySourceInteractor( get() ) }

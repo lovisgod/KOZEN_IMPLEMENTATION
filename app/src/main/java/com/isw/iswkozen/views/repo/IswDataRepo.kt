@@ -1,22 +1,30 @@
 package com.isw.iswkozen.views.repo
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
+import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.network.models.TerminalInformationRequest
+import com.isw.iswkozen.core.network.models.TokenRequestModel
 import com.isw.iswkozen.core.utilities.DeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
-                  val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor) {
+                  val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
+                  val iswTransactionInteractor: IswTransactionInteractor,
+                  val context: Context
+                    ) {
 
 
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -89,6 +97,36 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
+
+    suspend fun startTransaction( hasContactless: Boolean = true,
+                                  hasContact: Boolean = true,
+                                  amount: Long,
+                                  amountOther: Long,
+                                  transType: Int, contextX: Context): Boolean {
+        try {
+            return withContext(dispatcher) {
+                iswTransactionInteractor.setEmvContect(contextX)
+                iswTransactionInteractor.startTransaction(
+                    hasContactless, hasContact, amount, amountOther, transType)
+                   true
+            }
+        } catch (e:Exception) {
+            Log.e("startTransaction error", e.stackTraceToString())
+            return  false
+        }
+    }
+
+    suspend fun getTransactionData(): TransactionData {
+        try {
+            return withContext(dispatcher) {
+              iswTransactionInteractor.getTransactionData()
+            }
+        } catch (e:Exception) {
+            Log.e("get trans data error", e.stackTraceToString())
+            return  TransactionData()
+        }
+    }
+
     suspend fun eraseKeys() : Int {
         try {
             return withContext(dispatcher) {
@@ -110,6 +148,24 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             }
         } catch (e:Exception) {
             Log.e("loadTerminalError", e.stackTraceToString())
+            return false
+        }
+    }
+
+
+    suspend fun getISWToken(terminalData: TerminalInfo = TerminalInfo()): Boolean {
+
+        try {
+            return withContext(dispatcher) {
+                var terminalInformationRequest =
+                    TerminalInformationRequest().fromTerminalInfo(terminalData)
+                var tokenRequestModel = TokenRequestModel()
+                tokenRequestModel.terminalInformation = terminalInformationRequest
+                iswDetailsAndKeySourceInteractor.getISWToken(tokenRequestModel)
+                return@withContext true
+            }
+        } catch (e:Exception) {
+            Log.e("getIswToken", e.stackTraceToString())
             return false
         }
     }

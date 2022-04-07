@@ -4,9 +4,13 @@ import com.isw.iswkozen.BuildConfig
 
 object Constants {
 
+    var isHardWareKeyBoard = true
+
+
     val TOKEN: String = "TOKEN"
     internal const val EXCEPTION_CODE = 9000
     internal const val TERMINAL_INFO_KEY = "TERMINAL_INFO_KEY"
+    internal const val ISW_TOKEN_URL = "/kimonotms/requesttoken/perform-process"
 
     // URL END POINTS
     internal const val CODE_END_POINT = "till.json"

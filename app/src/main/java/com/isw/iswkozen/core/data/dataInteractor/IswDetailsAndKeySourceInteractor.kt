@@ -5,6 +5,7 @@ import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.network.AuthInterface
+import com.isw.iswkozen.core.network.models.TokenRequestModel
 
 class IswDetailsAndKeySourceInteractor(
     var iswDetailsAndKeyDataSource: IswDetailsAndKeyDataSource,
@@ -23,4 +24,7 @@ class IswDetailsAndKeySourceInteractor(
 
     suspend fun downloadTerminalDetails(data: IswTerminalModel) =
         iswDetailsAndKeyDataSource.downloadTerminalDetails(data)
+
+    suspend fun getISWToken(tokenRequestModel: TokenRequestModel) =
+        iswDetailsAndKeyDataSource.getISWToken(tokenRequestModel)
 }
