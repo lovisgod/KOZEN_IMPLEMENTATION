@@ -13,6 +13,7 @@ import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.network.models.TerminalInformationRequest
 import com.isw.iswkozen.core.network.models.TokenRequestModel
 import com.isw.iswkozen.core.utilities.DeviceUtils
@@ -116,14 +117,14 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun getTransactionData(): TransactionData {
+    suspend fun getTransactionData(): RequestIccData {
         try {
             return withContext(dispatcher) {
               iswTransactionInteractor.getTransactionData()
             }
         } catch (e:Exception) {
             Log.e("get trans data error", e.stackTraceToString())
-            return  TransactionData()
+            return  RequestIccData()
         }
     }
 

@@ -2,6 +2,7 @@ package com.isw.iswkozen.core.data.datasource
 
 import android.content.Context
 import com.isw.iswkozen.core.data.models.TransactionData
+import com.isw.iswkozen.core.data.utilsData.RequestIccData
 
 interface IswTransactionDataSource {
 
@@ -12,7 +13,7 @@ interface IswTransactionDataSource {
         amountOther: Long,
         transType: Int
     )
-    suspend fun getTransactionData(): TransactionData
+    suspend fun getTransactionData(): RequestIccData
 
     suspend fun setEmvContect(context: Context)
 }

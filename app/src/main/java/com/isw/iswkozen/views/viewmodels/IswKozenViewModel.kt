@@ -88,7 +88,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var transactionData = dataRepo.getTransactionData()
-                println("transactionData: ${transactionData}")
+                println("transactionData: ${transactionData.CARD_HOLDER_VERIFICATION_RESULT}")
             }
         }
 

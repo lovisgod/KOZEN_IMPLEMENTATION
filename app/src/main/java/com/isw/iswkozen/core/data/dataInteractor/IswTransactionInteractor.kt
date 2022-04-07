@@ -3,6 +3,7 @@ package com.isw.iswkozen.core.data.dataInteractor
 import android.content.Context
 import com.isw.iswkozen.core.data.datasource.IswTransactionDataSource
 import com.isw.iswkozen.core.data.models.TransactionData
+import com.isw.iswkozen.core.data.utilsData.RequestIccData
 
 class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionDataSource) {
 
@@ -17,7 +18,7 @@ class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionData
         amount,
         amountOther,
         transType)
-    suspend fun getTransactionData(): TransactionData =
+    suspend fun getTransactionData(): RequestIccData =
         iswTransactionDataSource.getTransactionData()
 
     suspend fun setEmvContect(context: Context) =

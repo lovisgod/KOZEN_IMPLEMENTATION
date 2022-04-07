@@ -8,6 +8,7 @@ import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.data.utilsData.getIccData
 import com.isw.iswkozen.core.utilities.views.PasswordDialog
 import com.pos.sdk.emvcore.IPosEmvCoreListener
@@ -28,6 +29,7 @@ class EmvHandler {
     var mode:Int = 0
     var deviceDetectedMessage: String?  = ""
     var transData : TransactionData?  = TransactionData()
+    var iccData: RequestIccData?  = RequestIccData()
     var cardType: Int = 0
     var context: Context? = null
     var activity: Activity? = null
@@ -395,7 +397,7 @@ class EmvHandler {
                     if (emvCard.getCardNumber() != null) {
 //                        transRepository.createTransaction(transData)
                     }
-                    val iccData = transData?.getTransData()?.let { getIccData(it) }
+                    iccData = transData?.getTransData()?.let { getIccData(it) }
                     println(
                         "iccData => {" +
                                 "date: ${iccData?.TRANSACTION_DATE} " +
