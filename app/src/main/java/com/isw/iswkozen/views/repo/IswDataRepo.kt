@@ -14,9 +14,10 @@ import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
-import com.isw.iswkozen.core.network.models.TerminalInformationRequest
-import com.isw.iswkozen.core.network.models.TokenRequestModel
+import com.isw.iswkozen.core.network.kimonoInterface
+import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,7 +25,8 @@ import kotlinx.coroutines.withContext
 class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                   val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
                   val iswTransactionInteractor: IswTransactionInteractor,
-                  val context: Context
+                  val context: Context,
+                  val kimonoInterface: kimonoInterface
                     ) {
 
 
@@ -84,6 +86,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 var info = readterminalDetails()
 
                 println("info =>  ${info.toString()}")
+                println("info =>  ${info?.terminalCountryCode}")
                 println("info =>  ${info?.terminalCode}")
                 if (info != null) {
 
@@ -128,6 +131,50 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
+    suspend fun makeOnlineRequest(transactionName: String, iccData: RequestIccData, terminalData: TerminalInfo): PurchaseResponse {
+        try {
+            return withContext(dispatcher) {
+               var purchaseRequest = TransactionRequest.createPurchaseRequest(terminalInfoX = terminalData, requestData = iccData)
+               return@withContext when (transactionName) {
+                   "purchase" -> {
+                       val token  = Prefs.getString("TOKEN", "")
+                       var response  = kimonoInterface.makePurchase(
+                           request = purchaseRequest as PurchaseRequest
+                       ).run()
+                       if (response.isSuccessful) {
+                           response.body()!!
+                       } else {
+                           PurchaseResponse(description = "An error occured",
+                               responseCode = "${response.code()}", responseMessage = "An error occurred")
+                       }
+                   }
+
+                   else -> {
+                       val token  = Prefs.getString("TOKEN", "")
+                       var response  = kimonoInterface.makePurchase(
+                           request = purchaseRequest as PurchaseRequest
+                       ).run()
+                       if (response.isSuccessful) {
+                           response.body()!!
+                       } else {
+                           PurchaseResponse(description = "An error occured",
+                               responseCode = "${response.code()}", responseMessage = "An error occurred")
+                       }
+                   }
+               }
+            }
+        } catch (e:Exception) {
+            Log.e("get trans data error", e.stackTraceToString())
+            return  PurchaseResponse(
+                responseCode = "0x000",
+                description = "An error occurred"
+            )
+        }
+    }
+
+
+
+
     suspend fun eraseKeys() : Int {
         try {
             return withContext(dispatcher) {
@@ -159,7 +206,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         try {
             return withContext(dispatcher) {
                 var terminalInformationRequest =
-                    TerminalInformationRequest().fromTerminalInfo(terminalData)
+                    TerminalInformationRequest().fromTerminalInfo("", terminalData, false)
                 var tokenRequestModel = TokenRequestModel()
                 tokenRequestModel.terminalInformation = terminalInformationRequest
                 iswDetailsAndKeySourceInteractor.getISWToken(tokenRequestModel)

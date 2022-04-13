@@ -1,5 +1,7 @@
 package com.isw.iswkozen.core.data.utilsData
 
+import com.isw.iswkozen.core.data.models.EmvCard
+import com.isw.iswkozen.core.data.models.EmvPinData
 import org.simpleframework.xml.Element
 
 class RequestIccData(
@@ -45,5 +47,14 @@ class RequestIccData(
         var CARD_HOLDER_NAME: String = ""
 
         var iccAsString: String = ""
+
+        var EMV_CARD_PIN_DATA: EmvPinData = EmvPinData()
+
+        var EMC_CARD_ : EmvCard ? = null
+
+        var haspin: Boolean? = true
+
+        var TRACK_2_DATA: String = ""
+
 }
 

@@ -1,5 +1,6 @@
 package com.isw.iswkozen.core.data.dataSourceImpl
 
+import android.util.Log
 import com.google.gson.Gson
 import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
 import com.isw.iswkozen.core.data.models.IswTerminalModel
@@ -22,6 +23,7 @@ import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTy
 
 class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
     override suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int {
+        Log.d("KSN", "KSN $KsnData")
         val kcvInfo = PedKcvInfo(0, ByteArray(5))
         return POIHsmManage.getDefault().PedWriteTIK(
             keyIndex,

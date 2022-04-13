@@ -1,7 +1,12 @@
 package com.isw.iswkozen.core.data.utilsData
 
+import android.annotation.SuppressLint
+import java.nio.charset.Charset
+
 
 object KeysUtils {
+
+    private val ASCII = Charset.forName("US-ASCII")
 
     fun productionKSN() = "0000000002DDDDE00001" //FFFF000002DDDDE0
     fun testKSN() = "0000000006DDDDE00000"
@@ -29,5 +34,17 @@ object KeysUtils {
 
     const val PINKEY_INDEX = 2
     const val DUKPTKEY_INDEX = 1
+
+
+
+    fun ByteArray.getTextValue(): String? {
+        return getTextValue(ASCII)
+    }
+
+    @SuppressLint("NewApi")
+    fun ByteArray.getTextValue(aCharset: Charset?): String? {
+        return String(this, aCharset!!)
+    }
+
 
 }

@@ -120,11 +120,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
             }
 
             startTransactionBtn -> {
-                viewmodel.startTransaction(100, 0, 0, this)
+                viewmodel.startTransaction(1000, 0, 0, this)
             }
 
             getTransactionDataBtn -> {
                 viewmodel.getTransactionData()
+                viewmodel.makeOnlineRequest()
             }
         }
     }

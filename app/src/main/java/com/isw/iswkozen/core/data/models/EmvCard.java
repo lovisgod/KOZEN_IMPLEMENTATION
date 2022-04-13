@@ -152,11 +152,11 @@ public class EmvCard implements Serializable {
         }
     }
 
-   EmvTrack1 getTrack1() {
+    public EmvTrack1 getTrack1() {
         return track1;
     }
 
-    EmvTrack2 getTrack2() {
+    public EmvTrack2 getTrack2() {
         return track2;
     }
 

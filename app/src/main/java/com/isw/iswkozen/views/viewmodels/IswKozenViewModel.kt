@@ -79,6 +79,10 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                     contextX = context
                 )
                 println("startTransactionStatus: ${status}")
+
+                // start transaction here
+
+//                makeOnlineRequest()
             }
         }
 
@@ -89,6 +93,24 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
             withContext(Dispatchers.Main) {
                 var transactionData = dataRepo.getTransactionData()
                 println("transactionData: ${transactionData.CARD_HOLDER_VERIFICATION_RESULT}")
+            }
+        }
+
+    }
+
+    fun makeOnlineRequest( ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var transactionData = dataRepo.getTransactionData()
+                var terminalInfo = dataRepo.readterminalDetails()
+                var response = terminalInfo?.let {
+                    dataRepo.makeOnlineRequest(transactionName = "purchase",
+                        iccData = transactionData, terminalData = it
+                    )
+                }
+                println("Online request response: ${response?.responseCode}," +
+                        " description: ${response?.description}," +
+                        " responseMesssage: ${response?.responseMessage}")
             }
         }
 

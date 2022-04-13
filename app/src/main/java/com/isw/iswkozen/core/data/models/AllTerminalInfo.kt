@@ -73,10 +73,10 @@ class TerminalInfo(
         var cardAcceptorNameLocation: String = "",
 
         @field:Element(name = "merchantCategoryCode", required = false)
-        var merchantCategoryCode: String = "0840",
+        var merchantCategoryCode: String = "8099",
 
-        var  terminalCountryCode: String = "0840",
-        var  transCurrencyCode: String = "0840",
+        var  terminalCountryCode: String = "0566",
+        var  transCurrencyCode: String = "0566",
         var transCurrencyExp: String = "02",
         var terminalType: String = "22",
         var terminalCapabilities: String = "E0F8C8",

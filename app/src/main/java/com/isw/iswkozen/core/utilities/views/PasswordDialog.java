@@ -23,6 +23,8 @@ import androidx.constraintlayout.widget.Group;
 
 import com.isw.iswkozen.R;
 import com.isw.iswkozen.core.data.utilsData.Constants;
+import com.isw.iswkozen.core.data.utilsData.KeysUtils;
+import com.isw.iswkozen.core.network.models.MemoryPinData;
 import com.isw.iswkozen.core.utilities.HexUtil;
 import com.pos.sdk.emvcore.POIEmvCoreManager;
 import com.pos.sdk.emvcore.POIEmvCoreManager.EmvPinConstraints;
@@ -43,7 +45,7 @@ public class PasswordDialog {
     private int    DEFAULT_TIMEOUT_MS      = 30000;
 
     private int keyIndex;
-    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_TPK;
+    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT;
     private int icSlot;
 
     private boolean isKeyboardFix = true;
@@ -251,6 +253,7 @@ public class PasswordDialog {
                 int sw2 = (rspBuf[2] >= 0 ? rspBuf[2] : (rspBuf[2] + 256));
 
                 if (sw1 == 0x90 && sw2 == 0x00) {
+
                     onPinSuccess(null, null);
                 } else if (sw1 == 0x63 && (sw2 & 0xc0) == (int) 0xc0) {
                     if ((sw2 & 0x0F) == 0) {
@@ -271,14 +274,19 @@ public class PasswordDialog {
 
         @Override
         public void onPedPinBlockRet(POIHsmManage manage, int type, byte[] rspBuf) {
+            Log.d("rspbuff", "rsp GOT HERE " + HexUtil.toHexString(rspBuf));
             if (rspBuf[0] != 0) {
                 byte[] pinBlock = new byte[rspBuf[0]];
                 System.arraycopy(rspBuf, 1, pinBlock, 0, rspBuf[0]);
                 if (rspBuf.length > (rspBuf[0] + 1)) {
+
+                    Log.d("KSN", "KSN GOT HERE");
+
                     byte[] ksn = new byte[rspBuf[rspBuf[0] + 1]];
                     System.arraycopy(rspBuf, rspBuf[0] + 2, ksn, 0, rspBuf[rspBuf[0] + 1]);
                     onPinSuccess(pinBlock, ksn);
-                } else {
+                }
+                else {
                     onPinSuccess(pinBlock, null);
                 }
             }
@@ -388,8 +396,16 @@ public class PasswordDialog {
     }
 
     private void onPinSuccess(byte[] pinBlock, byte[] pinKsn) {
-        Log.d("KSN", "KSN " + pinKsn);
-        Log.d("PINBLOCK", "PINBLOCK " + HexUtil.toHexString(pinBlock));
+        if (pinBlock != null) {
+            Log.d("KSN", "KSN " + pinKsn);
+            Log.d("PINBLOCK", "PINBLOCK " + HexUtil.toHexString(pinBlock));
+
+            MemoryPinData memoryPinData = new MemoryPinData(
+                    HexUtil.toHexString(pinBlock), "dukpt",
+                    HexUtil.toHexString(pinKsn), "605"
+            );
+            Constants.INSTANCE.setMemoryPinData(memoryPinData);
+        }
         Bundle bundle = new Bundle();
         bundle.putInt(EmvPinConstraints.OUT_PIN_VERIFY_RESULT, EmvPinConstraints.VERIFY_SUCCESS);
         bundle.putInt(EmvPinConstraints.OUT_PIN_TRY_COUNTER, 0);

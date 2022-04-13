@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.isw.iswkozen.core.data.models.EmvCard
+import com.isw.iswkozen.core.data.models.EmvPinData
 import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
@@ -153,7 +154,7 @@ class EmvHandler {
             AppExecutors.getInstance().mainThread().execute {
                 val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
                 val dialog =
-                    PasswordDialog( this@EmvHandler.context, isIcSlot, bundle, KeysUtils.PINKEY_INDEX)
+                    PasswordDialog( this@EmvHandler.context, isIcSlot, bundle, KeysUtils.DUKPTKEY_INDEX)
                 dialog.showDialog()
             }
 
@@ -394,15 +395,47 @@ class EmvHandler {
                 transData?.setTransResult(result)
                 if (data != null) {
                     val emvCard = EmvCard(data)
+                    iccData = transData?.getTransData()?.let { getIccData(it) }
                     if (emvCard.getCardNumber() != null) {
 //                        transRepository.createTransaction(transData)
+                      iccData?.EMC_CARD_ = emvCard
                     }
-                    iccData = transData?.getTransData()?.let { getIccData(it) }
+
+                    if (!Constants.memoryPinData.pinBlock.isNullOrEmpty()) {
+                        iccData?.EMV_CARD_PIN_DATA = EmvPinData(
+                            CardPinBlock = Constants.memoryPinData.pinBlock,
+                            ksn = Constants.memoryPinData.ksn
+                        )
+
+                    } else {
+                        iccData?.EMV_CARD_PIN_DATA = EmvPinData(
+                            CardPinBlock = "",
+                            ksn = ""
+                        )
+                    }
+                    iccData?.haspin = !iccData?.EMV_CARD_PIN_DATA?.CardPinBlock.isNullOrEmpty()
+
+                    val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
+
+                    if(isIcSlot) {
+                        Constants.POS_ENTRY_MODE = "051"
+                        if (iccData?.haspin!!) {
+                            Constants.POS_DATA_CODE = Constants.CONTACT_POS_DATA_CODE_PIN
+                        } else {
+                            Constants.POS_DATA_CODE = Constants.CONTACT_POS_DATA_CODE_PIN
+                        }
+                    } else {
+                        Constants.POS_ENTRY_MODE = "071"
+                        Constants.POS_DATA_CODE = Constants.CLSS_POS_DATA_CODE
+                    }
+
                     println(
                         "iccData => {" +
                                 "date: ${iccData?.TRANSACTION_DATE} " +
                                 "name: ${iccData?.CARD_HOLDER_NAME} " +
                                 "amount: ${iccData?.TRANSACTION_AMOUNT} " +
+                                "Track2Data ${iccData?.TRACK_2_DATA}" +
+                                "haspin ${iccData?.haspin}" +
                                 "}"
                     )
                 }

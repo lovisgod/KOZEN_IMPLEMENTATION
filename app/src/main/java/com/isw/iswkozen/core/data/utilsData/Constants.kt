@@ -1,10 +1,14 @@
 package com.isw.iswkozen.core.data.utilsData
 
 import com.isw.iswkozen.BuildConfig
+import com.isw.iswkozen.core.network.models.MemoryPinData
+import com.pixplicity.easyprefs.library.Prefs
+import java.util.*
 
 object Constants {
 
     var isHardWareKeyBoard = true
+    var memoryPinData = MemoryPinData()
 
 
     val TOKEN: String = "TOKEN"
@@ -123,7 +127,7 @@ object Constants {
 
     val ISW_DUKPT_KSN: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(checkEmv()) KeysUtils.testKSN()
+        return if(!checkEmv()) KeysUtils.testKSN()
         else KeysUtils.productionKSN()
     }
 
@@ -196,5 +200,25 @@ object Constants {
     fun checkEmv () : Boolean {
         return BuildConfig.DEBUG
     }
+
+    /**
+     * This method returns the next STAN (System Trace Audit Number)
+     */
+     fun getNextStan(): String {
+        var stan = Prefs.getInt("STAN", 0)
+
+        // compute and save new stan
+        val newStan = if (stan > 999999) 0 else ++stan
+        Prefs.putInt("STAN", newStan)
+
+        return String.format(Locale.getDefault(), "%06d", newStan)
+    }
+
+
+    var CLSS_POS_DATA_CODE = "A10101711344101"
+    var CONTACT_POS_DATA_CODE_PIN = "510101511344101"
+    var CONTACT_POS_DATA_CODE_NO_PIN = "511101511344101"
+    var POS_ENTRY_MODE = "051"
+    var POS_DATA_CODE = ""
 
 }

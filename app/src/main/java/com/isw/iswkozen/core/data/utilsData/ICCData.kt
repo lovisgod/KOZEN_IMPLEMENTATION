@@ -32,6 +32,7 @@ enum class ICCData(val tagName: String, val tag: String, val min: Int, val max: 
     ANOTHER_AMOUNT("Amount", "9F03", 6, 6),
     APP_PAN_SEQUENCE_NUMBER("App PAN Sequence Number", "5F34", 1, 1),
     CARD_HOLDER_NAME("Cardholder Name", "5F20", 2, 26),
+    TRACK_2_DATA("Track 2 Data", "57", 2, 37),
 
 
     // Issuer response
@@ -99,6 +100,8 @@ internal fun getIccData(data: ByteArray): RequestIccData {
         INTERFACE_DEVICE_SERIAL_NUMBER = ICCData.INTERFACE_DEVICE_SERIAL_NUMBER.getTlv(data) ?: ""
         APP_VERSION_NUMBER = ICCData.APP_VERSION_NUMBER.getTlv(data) ?: ""
         CARD_HOLDER_NAME = ICCData.CARD_HOLDER_NAME.getTlvText(data) ?: ""
+        APP_PAN_SEQUENCE_NUMBER = ICCData.APP_PAN_SEQUENCE_NUMBER.getTlv(data) ?: ""
+        TRACK_2_DATA = ICCData.TRACK_2_DATA.getTlv(data) ?: ""
     }
 
 
