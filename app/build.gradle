@@ -91,4 +91,6 @@ dependencies {
 
     api 'com.pixplicity.easyprefs:EasyPrefs:1.10.0'
 
+    api 'com.github.devicesandtokens:ISW_EMV_UTIL_LIB:0.1'
+
 }

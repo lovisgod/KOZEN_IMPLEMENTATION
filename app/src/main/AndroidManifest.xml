@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.isw.iswkozen">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,6 +28,7 @@
     <uses-permission android:name="com.pos.permission.EMVCORE" />
 
     <application
+        tools:replace="android:theme"
         android:name=".IswApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

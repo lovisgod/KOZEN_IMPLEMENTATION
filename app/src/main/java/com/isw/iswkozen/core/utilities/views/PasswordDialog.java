@@ -25,7 +25,10 @@ import com.isw.iswkozen.R;
 import com.isw.iswkozen.core.data.utilsData.Constants;
 import com.isw.iswkozen.core.data.utilsData.KeysUtils;
 import com.isw.iswkozen.core.network.models.MemoryPinData;
+import com.isw.iswkozen.core.network.models.StringManipulator;
 import com.isw.iswkozen.core.utilities.HexUtil;
+import com.isw.pinencrypter.Converter;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.pos.sdk.emvcore.POIEmvCoreManager;
 import com.pos.sdk.emvcore.POIEmvCoreManager.EmvPinConstraints;
 import com.pos.sdk.security.POIHsmManage;
@@ -33,6 +36,7 @@ import com.pos.sdk.security.PedRsaPinKey;
 
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 public class PasswordDialog {
@@ -57,6 +61,7 @@ public class PasswordDialog {
     private byte[]  pinRandom;
     private byte[]  pinModule;
     private byte[]  pinExponent;
+    private String pinX = "";
 
     private String title;
     private String message;
@@ -100,6 +105,7 @@ public class PasswordDialog {
         }
         if (bundle.containsKey(EmvPinConstraints.PIN_CARD)) {
             pinCard = bundle.getString(EmvPinConstraints.PIN_CARD);
+            System.out.println("pin card => " + pinCard);
         }
         if (bundle.containsKey(EmvPinConstraints.PIN_BYPASS)) {
             pinBypass = bundle.getBoolean(EmvPinConstraints.PIN_BYPASS);
@@ -109,6 +115,7 @@ public class PasswordDialog {
         }
         if (bundle.containsKey(EmvPinConstraints.PIN_CARD_RANDOM)) {
             pinRandom = bundle.getByteArray(EmvPinConstraints.PIN_CARD_RANDOM);
+            System.out.println("pin card random => " + pinCard);
         }
         if (bundle.containsKey(EmvPinConstraints.PIN_MODULE)) {
             pinModule = bundle.getByteArray(EmvPinConstraints.PIN_MODULE);
@@ -174,8 +181,148 @@ public class PasswordDialog {
         window.setAttributes(wlp);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.BOTTOM);
-        dialog.show();
+
+//        handleKeyInput();
+
+
     }
+
+    public void checkPinInput(){
+        StringBuilder info = new StringBuilder();
+        int xxxx  = pinX.length();
+        while (0 != (xxxx--)) {
+            info.append("*");
+        }
+        if (info.length() <= 12) {
+            etPin.setText(info.toString());
+        }
+    }
+
+    public void handleKeyInput(){
+        btn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+        btn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btn9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                pinX += ((TextView) view).getText().toString();
+                checkPinInput();
+            }
+        });
+
+        btnEsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                System.out.println("keyclicked :" + ((ImageView) view).getText().toString());
+                pinX = StringManipulator.INSTANCE.dropLastCharacter(pinX);
+                checkPinInput();
+            }
+        });
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+                System.out.println("pin inputs :" + pinX);
+                System.out.println("pin card :" + pinCard);
+                String IPEKK = Prefs.getString("IPEK", "");
+                String KSNX = Prefs.getString("KSN", "");
+                String newKSN = KSNX + Constants.INSTANCE.getNextKsnCounter();
+
+                String block = Converter.INSTANCE.GetPinBlock(IPEKK, newKSN, pinX, pinCard);
+                onPinSuccessISW(block, StringManipulator.INSTANCE.dropFirstCharacter(newKSN));
+                dialog.dismiss();
+            }
+        });
+
+    }
+
 
     public int showDialog() {
         int result;
@@ -204,11 +351,13 @@ public class PasswordDialog {
     }
 
     private int onVerifyPlainPin() {
+        dialog.show();
         hsmManage.registerListener(pinEventListener);
         return hsmManage.PedVerifyPlainPin(icSlot, 0, DEFAULT_TIMEOUT_MS, DEFAULT_EXP_PIN_LEN_IND);
     }
 
     private int onVerifyEncipherPin() {
+        dialog.show();
         hsmManage.registerListener(pinEventListener);
         if (pinModule == null) {
             return -1;
@@ -225,21 +374,27 @@ public class PasswordDialog {
     }
 
     private int onOnlinePin() {
-        hsmManage.registerListener(pinEventListener);
 
-        byte[] data = new byte[24];
-        if (!isEncrypt) {
-            byte[] temp = CalcPinBlock.calcPinBlock(pinCard).getBytes();
-            System.arraycopy(temp, 0, data, 0, 16);
-        } else {
-            byte[] temp = pinCard.getBytes();
-            System.arraycopy(temp, 0, data, 0, 16);
-        }
-
-        byte[] formatData = {0, 0, 0, 0, 0, 0, 0, 0};
-        System.arraycopy(formatData, 0, data, 16, 8);
-
-        return hsmManage.PedGetPinBlock(keyMode, keyIndex, 0, DEFAULT_TIMEOUT_MS, data, DEFAULT_EXP_PIN_LEN_IND);
+        dialog.show();
+        handleKeyInput();
+//        hsmManage.registerListener(pinEventListener);
+//
+//        byte[] data = new byte[24];
+//        if (!isEncrypt) {
+//            byte[] temp = CalcPinBlock.calcPinBlock(pinCard).getBytes();
+//            System.arraycopy(temp, 0, data, 0, 16);
+//        } else {
+//            byte[] temp = pinCard.getBytes();
+//            System.arraycopy(temp, 0, data, 0, 16);
+//        }
+//
+//        byte[] formatData = {0, 0, 0, 0, 0, 0, 0, 0};
+//        System.arraycopy(formatData, 0, data, 16, 8);
+//
+//        int ret  = hsmManage.PedGetPinBlock(keyMode, keyIndex, 0, DEFAULT_TIMEOUT_MS, data, DEFAULT_EXP_PIN_LEN_IND);
+//
+//        System.out.println("pin block ret => " + ret);
+        return  0;
     }
 
     private class PinEventListener implements POIHsmManage.EventListener {
@@ -323,6 +478,7 @@ public class PasswordDialog {
 
         @Override
         public void onKeyboardInput(POIHsmManage manage, int numKeys) {
+            System.out.println("keys input => " + numKeys);
             StringBuilder info = new StringBuilder();
             while (0 != (numKeys--)) {
                 info.append("*");
@@ -414,6 +570,27 @@ public class PasswordDialog {
         }
         if (pinKsn != null) {
             Log.e(null, "KSN " + HexUtil.toHexString(pinKsn));
+        }
+        POIEmvCoreManager.getDefault().onSetPinResponse(bundle);
+    }
+
+
+    private void onPinSuccessISW( String pinBlock, String pinKsn) {
+        if (pinBlock != null) {
+            MemoryPinData memoryPinData = new MemoryPinData(
+                    pinBlock, "dukpt",
+                    pinKsn, "605"
+            );
+            Constants.INSTANCE.setMemoryPinData(memoryPinData);
+        }
+        Bundle bundle = new Bundle();
+        bundle.putInt(EmvPinConstraints.OUT_PIN_VERIFY_RESULT, EmvPinConstraints.VERIFY_SUCCESS);
+        bundle.putInt(EmvPinConstraints.OUT_PIN_TRY_COUNTER, 0);
+        if (pinBlock != null) {
+            bundle.putByteArray(EmvPinConstraints.OUT_PIN_BLOCK, pinBlock.getBytes(StandardCharsets.UTF_8));
+        }
+        if (pinKsn != null) {
+            Log.e(null, "KSN " + HexUtil.toHexString(pinKsn.getBytes(StandardCharsets.UTF_8)));
         }
         POIEmvCoreManager.getDefault().onSetPinResponse(bundle);
     }

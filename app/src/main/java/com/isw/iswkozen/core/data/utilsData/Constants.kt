@@ -215,6 +215,21 @@ object Constants {
     }
 
 
+    /**
+     * This method returns the next STAN (System Trace Audit Number)
+     */
+    fun getNextKsnCounter(): String {
+        var ksn = Prefs.getInt("KSNCOUNTER", 0)
+
+        // compute and save new stan
+        val newKsn = if (ksn >= 9) 1 else ++ksn
+        Prefs.putInt("KSNCOUNTER", ksn)
+
+        return newKsn.toString()
+    }
+
+
+
     var CLSS_POS_DATA_CODE = "A10101711344101"
     var CONTACT_POS_DATA_CODE_PIN = "510101511344101"
     var CONTACT_POS_DATA_CODE_NO_PIN = "511101511344101"
