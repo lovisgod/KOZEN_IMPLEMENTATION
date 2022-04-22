@@ -1,5 +1,7 @@
 package com.isw.iswkozen.core.network.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace
 import org.simpleframework.xml.NamespaceList
@@ -11,6 +13,7 @@ import org.simpleframework.xml.Root
     Namespace( prefix = "ns2", reference = "http://interswitchng.com"),
     Namespace( prefix = "ns3", reference = "http://tempuri.org/ns.xsd")
 )
+@Parcelize
 data class PurchaseResponse(
 
     @field:Element(name = "description", required = false)
@@ -44,4 +47,4 @@ data class PurchaseResponse(
     var transactionRef: String = "",
 
     @field:Element(name = "remoteResponseCode", required = false)
-    var remoteResponseCode: String = "")
+    var remoteResponseCode: String = ""):Parcelable

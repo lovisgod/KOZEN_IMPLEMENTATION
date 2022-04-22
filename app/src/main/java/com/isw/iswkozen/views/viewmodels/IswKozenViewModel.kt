@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.views.repo.IswDataRepo
 import kotlinx.coroutines.*
 
@@ -33,6 +35,12 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     private val _keyMStatus = MutableLiveData<Int>()
     val keyMStatus: LiveData<Int> = _keyMStatus
 
+    private val _transactionResponse = MutableLiveData<PurchaseResponse>()
+    val transactionResponse: LiveData<PurchaseResponse> = _transactionResponse
+
+
+    private val _terminalInfo = MutableLiveData<TerminalInfo>()
+    val terminalInfo: LiveData<TerminalInfo> = _terminalInfo
 
     fun setupTerminal () {
        viewModelScope.launch {
@@ -71,12 +79,12 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     fun startTransaction( amount: Long,
                           amountOther: Long,
-                          transType: Int, context: Context) {
+                          transType: Int, context: Context, emvEvents: EMVEvents) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var status = dataRepo.startTransaction(
                     amount = amount, amountOther = amountOther, transType = transType,
-                    contextX = context
+                    contextX = context, emvEvents = emvEvents
                 )
                 println("startTransactionStatus: ${status}")
 
@@ -111,6 +119,8 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                 println("Online request response: ${response?.responseCode}," +
                         " description: ${response?.description}," +
                         " responseMesssage: ${response?.responseMessage}")
+
+                _transactionResponse.postValue(response)
             }
         }
 
@@ -156,6 +166,9 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
             withContext(Dispatchers.Main) {
                 var result = dataRepo.readterminalDetails()
                 println("terminalConfigLoaded: ${result?.terminalCode}")
+                if (result != null) {
+                    _terminalInfo.postValue(result)
+                }
             }
         }
     }

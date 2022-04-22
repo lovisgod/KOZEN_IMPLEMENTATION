@@ -296,29 +296,23 @@ public class PasswordDialog {
             }
         });
 
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnClear.setOnClickListener(view -> {
 //                System.out.println("keyclicked :" + ((ImageView) view).getText().toString());
-                pinX = StringManipulator.INSTANCE.dropLastCharacter(pinX);
-                checkPinInput();
-            }
+            pinX = StringManipulator.INSTANCE.dropLastCharacter(pinX);
+            checkPinInput();
         });
 
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("keyclicked :" + ((TextView) view).getText().toString());
-                System.out.println("pin inputs :" + pinX);
-                System.out.println("pin card :" + pinCard);
-                String IPEKK = Prefs.getString("IPEK", "");
-                String KSNX = Prefs.getString("KSN", "");
-                String newKSN = KSNX + Constants.INSTANCE.getNextKsnCounter();
+        btnConfirm.setOnClickListener(view -> {
+            System.out.println("keyclicked :" + ((TextView) view).getText().toString());
+            System.out.println("pin inputs :" + pinX);
+            System.out.println("pin card :" + pinCard);
+            String IPEKK = Prefs.getString("IPEK", "");
+            String KSNX = Prefs.getString("KSN", "");
+            String newKSN = KSNX + Constants.INSTANCE.getNextKsnCounter();
 
-                String block = Converter.INSTANCE.GetPinBlock(IPEKK, newKSN, pinX, pinCard);
-                onPinSuccessISW(block, StringManipulator.INSTANCE.dropFirstCharacter(newKSN));
-                dialog.dismiss();
-            }
+            String block = Converter.INSTANCE.GetPinBlock(IPEKK, newKSN, pinX, pinCard);
+            onPinSuccessISW(block, StringManipulator.INSTANCE.dropFirstCharacter(newKSN));
+            dialog.dismiss();
         });
 
     }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/paymentLandingFragment">
+
+    <fragment
+        android:id="@+id/paymentLandingFragment"
+        android:name="com.isw.iswkozen.views.fragments.PaymentLandingFragment"
+        android:label="PaymentLandingFragment" >
+        <action
+            android:id="@+id/action_paymentLandingFragment_to_amountFragment"
+            app:destination="@id/amountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/amountFragment"
+        android:name="com.isw.iswkozen.views.fragments.AmountFragment"
+        android:label="AmountFragment" >
+        <argument
+            android:name="transtype"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_amountFragment_to_processingFragment"
+            app:destination="@id/processingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/processingFragment"
+        android:name="com.isw.iswkozen.views.fragments.ProcessingFragment"
+        android:label="ProcessingFragment" >
+        <argument
+            android:name="transactiondetails"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_processingFragment_to_receiptFragment"
+            app:destination="@id/receiptFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/receiptFragment"
+        android:name="com.isw.iswkozen.views.fragments.ReceiptFragment"
+        android:label="ReceiptFragment" >
+        <argument
+            android:name="transResponse"
+            app:argType="com.isw.iswkozen.core.network.models.PurchaseResponse" />
+        <argument
+            android:name="transdata"
+            app:argType="com.isw.iswkozen.core.data.utilsData.RequestIccData" />
+        <argument
+            android:name="transtype"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

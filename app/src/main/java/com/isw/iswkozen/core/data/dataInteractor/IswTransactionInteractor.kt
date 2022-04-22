@@ -12,12 +12,14 @@ class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionData
         hasContact: Boolean = true,
         amount: Long,
         amountOther: Long,
-        transType: Int
+        transType: Int,
+        emvEvents: EMVEvents
     ) = iswTransactionDataSource.startTransaction(hasContactless,
         hasContact,
         amount,
         amountOther,
-        transType)
+        transType,
+        emvEvents)
     suspend fun getTransactionData(): RequestIccData =
         iswTransactionDataSource.getTransactionData()
 

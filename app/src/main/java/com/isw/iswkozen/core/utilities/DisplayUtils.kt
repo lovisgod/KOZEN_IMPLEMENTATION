@@ -156,4 +156,12 @@ internal object DisplayUtils {
                     creditCardNumber.substring(length.toInt() - 4)
 
     }
+
+    fun View.hide() {
+        this.visibility = View.GONE
+    }
+
+    fun View.show() {
+        this.visibility = View.VISIBLE
+    }
 }

@@ -17,4 +17,9 @@
     <string name="cancel_payments">Cancel Payment</string>
     <string name="print_receipt">Print Receipt</string>
     <string name="new_payment">New Payment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_paid">Get Paid</string>
+    <string name="input_pin">Kindly input your pin</string>
+    <string name="insert_card">Please insert customer card</string>
 </resources>

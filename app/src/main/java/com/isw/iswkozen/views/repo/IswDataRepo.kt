@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
@@ -106,12 +107,12 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                   hasContact: Boolean = true,
                                   amount: Long,
                                   amountOther: Long,
-                                  transType: Int, contextX: Context): Boolean {
+                                  transType: Int, contextX: Context, emvEvents: EMVEvents): Boolean {
         try {
             return withContext(dispatcher) {
                 iswTransactionInteractor.setEmvContect(contextX)
                 iswTransactionInteractor.startTransaction(
-                    hasContactless, hasContact, amount, amountOther, transType)
+                    hasContactless, hasContact, amount, amountOther, transType, emvEvents)
                    true
             }
         } catch (e:Exception) {

@@ -1,6 +1,7 @@
 package com.isw.iswkozen.core.data.dataSourceImpl
 
 import android.content.Context
+import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.datasource.IswTransactionDataSource
 import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
@@ -12,14 +13,16 @@ class IswTransactionImpl(val emvHandler: EmvHandler): IswTransactionDataSource {
         hasContact: Boolean,
         amount: Long,
         amountOther: Long,
-        transType: Int
+        transType: Int,
+        emvEvents: EMVEvents
     ) {
         emvHandler.startTransaction(
             hasContactless,
             hasContact,
             amount,
             amountOther,
-            transType)
+            transType,
+            emvEvents)
     }
 
     override suspend fun getTransactionData(): RequestIccData {

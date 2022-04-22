@@ -11,6 +11,12 @@ enum class TransactionType {
     Cash
 }
 
+enum class PaymentType(val value: Int) {
+    PURCHASE(0),
+    TRANSFER(0),
+    CASHOUT(0)
+}
+
 
 /**
  * This enum type identifies the

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.EmvPinData
 import com.isw.iswkozen.core.data.models.TransactionData
@@ -15,6 +16,7 @@ import com.isw.iswkozen.core.utilities.views.PasswordDialog
 import com.pos.sdk.emvcore.IPosEmvCoreListener
 import com.pos.sdk.emvcore.POIEmvCoreManager
 import com.pos.sdk.emvcore.PosEmvErrorCode
+import kotlinx.coroutines.delay
 import java.lang.Exception
 
 
@@ -34,21 +36,25 @@ class EmvHandler {
     var cardType: Int = 0
     var context: Context? = null
     var activity: Activity? = null
+    var emvEvents: EMVEvents ? = null
 
 
     fun setEmvContext(context: Context) {
         this.context = context
     }
 
-    fun startTransaction(
+     fun startTransaction(
         hasContactless: Boolean = true,
         hasContact: Boolean = true,
         amount: Long,
         amountOther: Long,
-        transType: Int
+        transType: Int,
+        emvEvents: EMVEvents
     ) {
 
         try {
+            this.emvEvents = emvEvents
+            this.emvEvents!!.onInsertCard()
 
             emvCoreManager = POIEmvCoreManager.getDefault()
             emvCoreListener = POIEmvCoreListener()
@@ -106,9 +112,14 @@ class EmvHandler {
         override fun onEmvProcess(type: Int, bundle: Bundle?) {
                 cardType = type
                 when (type) {
-                    POIEmvCoreManager.DEVICE_CONTACT -> println("Contact Card Trans")
-                    POIEmvCoreManager.DEVICE_CONTACTLESS -> println("Contactless Card Trans")
-                    POIEmvCoreManager.DEVICE_MAGSTRIPE -> println("Magstripe Card Trans")
+                    POIEmvCoreManager.DEVICE_CONTACT -> {
+                        println("Contact Card Trans")
+                        this@EmvHandler.emvEvents?.onEmvProcessing(message = "Contact Card Trans")
+                    }
+                    POIEmvCoreManager.DEVICE_CONTACTLESS -> {
+                        println("Contactless Card Trans")
+                    }
+                    POIEmvCoreManager.DEVICE_MAGSTRIPE -> { println("Magstripe Card Trans") }
                     else -> {
                     }
                 }
@@ -152,6 +163,7 @@ class EmvHandler {
 
         override fun onRequestInputPin(bundle: Bundle?) {
             AppExecutors.getInstance().mainThread().execute {
+                this@EmvHandler.emvEvents?.onPinInput()
                 val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
                 val dialog =
                     PasswordDialog( this@EmvHandler.context, isIcSlot, bundle, KeysUtils.DUKPTKEY_INDEX)
@@ -438,6 +450,8 @@ class EmvHandler {
                                 "haspin ${iccData?.haspin}" +
                                 "}"
                     )
+
+                    iccData?.let { this@EmvHandler.emvEvents?.onEmvProcessed(it) }
                 }
 //                else if (vasData != null) {
 //                    if (vasResult == PosEmvErrorCode.APPLE_VAS_APPROVED) {
