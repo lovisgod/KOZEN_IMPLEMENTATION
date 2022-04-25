@@ -243,6 +243,7 @@ class IswDataConfig : IswConfigDataSource {
         aid.ContactlessCVMLimit = 50000
         aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
         emvCoreManager.EmvSetAid(aid)
+
         aid = addAid("A0000003710001", "0096")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")

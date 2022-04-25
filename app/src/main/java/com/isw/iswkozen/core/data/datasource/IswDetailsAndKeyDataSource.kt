@@ -11,6 +11,7 @@ interface IswDetailsAndKeyDataSource {
     suspend fun getISWToken(tokenRequestModel: TokenRequestModel)
     suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int
     suspend fun writePinKey(keyIndex: Int, keyData: String): Int
+    suspend fun loadMasterKey(masterkey: String)
     suspend fun readTerminalInfo():TerminalInfo
     suspend fun eraseKey(): Int
     suspend fun saveTerminalInfo(data: TerminalInfo)

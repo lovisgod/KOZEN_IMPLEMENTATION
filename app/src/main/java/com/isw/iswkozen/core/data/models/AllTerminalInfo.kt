@@ -28,7 +28,7 @@ data class AllTerminalInfo (
 
 @Parcelize
 @Root(name = "terminalInfoBySerials", strict = false)
-class TerminalInfo(
+data class TerminalInfo(
 
         @field:Element(name = "terminalCode", required = false)
         var terminalCode: String = "Terminal",

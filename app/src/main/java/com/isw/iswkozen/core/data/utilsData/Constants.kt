@@ -90,8 +90,8 @@ object Constants {
 
     val ISW_TERMINAL_IP: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_IP_EPMS
-        else Production.ISW_TERMINAL_IP_EPMS
+        return if (checkEmv()) Test.ISW_TERMINAL_IP_CTMS
+        else Production.ISW_TERMINAL_IP_CTMS
     }
 
     val ISW_DEFAULT_TERMINAL_IP: String get() {
@@ -156,8 +156,8 @@ object Constants {
     }
 
     val ISW_TERMINAL_PORT: Int get() {
-        return if(checkEmv()) Test.ISW_TERMINAL_PORT_EPMS
-        else Production.ISW_TERMINAL_PORT_EPMS
+        return if(checkEmv()) Test.ISW_TERMINAL_PORT_CTMS
+        else Production.ISW_TERMINAL_PORT_CTMS
     }
 
     val ISW_KIMONO_KEY_URL: String

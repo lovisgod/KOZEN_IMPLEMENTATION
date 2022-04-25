@@ -126,4 +126,6 @@ val networkModule = module {
         return@single retrofit.create(AuthInterface::class.java)
     }
 
+
+
 }

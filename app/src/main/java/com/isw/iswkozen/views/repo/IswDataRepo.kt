@@ -1,18 +1,16 @@
 package com.isw.iswkozen.views.repo
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
+import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
-import com.isw.iswkozen.core.data.models.TransactionData
+import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
-import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.network.kimonoInterface
@@ -27,13 +25,41 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                   val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
                   val iswTransactionInteractor: IswTransactionInteractor,
                   val context: Context,
-                  val kimonoInterface: kimonoInterface
+                  val kimonoInterface: kimonoInterface,
+                  val nibssIsoServiceImpl: NibssIsoServiceImpl
                     ) {
 
 
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     // keys wite, download and parameter downloads
+
+    suspend fun downLoadNibbsKey(): Boolean {
+        try {
+            return withContext(dispatcher) {
+                var terminalInfo = readterminalDetails()
+
+                // check if its EPMS
+
+                val port = Constants.ISW_DEFAULT_TERMINAL_PORT.toInt()
+                val ip = Constants.ISW_DEFAULT_TERMINAL_IP
+                val isEPMS = port == Constants.ISW_TERMINAL_PORT
+                        && ip == Constants.ISW_TERMINAL_IP
+
+                // getResult clear master key
+                val cms = Constants.getCMS(isEPMS)
+                nibssIsoServiceImpl.downloadKey(
+                    terminalInfo?.terminalCode.toString(),
+                    ip, port, cms, "9A0000",
+                    "9B0000",
+                    "9G0000"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("key error", e.stackTraceToString())
+            return false
+        }
+    }
 
     suspend fun writePinKey(): Int {
         try {
@@ -88,6 +114,42 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
                 println("info =>  ${info.toString()}")
                 println("info =>  ${info?.terminalCountryCode}")
+                println("info =>  ${info?.terminalCode}")
+                if (info != null) {
+
+                    // load the details into the terminal
+                    loadTerminal(info)
+                }
+                true
+            }
+        } catch (e:Exception) {
+            Log.e("term data down error", e.stackTraceToString())
+            return  false
+        }
+    }
+
+
+    suspend fun downloadNibbsTerminalDetails(terminalId: String): Boolean {
+        try {
+            return withContext(dispatcher) {
+                println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
+                var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
+                val port = Constants.ISW_DEFAULT_TERMINAL_PORT.toInt()
+                val ip = Constants.ISW_DEFAULT_TERMINAL_IP
+                val isEPMS = port == Constants.ISW_TERMINAL_PORT
+                        && ip == Constants.ISW_TERMINAL_IP
+
+                val nibbsInfo =nibssIsoServiceImpl.downloadTerminalDetails(
+                    terminalId = terminalId,
+                    ip = ip,
+                    port = port,
+                    processingCode = "9C0000")
+
+                // read the data
+                var info = readterminalDetails()
+
+                println("info =>  ${nibbsInfo.toString()}")
+                println("info =>  ${nibbsInfo?.terminalCountryCode}")
                 println("info =>  ${info?.terminalCode}")
                 if (info != null) {
 

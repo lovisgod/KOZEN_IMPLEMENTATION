@@ -12,6 +12,7 @@ import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.views.repo.IswDataRepo
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.*
 
 class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
@@ -34,6 +35,9 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     private val _keyMStatus = MutableLiveData<Int>()
     val keyMStatus: LiveData<Int> = _keyMStatus
+
+    private val _nibbsKeyMStatus = MutableLiveData<Boolean>()
+    val nibbsKeyMStatus: LiveData<Boolean> = _nibbsKeyMStatus
 
     private val _transactionResponse = MutableLiveData<PurchaseResponse>()
     val transactionResponse: LiveData<PurchaseResponse> = _transactionResponse
@@ -150,6 +154,34 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     }
 
 
+    fun downloadNibbsKey() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.downLoadNibbsKey()
+                println(" nibbs key result: ${result}")
+                Prefs.putBoolean("NIBSSKEYSUCCESS", result)
+                _nibbsKeyMStatus.postValue(result)
+                if (result) {
+                    downloadNibbsParams()
+                }
+            }
+
+        }
+    }
+
+    fun checkKey(){
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var terminalInfo = dataRepo.readterminalDetails()
+                if (terminalInfo == null) {
+                    dataRepo.downloadTerminalDetails()
+                    dataRepo.downLoadNibbsKey()
+                }
+            }
+        }
+    }
+
+
      fun  writeDukptKey()  {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
@@ -158,6 +190,15 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                 _keyMStatus.postValue(result)
             }
 
+        }
+    }
+
+    fun downloadNibbsParams(){
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.downloadNibbsTerminalDetails("2ISW0001")
+                println("terminal Details => $result")
+            }
         }
     }
 

@@ -44,6 +44,15 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterfac
             pedKeyInfo,
             PedKcvInfo(0, ByteArray(5)))
     }
+
+    override suspend fun loadMasterKey(masterkey: String) {
+        val pedKeyInfo =
+            PedKeyInfo(0, 0, POIHsmManage.PED_TPK, 1, 0, 16, HexUtil.parseHex(masterkey))
+         POIHsmManage.getDefault().PedWriteKey(
+            pedKeyInfo,
+            PedKcvInfo(0, ByteArray(5)))
+    }
+
     override suspend fun downloadTerminalDetails(terminalData: IswTerminalModel) {
        var response = authInterface.getMerchantDetails(terminalData.serialNumber).run()
        if (response.isSuccessful) {

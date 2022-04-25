@@ -77,17 +77,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
 
     fun setupTerminals() {
-        viewmodel.setupTerminal()
+//        viewmodel.setupTerminal()
         viewmodel.getISWToken()
+        viewmodel.downloadNibbsKey()
         if (Prefs.getString("KSN", "").isNullOrEmpty()) {
-            Toast.makeText(this, "Kindly wait while details are being downloaded", Toast.LENGTH_LONG).show()
-           runBlocking {
-               viewmodel.eraseKeys()
-               viewmodel.writePinKey()
-               viewmodel.writeDukptKey()
-//               viewmodel.dowloadDetails()
-           }
+//            Toast.makeText(this, "Kindly wait while details are being downloaded", Toast.LENGTH_LONG).show()
+//           runBlocking {
+//               viewmodel.eraseKeys()
+//               viewmodel.writePinKey()
+//               viewmodel.writeDukptKey()
+////               viewmodel.dowloadDetails()
+//           }
         }
+
+//        viewmodel.checkKey()
+
     }
 
 //    fun handleClicks(){
