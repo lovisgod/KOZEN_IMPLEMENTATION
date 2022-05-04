@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_getpaid"
         android:iconTint="@color/grey"/>
 
-    <item android:id="@+id/LandingFragment"
+    <item android:id="@+id/transactionHistoryFragment"
         android:title="Transactions"
         app:showAsAction="always"
         android:orderInCategory="2"

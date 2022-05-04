@@ -10,10 +10,12 @@ import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
+import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.views.repo.IswDataRepo
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 
 class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
@@ -41,6 +43,10 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     private val _transactionResponse = MutableLiveData<PurchaseResponse>()
     val transactionResponse: LiveData<PurchaseResponse> = _transactionResponse
+
+    private val _transactionDataList = MutableLiveData<List<TransactionResultData>>()
+    val transactionDataList: LiveData<List<TransactionResultData>> = _transactionDataList
+
 
 
     private val _terminalInfo = MutableLiveData<TerminalInfo>()
@@ -105,6 +111,18 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
             withContext(Dispatchers.Main) {
                 var transactionData = dataRepo.getTransactionData()
                 println("transactionData: ${transactionData.CARD_HOLDER_VERIFICATION_RESULT}")
+            }
+        }
+
+    }
+
+    fun getAllTransactionHistory( ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                dataRepo.allTransactions.collect {
+                    println("this is the list => ${it[0]}")
+                    _transactionDataList.postValue(it)
+                }
             }
         }
 

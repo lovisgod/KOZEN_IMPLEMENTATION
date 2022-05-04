@@ -52,5 +52,9 @@
         android:id="@+id/settingsLandingFragment"
         android:name="com.isw.iswkozen.views.fragments.SettingsLandingFragment"
         android:label="SettingsLandingFragment" />
+    <fragment
+        android:id="@+id/transactionHistoryFragment"
+        android:name="com.isw.iswkozen.views.fragments.TransactionHistoryFragment"
+        android:label="TransactionHistoryFragment" />
 
 </navigation>

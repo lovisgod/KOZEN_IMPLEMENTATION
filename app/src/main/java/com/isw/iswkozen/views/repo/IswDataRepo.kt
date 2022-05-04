@@ -2,6 +2,7 @@ package com.isw.iswkozen.views.repo
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.WorkerThread
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
@@ -9,16 +10,19 @@ import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteracto
 import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
-import com.isw.iswkozen.core.data.utilsData.Constants
+import com.isw.iswkozen.core.data.utilsData.*
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
-import com.isw.iswkozen.core.data.utilsData.KeysUtils
-import com.isw.iswkozen.core.data.utilsData.RequestIccData
+import com.isw.iswkozen.core.database.dao.IswKozenDao
+import com.isw.iswkozen.core.database.entities.TransactionResultData
+import com.isw.iswkozen.core.database.entities.createTransResultData
 import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
+import com.isw.iswkozen.core.utilities.DisplayUtils
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
@@ -26,7 +30,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                   val iswTransactionInteractor: IswTransactionInteractor,
                   val context: Context,
                   val kimonoInterface: kimonoInterface,
-                  val nibssIsoServiceImpl: NibssIsoServiceImpl
+                  val nibssIsoServiceImpl: NibssIsoServiceImpl,
+                  var iswKozenDao: IswKozenDao
                     ) {
 
 
@@ -201,15 +206,39 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                var purchaseRequest = TransactionRequest.createPurchaseRequest(terminalInfoX = terminalData, requestData = iccData)
                return@withContext when (transactionName) {
                    "purchase" -> {
-                       val token  = Prefs.getString("TOKEN", "")
-                       var response  = kimonoInterface.makePurchase(
+                       val token = Prefs.getString("TOKEN", "")
+                       var response = kimonoInterface.makePurchase(
                            request = purchaseRequest as PurchaseRequest
                        ).run()
                        if (response.isSuccessful) {
-                           response.body()!!
+                           val purchaseResponse = response.body()
+                           var resultData = purchaseResponse?.let {
+                               createTransResultData(
+                                   it,
+                                   iccData,
+                                   transactionName,
+                                   TransactionType.Card,
+                                   terminalData
+                               )
+                           }
+                           if (resultData != null) {
+                               saveTransactionResult(resultData)
+                           }
+                          purchaseResponse!!
                        } else {
-                           PurchaseResponse(description = "An error occured",
+                           val purchaseResponse =  PurchaseResponse(description = "An error occured",
                                responseCode = "${response.code()}", responseMessage = "An error occurred")
+                           val resultData = purchaseResponse?.let {
+                               createTransResultData(
+                                   it,
+                                   iccData,
+                                   transactionName,
+                                   TransactionType.Card,
+                                   terminalData
+                               )
+                           }
+                           saveTransactionResult(resultData)
+                           purchaseResponse
                        }
                    }
 
@@ -336,4 +365,13 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             return 99
         }
     }
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun saveTransactionResult(result: TransactionResultData) {
+        iswKozenDao.insert(resultData = result)
+    }
+
+    val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
 }

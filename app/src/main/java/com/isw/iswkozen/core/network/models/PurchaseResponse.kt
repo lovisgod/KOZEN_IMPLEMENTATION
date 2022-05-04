@@ -1,6 +1,7 @@
 package com.isw.iswkozen.core.network.models
 
 import android.os.Parcelable
+import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace
@@ -13,6 +14,7 @@ import org.simpleframework.xml.Root
     Namespace( prefix = "ns2", reference = "http://interswitchng.com"),
     Namespace( prefix = "ns3", reference = "http://tempuri.org/ns.xsd")
 )
+@Entity(tableName = "transaction_table")
 @Parcelize
 data class PurchaseResponse(
 
