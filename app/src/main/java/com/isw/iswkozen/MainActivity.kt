@@ -46,7 +46,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         NavigationUI.setupWithNavController(bottomNav, navHostFragment!!.findNavController())
 
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.amountFragment || destination.id == R.id.processingFragment || destination.id == R.id.receiptFragment) {
+            if (destination.id == R.id.amountFragment || destination.id == R.id.processingFragment
+                || destination.id == R.id.receiptFragment
+                || destination.id == R.id.settingsLandingFragment) {
                 bottomNav.hide()
             } else {
                 bottomNav.show()
@@ -77,20 +79,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
 
     fun setupTerminals() {
-//        viewmodel.setupTerminal()
-        viewmodel.getISWToken()
-        viewmodel.downloadNibbsKey()
         if (Prefs.getString("KSN", "").isNullOrEmpty()) {
-//            Toast.makeText(this, "Kindly wait while details are being downloaded", Toast.LENGTH_LONG).show()
-//           runBlocking {
-//               viewmodel.eraseKeys()
-//               viewmodel.writePinKey()
-//               viewmodel.writeDukptKey()
-////               viewmodel.dowloadDetails()
-//           }
+            Toast.makeText(this, "Kindly wait while details are being downloaded", Toast.LENGTH_LONG).show()
+           runBlocking {
+               viewmodel.eraseKeys()
+               viewmodel.writePinKey()
+               viewmodel.writeDukptKey()
+//               viewmodel.dowloadDetails()
+           }
         }
 
-//        viewmodel.checkKey()
+        viewmodel.checkKey()
 
     }
 

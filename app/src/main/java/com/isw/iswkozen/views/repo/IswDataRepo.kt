@@ -41,15 +41,16 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
                 // check if its EPMS
 
-                val port = Constants.ISW_DEFAULT_TERMINAL_PORT.toInt()
-                val ip = Constants.ISW_DEFAULT_TERMINAL_IP
-                val isEPMS = port == Constants.ISW_TERMINAL_PORT
-                        && ip == Constants.ISW_TERMINAL_IP
+                val port = Constants.ISW_TERMINAL_PORT.toInt()
+                val ip = Constants.ISW_TERMINAL_IP
+//                val isEPMS = port == Constants.ISW_TERMINAL_PORT
+//                        && ip == Constants.ISW_TERMINAL_IP
 
                 // getResult clear master key
-                val cms = Constants.getCMS(isEPMS)
+                val cms = Constants.getCMS(false)
                 nibssIsoServiceImpl.downloadKey(
-                    terminalInfo?.terminalCode.toString(),
+//                    terminalInfo?.terminalCode.toString(),
+                    "205777VZ",
                     ip, port, cms, "9A0000",
                     "9B0000",
                     "9G0000"
@@ -109,7 +110,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
                 iswDetailsAndKeySourceInteractor.downloadTerminalDetails(data)
 
-                // read the data
+                // read the data from saved pref
                 var info = readterminalDetails()
 
                 println("info =>  ${info.toString()}")
@@ -134,8 +135,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             return withContext(dispatcher) {
                 println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
                 var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
-                val port = Constants.ISW_DEFAULT_TERMINAL_PORT.toInt()
-                val ip = Constants.ISW_DEFAULT_TERMINAL_IP
+                val port = Constants.ISW_TERMINAL_PORT.toInt()
+                val ip = Constants.ISW_TERMINAL_IP
                 val isEPMS = port == Constants.ISW_TERMINAL_PORT
                         && ip == Constants.ISW_TERMINAL_IP
 
@@ -304,5 +305,35 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
            Log.e("loadConfigError", e.stackTraceToString())
            return false
        }
+    }
+
+    suspend fun resetConfig(): Boolean {
+        try {
+            return withContext(dispatcher) {
+                // first download terminal parameters
+                // the download parameter function has the loadparameter function implemented in it
+                downloadTerminalDetails()
+                loadAllConfig()
+                return@withContext true
+            }
+        } catch (e: Exception) {
+            Log.e("loadConfigError", e.stackTraceToString())
+            return false
+        }
+    }
+
+    suspend fun loadAllkeys(): Int {
+        try {
+            return withContext(dispatcher) {
+               // run all the keys related functions
+                eraseKeys()
+                writePinKey()
+                writeDukptKey()
+                return@withContext 0
+            }
+        } catch (e: Exception) {
+            Log.e("loadallkeyError", e.stackTraceToString())
+            return 99
+        }
     }
 }

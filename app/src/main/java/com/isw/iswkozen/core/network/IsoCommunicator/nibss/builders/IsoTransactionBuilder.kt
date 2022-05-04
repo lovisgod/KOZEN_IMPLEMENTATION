@@ -4,14 +4,18 @@ import android.content.Context
 import com.interswitchng.smartpos.shared.services.utils.IsoUtils
 import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.models.TransactionData
+import com.isw.iswkozen.core.data.utilsData.AccountType
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_MASTER_KEY
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_SESSION_KEY
 import com.isw.iswkozen.core.data.utilsData.Constants.getNextStan
+import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.network.IsoCommunicator.IsoSocket
 import com.isw.iswkozen.core.network.IsoCommunicator.utils.NibssIsoMessage
 import com.isw.iswkozen.core.network.IsoCommunicator.utils.TerminalInfoParser
 import com.isw.iswkozen.core.network.IsoCommunicator.utils.TripleDES
+import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.core.utilities.DateUtils.timeAndDateFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.monthFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.timeFormatter
@@ -91,7 +95,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             // extract encrypted key with clear key
             val encryptedKey = msg.message.getField<String>(SRCI)
-            println("typeaaaaaa ${key.javaClass}")
+            println("typeaaaaaa ${key}")
             println("typeaaaaaa ${encryptedKey}")
             val decryptedKey = TripleDES.soften(key, encryptedKey.toString())
             logger.log("Decrypted Key => $decryptedKey")
@@ -144,11 +148,16 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             // confirm that key was downloaded
             val key = Prefs.getString(KEY_SESSION_KEY, "")
+            println("session key => ${key}")
             if (key.isEmpty()) return null
 
             val hashValue = IsoUtils.getMac(key, temp) //SHA256
             message.setValue(64, hashValue)
+
+            // remove unset fields
+            message.message.removeFields(63)
             message.dump(System.out, "parameter request ---- ")
+
 
             // set server Ip and port
             socket.setIpAndPort(ip, port)
@@ -185,117 +194,126 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
         return null
     }
 
-//    override fun initiateCardPurchase(
-//        terminalInfo: TerminalInfo,
-//        transaction: TransactionInfo
-//    ): TransactionResponse {
-//        val now = Date()
-//        val message = NibssIsoMessage(messageFactory.newMessage(0x200))
-//        val processCode = "00" + transaction.accountType.value + "00"
-//        val hasPin = transaction.cardPIN.isNotEmpty()
-//        val stan = transaction.stan
-//        val randomReference = "000000$stan"
-//
-//        message
-//            .setValue(2, transaction.cardPAN)
-//            .setValue(3, processCode)
-//            .setValue(4, String.format(Locale.getDefault(), "%012d", transaction.amount))
-//            .setValue(7, timeAndDateFormatter.format(now))
-//            .setValue(11, stan)
-//            .setValue(12, timeFormatter.format(now))
-//            .setValue(13, monthFormatter.format(now))
-//            .setValue(14, transaction.cardExpiry)
-//            .setValue(18, terminalInfo.merchantCategoryCode)
-//            .setValue(22, "051")
-//            .setValue(23, transaction.csn)
-//            .setValue(25, "00")
-//            .setValue(26, "06")
-//            .setValue(28, "C00000000")
-//            .setValue(35, transaction.cardTrack2)
-//            .setValue(37, randomReference)
-//            .setValue(40, transaction.src)
-//            .setValue(41, terminalInfo.terminalId)
-//            .setValue(42, terminalInfo.merchantId)
-//            .setValue(43, terminalInfo.merchantNameAndLocation)
-//            .setValue(49, terminalInfo.currencyCode)
-//            .setValue(55, transaction.iccString)
-//
-//        if (hasPin) {
-//            message.setValue(52, transaction.cardPIN)
-//                .setValue(123, "510101511344101")
-//            // remove unset fields
-//            message.message.removeFields(32, 59)
-//        } else {
-//            message.setValue(123, "511101511344101")
-//            // remove unset fields
-//            message.message.removeFields(32, 52, 59)
-//        }
-//
-//        // set message hash
-//        val bytes = message.message.writeData()
-//        val length = bytes.size
-//        val temp = ByteArray(length - 64)
-//        if (length >= 64) {
-//            System.arraycopy(bytes, 0, temp, 0, length - 64)
-//        }
-//
-//        val sessionKey = store.getString(KEY_SESSION_KEY, "")
-//        val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
-//        message.setValue(128, hashValue)
-//        message.dump(System.out, "request -- ")
-//
-//        try {
-//            // open connection
-//            val isConnected = socket.open()
-//            if (!isConnected) return TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = "",
-//                scripts = "",
-//                date = now.time
-//            )
-//
-//
-//            val request = message.message.writeData()
-//            logger.log("Purchase Request HEX ---> ${IsoUtils.bytesToHex(request)}")
-//
-//            val response = socket.sendReceive(request)
-//            // close connection
-//            socket.close()
-//
-//            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
-//            responseMsg.dump(System.out, "")
-//
-//
-//            // return response
-//            return responseMsg.message.let {
-//                val authCode = it.getObjectValue<String?>(38) ?: ""
-//                val code = it.getObjectValue<String>(39)
-//                val scripts = it.getObjectValue<String>(55)
-//                return@let TransactionResponse(
-//                    responseCode = code,
-//                    authCode = authCode,
-//                    stan = stan,
-//                    scripts = scripts,
-//                    date = now.time
-//                )
-//            }
-//        } catch (e: Exception) {
-//            // log error
-//            logger.log(e.localizedMessage)
-//            e.printStackTrace()
-//            // auto reverse txn purchase
-//            reversePurchase(message)
-//            // return response
-//            return TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = transaction.stan,
-//                scripts = "",
-//                date = now.time
-//            )
-//        }
-//    }
+    fun get200Requeste(
+        terminalInfo: TerminalInfo,
+        transaction: RequestIccData,
+        accountType: AccountType
+    ): PurchaseResponse {
+        val now = Date()
+        val message = NibssIsoMessage(messageFactory.newMessage(0x200))
+        val processCode = "00" + accountType.value + "00"
+        var hasPin = transaction.haspin
+        val stan = getNextStan()
+        val randomReference = "000000$stan"
+
+        val track2data =transaction.TRACK_2_DATA
+        println("track2 data => ${track2data}")
+        // extract pan and expiry
+        val strTrack2 = track2data.split("F")[0]
+        var panX = strTrack2.split("D")[0]
+        val expiry = strTrack2.split("D")[1].substring(0, 4)
+        val src = strTrack2.split("D")[1].substring(4, 7)
+
+        message
+            .setValue(2, panX)
+            .setValue(3, processCode)
+            .setValue(4, String.format(Locale.getDefault(), "%012d", transaction.TRANSACTION_AMOUNT))
+            .setValue(7, timeAndDateFormatter.format(now))
+            .setValue(11, stan)
+            .setValue(12, timeFormatter.format(now))
+            .setValue(13, monthFormatter.format(now))
+            .setValue(14, expiry)
+            .setValue(18, terminalInfo.merchantCategoryCode)
+            .setValue(22, "051")
+            .setValue(23, transaction.APP_PAN_SEQUENCE_NUMBER)
+            .setValue(25, "00")
+            .setValue(26, "06")
+            .setValue(28, "C00000000")
+            .setValue(35, transaction.TRACK_2_DATA)
+            .setValue(37, randomReference)
+            .setValue(40, src)
+            .setValue(41, terminalInfo.terminalCode)
+            .setValue(42, terminalInfo.merchantId)
+            .setValue(43, terminalInfo.merchantName)
+            .setValue(49, terminalInfo.transCurrencyCode)
+            .setValue(55, transaction.iccAsString)
+
+        if (hasPin == true) {
+            message.setValue(52, transaction.EMV_CARD_PIN_DATA.CardPinBlock)
+                .setValue(123, Constants.POS_DATA_CODE)
+            // remove unset fields
+            message.message.removeFields(32, 59)
+        } else {
+            message.setValue(123, Constants.POS_DATA_CODE)
+            // remove unset fields
+            message.message.removeFields(32, 52, 59)
+        }
+
+        // set message hash
+        val bytes = message.message.writeData()
+        val length = bytes.size
+        val temp = ByteArray(length - 64)
+        if (length >= 64) {
+            System.arraycopy(bytes, 0, temp, 0, length - 64)
+        }
+
+        val sessionKey = Prefs.getString(KEY_SESSION_KEY, "")
+        val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
+        message.setValue(128, hashValue)
+        message.dump(System.out, "request -- ")
+
+        try {
+            // open connection
+            val isConnected = socket.open()
+            if (!isConnected) return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = "",
+                scripts = "",
+                date = now.time
+            )
+
+
+            val request = message.message.writeData()
+            logger.log("Purchase Request HEX ---> ${IsoUtils.bytesToHex(request)}")
+
+            val response = socket.sendReceive(request)
+            // close connection
+            socket.close()
+
+            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
+            responseMsg.dump(System.out, "")
+
+
+            // return response
+            return responseMsg.message.let {
+                val authCode = it.getObjectValue<String?>(38) ?: ""
+                val code = it.getObjectValue<String>(39)
+                val scripts = it.getObjectValue<String>(55)
+                return@let PurchaseResponse(
+                    responseCode = code,
+                    authCode = authCode,
+                    stan = stan,
+                    scripts = scripts,
+                    date = now.time
+                )
+            }
+        } catch (e: Exception) {
+            // log error
+            logger.log(e.localizedMessage)
+            e.printStackTrace()
+            // auto reverse txn purchase
+            reversePurchase(message)
+            // return response
+            return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = stan,
+                scripts = "",
+                date = now.time
+            )
+        }
+    }
 //
 //    override fun initiatePaycodePurchase(
 //        terminalInfo: TerminalInfo,
@@ -1069,104 +1087,104 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 //    }
 //
 //
-//    private fun reversePurchase(txnMessage: NibssIsoMessage): TransactionResponse {
-//        logger.log("D/IsoServiceImpl+++++ in reversal method")
-//        val now = Date()
-//        val stan = getNextStan()
-//
-//        try {
-//            val message = NibssIsoMessage(messageFactory.newMessage(0x420))
-//            val randomReference = "000000$stan"
-//
-//            val txnAmount = txnMessage.message.getField<Any>(4).toString()
-//            val txnStan = txnMessage.message.getField<Any>(11).toString()
-//            val txnDateTime = txnMessage.message.getField<Any>(7).toString()
-//            val pinData = txnMessage.message.getField<Any>(52)
-//
-//            // txn acquirer and forwarding code
-//            val txnCodes = "0000011112900000111129"
-//            // settlement amt
-//            val settlement = "000000000000"
-//            val txnFee = "C00000000"
-//            val settlementFee = "C00000000"
-//
-//            val originalDataElements = "0200$txnStan$txnDateTime$txnCodes"
-//            val replacementAmount = txnAmount + settlement + txnFee + settlementFee
-//
-//            message
-//                .copyFieldsFrom(txnMessage)
-////                    .setValue(32)
-//                .setValue(11, stan)
-//                .setValue(37, randomReference)
-//                .setValue(56, "4021") // timeout waiting for response
-//                .setValue(90, originalDataElements)
-//                .setValue(95, replacementAmount)
-//                // remove unused fields
-//                .message.removeFields(28, 32, 53, 55, 59, 62)
-//
-//            // set or remove pin field
-//            if (pinData != null) message.setValue(52, pinData.toString())
-//            else message.message.removeFields(52)
-//
-//
-//            // set message hash
-//            val bytes = message.message.writeData()
-//            val length = bytes.size
-//            val temp = ByteArray(length - 64)
-//            if (length >= 64) {
-//                System.arraycopy(bytes, 0, temp, 0, length - 64)
-//            }
-//
-//            val sessionKey = store.getString(KEY_SESSION_KEY, "")
-//            val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
-//            message.setValue(128, hashValue)
-//            message.dump(System.out, "reversal request -- ")
-//
-//            // open connection
-//            val isConnected = socket.open()
-//            if (!isConnected) return TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = stan,
-//                scripts = "",
-//                date = now.time
-//            )
-//
-//            logger.log("D/IsoServiceImpl++++sending reversal")
-//            val request = message.message.writeData()
-//            val response = socket.sendReceive(request)
-//            // close connection
-//            socket.close()
-//
-//            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
-//            responseMsg.dump(System.out, "")
-//
-//
-//            // return response
-//            return responseMsg.message.let {
-//                val authCode = it.getObjectValue(38) ?: ""
-//                val code = it.getObjectValue<String>(39)
-//                val scripts = it.getObjectValue<String>(55)
-//                return@let TransactionResponse(
-//                    responseCode = code,
-//                    authCode = authCode,
-//                    stan = stan,
-//                    scripts = scripts,
-//                    date = now.time
-//                )
-//            }
-//        } catch (e: Exception) {
-//            logger.log(e.localizedMessage)
-//            e.printStackTrace()
-//            return TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = stan,
-//                scripts = "",
-//                date = now.time
-//            )
-//        }
-//    }
+    private fun reversePurchase(txnMessage: NibssIsoMessage): PurchaseResponse {
+        logger.log("D/IsoServiceImpl+++++ in reversal method")
+        val now = Date()
+        val stan = getNextStan()
+
+        try {
+            val message = NibssIsoMessage(messageFactory.newMessage(0x420))
+            val randomReference = "000000$stan"
+
+            val txnAmount = txnMessage.message.getField<Any>(4).toString()
+            val txnStan = txnMessage.message.getField<Any>(11).toString()
+            val txnDateTime = txnMessage.message.getField<Any>(7).toString()
+            val pinData = txnMessage.message.getField<Any>(52)
+
+            // txn acquirer and forwarding code
+            val txnCodes = "0000011112900000111129"
+            // settlement amt
+            val settlement = "000000000000"
+            val txnFee = "C00000000"
+            val settlementFee = "C00000000"
+
+            val originalDataElements = "0200$txnStan$txnDateTime$txnCodes"
+            val replacementAmount = txnAmount + settlement + txnFee + settlementFee
+
+            message
+                .copyFieldsFrom(txnMessage)
+//                    .setValue(32)
+                .setValue(11, stan)
+                .setValue(37, randomReference)
+                .setValue(56, "4021") // timeout waiting for response
+                .setValue(90, originalDataElements)
+                .setValue(95, replacementAmount)
+                // remove unused fields
+                .message.removeFields(28, 32, 53, 55, 59, 62)
+
+            // set or remove pin field
+            if (pinData != null) message.setValue(52, pinData.toString())
+            else message.message.removeFields(52)
+
+
+            // set message hash
+            val bytes = message.message.writeData()
+            val length = bytes.size
+            val temp = ByteArray(length - 64)
+            if (length >= 64) {
+                System.arraycopy(bytes, 0, temp, 0, length - 64)
+            }
+
+            val sessionKey = Prefs.getString(KEY_SESSION_KEY, "")
+            val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
+            message.setValue(128, hashValue)
+            message.dump(System.out, "reversal request -- ")
+
+            // open connection
+            val isConnected = socket.open()
+            if (!isConnected) return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = stan,
+                scripts = "",
+                date = now.time
+            )
+
+            logger.log("D/IsoServiceImpl++++sending reversal")
+            val request = message.message.writeData()
+            val response = socket.sendReceive(request)
+            // close connection
+            socket.close()
+
+            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
+            responseMsg.dump(System.out, "")
+
+
+            // return response
+            return responseMsg.message.let {
+                val authCode = it.getObjectValue(38) ?: ""
+                val code = it.getObjectValue<String>(39)
+                val scripts = it.getObjectValue<String>(55)
+                return@let PurchaseResponse(
+                    responseCode = code,
+                    authCode = authCode,
+                    stan = stan,
+                    scripts = scripts,
+                    date = now.time
+                )
+            }
+        } catch (e: Exception) {
+            logger.log(e.localizedMessage)
+            e.printStackTrace()
+            return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = stan,
+                scripts = "",
+                date = now.time
+            )
+        }
+    }
 
     companion object {
         private const val SRCI = 53

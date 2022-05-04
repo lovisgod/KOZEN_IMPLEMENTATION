@@ -31,6 +31,9 @@ class NibssIsoServiceImpl(
                             TPK: String
                             ): Boolean {
 
+
+        println("ip  => $ip  port => $port")
+
         // getResult master key & save
         val isDownloaded = isoTransactionBuilder.KeyTransactionBuilder(terminalId, ip, port, TMK, cms)?.let { masterKey ->
             Prefs.putString(Constants.KEY_MASTER_KEY, masterKey)
@@ -65,6 +68,7 @@ class NibssIsoServiceImpl(
         port: Int,
         processingCode: String,
     ): TerminalInfo? {
+        println("ip  => $ip  port => $port")
         val terminalData = isoTransactionBuilder.parameterTransactionBuilder(
             terminalId,
             ip,

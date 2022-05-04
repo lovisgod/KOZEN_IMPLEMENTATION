@@ -153,6 +153,17 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         }
     }
 
+    fun loadAllKeys() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.loadAllkeys()
+                println("key result: ${result}")
+                _keyMStatus.postValue(result)
+            }
+
+        }
+    }
+
 
     fun downloadNibbsKey() {
         viewModelScope.launch {
@@ -175,7 +186,10 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                 var terminalInfo = dataRepo.readterminalDetails()
                 if (terminalInfo == null) {
                     dataRepo.downloadTerminalDetails()
-                    dataRepo.downLoadNibbsKey()
+//                    dataRepo.downLoadNibbsKey()
+                } else {
+                    setupTerminal()
+                    getISWToken()
                 }
             }
         }
@@ -193,10 +207,24 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         }
     }
 
+    // reset terminal downloads the terminal details and run the load terminal
+    // function that set the EMV parameters for the terminal
+
+    fun resetTerminalConfig()  {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var result = dataRepo.resetConfig()
+                println("reset terminal: ${result}")
+                _terminalSetupStatus.postValue(result)
+            }
+
+        }
+    }
+
     fun downloadNibbsParams(){
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                var result = dataRepo.downloadNibbsTerminalDetails("2ISW0001")
+                var result = dataRepo.downloadNibbsTerminalDetails("205777VZ")
                 println("terminal Details => $result")
             }
         }

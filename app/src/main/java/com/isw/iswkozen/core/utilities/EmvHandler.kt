@@ -206,11 +206,13 @@ class EmvHandler {
                 data = bundle.getByteArray(POIEmvCoreManager.EmvOnlineConstraints.EMV_DATA)
                 if (data != null) {
                     Log.d(TAG, "Trans Data : " + HexUtil.toHexString(data))
+                    iccData?.iccAsString = HexUtil.toHexString(data)
                 }
                 encryptData =
                     bundle.getByteArray(POIEmvCoreManager.EmvOnlineConstraints.ENCRYPT_DATA)
                 if (encryptData != null) {
                     Log.d(TAG, "Encrypt Data : " + HexUtil.toHexString(encryptData))
+                    iccData?.iccAsString = HexUtil.toHexString(data)
                 }
                 if (data != null) {
                     val tlvBuilder = BerTlvBuilder()
@@ -299,11 +301,13 @@ class EmvHandler {
                 data = bundle.getByteArray(POIEmvCoreManager.EmvResultConstraints.EMV_DATA)
                 if (data != null) {
                     Log.d(TAG, "Trans Data : " + HexUtil.toHexString(data))
+                    iccData?.iccAsString = HexUtil.toHexString(data)
                 }
                 encryptData =
                     bundle.getByteArray(POIEmvCoreManager.EmvResultConstraints.ENCRYPT_DATA)
                 if (encryptData != null) {
                     Log.d(TAG, "Encrypt Data : " + HexUtil.toHexString(encryptData))
+                    iccData?.iccAsString = HexUtil.toHexString(data)
                 }
                 scriptResult =
                     bundle.getByteArray(POIEmvCoreManager.EmvResultConstraints.SCRIPT_RESULT)
@@ -464,6 +468,7 @@ class EmvHandler {
 //                }, 1000)
         }
     }
+
 }
 
 

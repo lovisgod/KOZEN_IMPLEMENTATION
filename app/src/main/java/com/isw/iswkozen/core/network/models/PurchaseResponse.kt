@@ -46,5 +46,20 @@ data class PurchaseResponse(
     @field:Element(name = "transactionRef", required = false)
     var transactionRef: String = "",
 
+    @field: Element(name = "date", required = false)
+    var date: Long = 0L,
+
+    @field: Element(name = "scripts", required = false)
+    var scripts: String = "",
+
+    @field: Element(name = "responseDescription", required = false)
+    var responseDescription: String? = null,
+
+    @field: Element(name = "transactionId", required = false)
+    var transactionId: String? = null,
+
+//    @field: Element(name = "data", required = false)
+//    val inquiryResponse: InquiryResponse? = null,
+
     @field:Element(name = "remoteResponseCode", required = false)
     var remoteResponseCode: String = ""):Parcelable

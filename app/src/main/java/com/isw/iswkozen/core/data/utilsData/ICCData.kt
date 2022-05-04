@@ -1,9 +1,7 @@
 package com.isw.iswkozen.core.data.utilsData
 
-import com.isw.iswkozen.core.utilities.BerTag
-import com.isw.iswkozen.core.utilities.BerTlv
-import com.isw.iswkozen.core.utilities.BerTlvParser
-import com.isw.iswkozen.core.utilities.BerTlvs
+import com.isw.iswkozen.core.utilities.*
+import com.isw.iswkozen.core.utilities.EmvUtils
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -11,7 +9,7 @@ import java.util.*
 
 enum class ICCData(val tagName: String, val tag: String, val min: Int, val max: Int) {
     // emv request and sensitive data
-    AUTHORIZATION_REQUEST("Authorization Request", "9F26", 8, 8),
+    AUTHORIZATION_REQUEST("Authorization Request", "9F26", 8, 8,),
     CRYPTOGRAM_INFO_DATA("Cryptogram Information Data", "9F27",  1, 1),
     ISSUER_APP_DATA("Issuer Application Data", "9F10", 0, 32),
     UNPREDICTABLE_NUMBER("Unpredictable Number", "9F37", 4, 4),
@@ -89,14 +87,14 @@ internal fun getIccData(data: ByteArray): RequestIccData {
         DEDICATED_FILE_NAME = ICCData.DEDICATED_FILE_NAME.getTlv(data) ?: "").apply {
 
 
-        val tagValues: MutableList<Pair<ICCData, ByteArray?>> = mutableListOf()
-
+//        val tagValues: MutableList<Pair<ICCData, ByteArray?>> = mutableListOf()
+//
 //        for (tag in REQUEST_TAGS) {
-//            val tlv = getTlv(tag.tag)
+//            val tlv = tag.getTlv()
 //            tagValues.add(Pair(tag, tlv))
 //        }
 
-//        iccAsString = EmvUtils.buildIccString(tagValues)
+
         INTERFACE_DEVICE_SERIAL_NUMBER = ICCData.INTERFACE_DEVICE_SERIAL_NUMBER.getTlv(data) ?: ""
         APP_VERSION_NUMBER = ICCData.APP_VERSION_NUMBER.getTlv(data) ?: ""
         CARD_HOLDER_NAME = ICCData.CARD_HOLDER_NAME.getTlvText(data) ?: ""
@@ -106,6 +104,7 @@ internal fun getIccData(data: ByteArray): RequestIccData {
 
 
 }
+
 
 fun ICCData.getTlv(data: ByteArray): String{
     val tlvParser = BerTlvParser()

@@ -191,8 +191,8 @@ object Constants {
         const val ISW_TERMINAL_IP_EPMS = "196.6.103.72"
         const val ISW_TERMINAL_PORT_EPMS = 5043
 
-        const val ISW_TERMINAL_IP_CTMS = "196.6.103.18"
-        const val ISW_TERMINAL_PORT_CTMS = 5008
+        const val ISW_TERMINAL_IP_CTMS = "196.6.103.10"
+        const val ISW_TERMINAL_PORT_CTMS = 55533
         const val PAYMENT_CODE = "051626554287"
     }
 
@@ -235,5 +235,6 @@ object Constants {
     var CONTACT_POS_DATA_CODE_NO_PIN = "511101511344101"
     var POS_ENTRY_MODE = "051"
     var POS_DATA_CODE = ""
+    const val TIMEOUT_CODE = "0x0x0"
 
 }

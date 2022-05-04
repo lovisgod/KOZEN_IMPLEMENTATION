@@ -48,5 +48,9 @@
             android:name="transtype"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsLandingFragment"
+        android:name="com.isw.iswkozen.views.fragments.SettingsLandingFragment"
+        android:label="SettingsLandingFragment" />
 
 </navigation>
