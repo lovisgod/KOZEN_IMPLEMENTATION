@@ -100,6 +100,7 @@ internal object DisplayUtils {
         val currency = when (val config = terminalInfo) {
             null -> ""
             else -> when(config.transCurrencyCode) {
+                "0566" -> IswLocal.NIGERIA.currency
                 IswLocal.NIGERIA.code -> IswLocal.NIGERIA.currency
                 IswLocal.GHANA.code -> IswLocal.GHANA.currency
                 IswLocal.USA.code -> IswLocal.USA.currency
