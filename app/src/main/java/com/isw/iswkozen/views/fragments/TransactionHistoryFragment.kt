@@ -6,14 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.isw.iswkozen.R
+import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.databinding.FragmentReceiptBinding
 import com.isw.iswkozen.databinding.FragmentTransactionHistoryBinding
+import com.isw.iswkozen.views.adapters.GenericListAdapter
+import com.isw.iswkozen.views.adapters.getGenericAdapter
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class TransactionHistoryFragment : Fragment() {
+
+    lateinit var adapter: GenericListAdapter<TransactionResultData>
 
     private lateinit var binding: FragmentTransactionHistoryBinding
     val viewmodel: IswKozenViewModel by viewModel()
@@ -33,8 +40,23 @@ class TransactionHistoryFragment : Fragment() {
         return binding.root
     }
 
+
     private fun fetchData() {
         viewmodel.getAllTransactionHistory()
+        viewmodel.readterminalDetails()
+        viewmodel.terminalInfo.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter = getGenericAdapter(R.layout.transaction_item, it)
+                binding.transList.adapter = adapter
+                binding.transList.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
+                viewmodel.transactionDataList.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        adapter.submitList(it)
+                    }
+                })
+            }
+        })
+
     }
 
     companion object {
