@@ -1,11 +1,13 @@
 package com.isw.iswkozen.core.network.models
 
-import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.utilsData.AccountType
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.data.utilsData.TransactionType
+import com.isw.iswkozen.core.utilities.DateUtils
 import org.simpleframework.xml.Element
+import java.util.*
 
 sealed class TransactionRequest {
     @field:Element(name = "terminalInformation", required = false)
@@ -15,7 +17,19 @@ sealed class TransactionRequest {
     var cardData: CardData? = null
 
     @field:Element(name = "fromAccount", required = false)
-    var fromAccount: String = ""
+    var fromAccount: String = AccountType.Default.name
+
+    @field:Element(name = "receivingInstitutionId", required = false)
+    var receivingInstitutionId: String = ""
+
+    @field:Element(name = "destinationAccountNumber", required = false)
+    var destinationAccountNumber: String = ""
+
+    @field:Element(name = "extendedTransactionType", required = false)
+    var extendedTransactionType: String = "6101"
+
+    @field:Element(name = "originalTransmissionDateTime", required = false)
+    var originalTransmissionDateTime: String = DateUtils.universalDateFormat.format(Date())
 
     @field:Element(name = "stan", required = false)
     var stan: String = ""
@@ -90,188 +104,6 @@ sealed class TransactionRequest {
     var surcharge: String = ""
 
     companion object {
-//        fun create(
-//            type: TransactionType,
-//            deviceName: String,
-//            terminalInfo: TerminalInfo,
-//            transactionInfo: TransactionInfo,
-//            preAuthStan: String = "",
-//            preAuthDateTime: String = "",
-//            preAuthAuthId: String = ""
-//        ): TransactionRequest {
-//            val hasPin = transactionInfo.cardPIN.isNotEmpty()
-//            val iswConfig = IswPos.getInstance().config
-//
-//            val request = when (type) {
-//                TransactionType.Purchase, TransactionType.CashBack -> PurchaseRequest()
-//                TransactionType.PreAuth -> PreAuthRequest()
-//                TransactionType.Completion -> CompletionRequest()
-//                TransactionType.Refund -> RefundRequest()
-//                TransactionType.IFIS -> CashOutRequest()
-//                else -> throw Exception("Invalid transaction type selected")
-//            }
-//
-//            return request.apply {
-//                terminalInformation =
-//                    TerminalInformation.create(deviceName, terminalInfo, transactionInfo)
-//                cardData = CardData.create(transactionInfo)
-//                fromAccount = transactionInfo.accountType.name
-//                minorAmount = transactionInfo.amount.toString()
-//                stan = transactionInfo.stan
-//                pinData = if (hasPin) PinData.create(transactionInfo) else null
-//                keyLabel = if (iswConfig.environment == Environment.Test) "000006" else "000002"
-//                this.purchaseType = transactionInfo.purchaseType.name
-//                transactionId = System.currentTimeMillis().toString()
-//
-//                // completion fields
-//                originalStan = preAuthStan
-//                originalDateTime = preAuthDateTime
-//                originalAuthId = preAuthAuthId
-//            }
-//        }
-//
-//        fun createCashOut(
-//            type: TransactionType,
-//            deviceName: String,
-//            terminalInfo: TerminalInfo,
-//            transactionInfo: TransactionInfo,
-//            allTerminalInfo: AllTerminalInfo
-//        ): TransactionRequest {
-//            val hasPin = transactionInfo.cardPIN.isNotEmpty()
-//            val iswConfig = IswPos.getInstance().config
-//
-//            val request =  CashOutRequest()
-//
-//            val agentDetails = allTerminalInfo.terminalInfoBySerials
-//
-//            return request.apply {
-//                terminalInformation =
-//                    TerminalInformation.create(deviceName, terminalInfo, transactionInfo)
-//                cardData = CardData.create(transactionInfo)
-//                fromAccount = transactionInfo.accountType.name
-//                minorAmount = transactionInfo.amount.toString()
-//                stan = transactionInfo.stan
-//                pinData = if (hasPin) PinData.create(transactionInfo) else null
-//                keyLabel = if (iswConfig.environment == Environment.Test) "000006" else "000002"
-//                this.purchaseType = transactionInfo.purchaseType.name
-//                transactionId = System.currentTimeMillis().toString()
-//
-//                customerName = agentDetails!!.merchantName
-//                customerMobile = agentDetails.merchantPhoneNumber
-//                customerId = agentDetails.merchantPhoneNumber
-//                customerEmail = agentDetails.merchantEmail
-//                retrievalReferenceNumber = transactionInfo.stan
-//                requestType = "InquiryPayment"
-//                paymentCode = Constants.PAYMENT_CODE
-//                cardPan = transactionInfo.cardPAN
-//                bankCbnCode = terminalInfo.terminalId.substring(1,4)
-//                terminalId = terminalInfo.terminalId
-//                app = "IFISBillPaymentCashoutRequest"
-//            }
-//        }
-//
-//        fun buildInquiry(
-//            deviceName: String,
-//            terminalInfo: TerminalInfo,
-//            billPaymentInfo: IswBillPaymentInfo,
-//            pan: String,
-//            paymentInfo: IswPaymentInfo
-//        ): TransactionRequest {
-//
-//            val iswConfig = IswPos.getInstance().config
-//
-//            val request =  BillPaymentRequest()
-//
-//            val iccData = IccData()
-//            val transactionInfo = TransactionInfo("","", pan, pan,"",iccData,"","", paymentInfo.amount, paymentInfo.currentStan, PurchaseType.Card, AccountType.Savings, "")
-//            return request.apply {
-//                terminalInformation =
-//                    TerminalInformation.create(deviceName, terminalInfo, transactionInfo)
-//                cardData = CardData.create(transactionInfo)
-//                //fromAccount = transactionInfo.accountType.name
-//                minorAmount = transactionInfo.amount.toString()
-//                stan = transactionInfo.stan
-//                pinData =  null
-//                keyLabel = if (iswConfig.environment == Environment.Test) "000006" else "000002"
-//
-//                customerMobile = billPaymentInfo.customerPhone
-//                customerId = billPaymentInfo.customerId
-//                customerEmail = billPaymentInfo.customerEmail ?: ""
-//                requestType = "Inquiry"
-//                paymentCode = billPaymentInfo.paymentCode
-//                cardPan = pan
-//                bankCbnCode = terminalInfo.terminalId.substring(1,4)
-//                terminalId = terminalInfo.terminalId
-//            }
-//        }
-//
-//        fun buildCompletion(
-//            deviceName: String,
-//            terminalInfo: TerminalInfo,
-//            transactionInfo: TransactionInfo,
-//            inquiryResponse: InquiryResponse
-//        ): TransactionRequest {
-//
-//            val hasPin = transactionInfo.cardPIN.isNotEmpty()
-//            val iswConfig = IswPos.getInstance().config
-//
-//            val request =  BillPaymentRequest()
-//            val amount: Int = if(inquiryResponse.isAmountFixed == "1") inquiryResponse.approvedAmount.toInt() else transactionInfo.amount
-//            return request.apply {
-//                terminalInformation =
-//                    TerminalInformation.create(deviceName, terminalInfo, transactionInfo)
-//                cardData = CardData.create(transactionInfo)
-//                fromAccount = transactionInfo.accountType.name
-//                minorAmount = amount.toString()
-//                stan = transactionInfo.stan
-//                pinData =  if (hasPin) PinData.create(transactionInfo) else null
-//                keyLabel = if (iswConfig.environment == Environment.Test) "000006" else "000002"
-//                customerMobile = inquiryResponse.customerPhone
-//                customerId = inquiryResponse.customerId
-//                customerEmail = inquiryResponse.customerEmail ?: ""
-//                requestType = "Payment"
-//                paymentCode = inquiryResponse.paymentCode
-//                cardPan = transactionInfo.cardPAN
-//                bankCbnCode = terminalInfo.terminalId.substring(1,4)
-//                terminalId = terminalInfo.terminalId
-//                uuid = inquiryResponse.uuid
-//                transactionRef = inquiryResponse.transactionRef
-//            }
-//        }
-//
-//        fun buildAdvice(
-//            deviceName: String,
-//            terminalInfo: TerminalInfo,
-//            transactionInfo: TransactionInfo,
-//            inquiryResponse: InquiryResponse
-//        ): TransactionRequest {
-//
-//            val hasPin = transactionInfo.cardPIN.isNotEmpty()
-//            val iswConfig = IswPos.getInstance().config
-//
-//            val request =  BillPaymentRequest()
-//            val amount: Int = if(inquiryResponse?.isAmountFixed == "1") inquiryResponse.approvedAmount.toInt() else transactionInfo.amount
-//            return request.apply {
-//                terminalInformation =
-//                    TerminalInformation.create(deviceName, terminalInfo, transactionInfo)
-//                cardData = CardData.create(transactionInfo)
-//                fromAccount = transactionInfo.accountType.name
-//                minorAmount = amount.toString()
-//                stan = transactionInfo.stan
-//                pinData =  if (hasPin) PinData.create(transactionInfo) else null
-//                keyLabel = if (iswConfig.environment == Environment.Test) "000006" else "000002"
-//                customerMobile = inquiryResponse.customerPhone
-//                customerId = inquiryResponse.customerId
-//                customerEmail = inquiryResponse.customerEmail ?: ""
-//                requestType = "Advice"
-//                paymentCode = inquiryResponse.paymentCode
-//                cardPan = transactionInfo.cardPAN
-//                bankCbnCode = terminalInfo.terminalId.substring(1,4)
-//                terminalId = terminalInfo.terminalId
-//                uuid = inquiryResponse.uuid
-//                transactionRef = inquiryResponse.transactionRef
-//            }
-//        }
 
         fun createPurchaseRequest(terminalInfoX: TerminalInfo, requestData: RequestIccData = RequestIccData()): TransactionRequest {
             val request = PurchaseRequest()
@@ -288,6 +120,31 @@ sealed class TransactionRequest {
                 keyLabel = if (!Constants.checkEmv()) "000006" else "000002"
                 this.purchaseType = TransactionType.Card.name
                 transactionId = System.currentTimeMillis().toString()
+            }
+
+        }
+
+        fun createCashoutRequest(terminalInfoX: TerminalInfo, requestData: RequestIccData = RequestIccData()): TransactionRequest {
+            val request = TransferRequest()
+            var cardDataX = CardData.create(requestData)
+
+            return request.apply {
+                terminalInformation =
+                    TerminalInformationRequest().createForrequest(
+                        terminalInfo = terminalInfoX, haspin = requestData.haspin!!)
+                cardData = cardDataX
+                minorAmount = requestData.TRANSACTION_AMOUNT
+                stan = Constants.getNextStan()
+                pinData = if (requestData.haspin!!) PinData.create(Constants.memoryPinData) else null
+                keyLabel = if (!Constants.checkEmv()) "000006" else "000002"
+                this.purchaseType = TransactionType.Card.name
+                transactionId = System.currentTimeMillis().toString()
+                extendedTransactionType = Constants.additionalTransactionInfo.extendedTransactionType
+                surcharge = Constants.additionalTransactionInfo.surcharge
+                receivingInstitutionId = Constants.additionalTransactionInfo.receivingInstitutionId
+                destinationAccountNumber = Constants.additionalTransactionInfo.destinationAccountNumber
+                fromAccount = Constants.additionalTransactionInfo.fromAccount
+
             }
 
         }

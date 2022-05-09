@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == R.id.amountFragment || destination.id == R.id.processingFragment
                 || destination.id == R.id.receiptFragment
+                || destination.id == R.id.transactionHistoryFragment
                 || destination.id == R.id.settingsLandingFragment) {
                 bottomNav.hide()
             } else {

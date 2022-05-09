@@ -14,4 +14,8 @@ interface kimonoInterface {
     @POST(Constants.KIMONO_END_POINT)
     fun makePurchase( @Body request: PurchaseRequest):
             Simple<PurchaseResponse>
+
+    @POST(Constants.KIMONO_END_POINT)
+    fun makeCashout(@Body request: TransferRequest, @Header("Authorization") token: String ):
+            Simple<PurchaseResponse>
 }

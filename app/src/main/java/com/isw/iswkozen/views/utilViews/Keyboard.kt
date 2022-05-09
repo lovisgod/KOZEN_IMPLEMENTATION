@@ -39,22 +39,22 @@ class Keyboard(activity: Activity, callback: KeyBoardListener, view: View) : Vie
         view.findViewById<View>(R.id.btn8).setOnClickListener(this)
         view.findViewById<View>(R.id.btn9).setOnClickListener(this)
         view.findViewById<View>(R.id.btn_dot).setOnClickListener(this)
-        view.findViewById<View>(R.id.btnClear).setOnClickListener(this)
+//        view.findViewById<View>(R.id.btnClear).setOnClickListener(this)
         view.findViewById<View>(R.id.btnConfirm).setOnClickListener(this)
 
 
 
 
-//        activity.findViewById<View>(R.id.btnClear).let {
-//            it.setOnClickListener(this)
-//
-//            // clear text on long click
-//            it.setOnLongClickListener {
-//                result = ""
-//                mCallback.onTextChange(result)
-//                true
-//            }
-//        }
+        activity.findViewById<View>(R.id.btnClear).let {
+            it.setOnClickListener(this)
+
+            // clear text on long click
+            it.setOnLongClickListener {
+                result = ""
+                mCallback.onTextChange(result)
+                true
+            }
+        }
 
 
         // set callback
@@ -102,7 +102,7 @@ class Keyboard(activity: Activity, callback: KeyBoardListener, view: View) : Vie
 //                result += "000"
 //            }
             R.id.btnClear -> {
-                if (result.length > 0) {
+                if (result.isNotEmpty()) {
                     result = result.substring(0, result.length - 1)
                 }
             }

@@ -1,6 +1,7 @@
 package com.isw.iswkozen.core.data.utilsData
 
 import com.isw.iswkozen.BuildConfig
+import com.isw.iswkozen.core.network.models.AdditionalTransactionInfo
 import com.isw.iswkozen.core.network.models.MemoryPinData
 import com.pixplicity.easyprefs.library.Prefs
 import java.util.*
@@ -236,5 +237,7 @@ object Constants {
     var POS_ENTRY_MODE = "051"
     var POS_DATA_CODE = ""
     const val TIMEOUT_CODE = "0x0x0"
+
+     var additionalTransactionInfo = AdditionalTransactionInfo()
 
 }

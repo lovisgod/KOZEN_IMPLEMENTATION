@@ -120,7 +120,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 dataRepo.allTransactions.collect {
-                    println("this is the list => ${it[0]}")
+                    println("this is the list => ${it}")
                     _transactionDataList.postValue(it)
                 }
             }
@@ -128,13 +128,14 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     }
 
-    fun makeOnlineRequest( ) {
+    fun makeOnlineRequest(transType: String ) {
+        println("transtype => $transType")
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var transactionData = dataRepo.getTransactionData()
                 var terminalInfo = dataRepo.readterminalDetails()
                 var response = terminalInfo?.let {
-                    dataRepo.makeOnlineRequest(transactionName = "purchase",
+                    dataRepo.makeOnlineRequest(transactionName = transType,
                         iccData = transactionData, terminalData = it
                     )
                 }

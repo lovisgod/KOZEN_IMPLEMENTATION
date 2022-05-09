@@ -6,15 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.isw.iswkozen.R
+import com.isw.iswkozen.core.data.utilsData.AccountType
+import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.PaymentType
 import com.isw.iswkozen.databinding.FragmentAmountBinding
 import com.isw.iswkozen.views.utilViews.Keyboard
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
+import getSurchargeFromETT
 import kotlinx.android.synthetic.main.fragment_amount.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
@@ -23,11 +27,13 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
 
     private lateinit var keyboard: Keyboard
     private lateinit var binding: FragmentAmountBinding
+    private var accountType = AccountType.Default
     val viewmodel: IswKozenViewModel by viewModel()
     private val defaultAmount = "0.00"
     private var currentAmount = 0
     private val amountFragmentArgs by navArgs<AmountFragmentArgs>()
     private val transType by lazy { amountFragmentArgs.transtype }
+    private lateinit var accountTYpeDialogFragment: AccountTypeFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +91,36 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
                 val direction = AmountFragmentDirections.actionAmountFragmentToProcessingFragment("${currentAmount},PURCHASE")
                 findNavController().navigate(direction)
             }
+
+            "CASHOUT" -> {
+                showAccountTypeFragment()
+            }
         }
+    }
+
+    fun showAccountTypeFragment(){
+        accountTYpeDialogFragment = AccountTypeFragment {
+            accountType = when (it) {
+                0 -> AccountType.Default
+                1 -> AccountType.Savings
+                2 -> AccountType.Current
+                else -> AccountType.Default
+            }
+
+            Constants.additionalTransactionInfo.apply {
+                amount = currentAmount.toString()
+                extendedTransactionType = "6103"
+                receivingInstitutionId = "627629"
+                destinationAccountNumber = "2089430464"
+                surcharge = getSurchargeFromETT(ETT.ETT_6103, currentAmount.toString())
+                fromAccount = accountType.name
+
+            }
+
+            val direction = AmountFragmentDirections.actionAmountFragmentToProcessingFragment("${currentAmount},CASHOUT")
+            findNavController().navigate(direction)
+        }
+        accountTYpeDialogFragment.show(childFragmentManager, "account_type")
     }
 
 

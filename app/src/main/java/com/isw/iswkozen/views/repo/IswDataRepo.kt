@@ -18,7 +18,6 @@ import com.isw.iswkozen.core.database.entities.createTransResultData
 import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
-import com.isw.iswkozen.core.utilities.DisplayUtils
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -222,8 +221,11 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                )
                            }
                            if (resultData != null) {
+                               println("got here for saving")
+                               println(resultData)
                                saveTransactionResult(resultData)
                            }
+                          purchaseResponse?.transTYpe = transactionName
                           purchaseResponse!!
                        } else {
                            val purchaseResponse =  PurchaseResponse(description = "An error occured",
@@ -238,11 +240,55 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                )
                            }
                            saveTransactionResult(resultData)
+                           purchaseResponse?.transTYpe = transactionName
+                           purchaseResponse
+                       }
+                   }
+
+                   "cashout" -> {
+                       var cashoutRequest = TransactionRequest.createCashoutRequest(terminalInfoX = terminalData, requestData = iccData)
+                       val token = Prefs.getString("TOKEN", "")
+                       var response = kimonoInterface.makeCashout(
+                           request = cashoutRequest as TransferRequest,
+                           token = token
+                       ).run()
+                       if (response.isSuccessful) {
+                           val purchaseResponse = response.body()
+                           var resultData = purchaseResponse?.let {
+                               createTransResultData(
+                                   it,
+                                   iccData,
+                                   transactionName,
+                                   TransactionType.Card,
+                                   terminalData
+                               )
+                           }
+                           if (resultData != null) {
+                               println("got here for saving")
+                               saveTransactionResult(resultData)
+                           }
+                           purchaseResponse?.transTYpe = transactionName
+                           purchaseResponse!!
+                       } else {
+                           val purchaseResponse =  PurchaseResponse(description = "An error occured",
+                               responseCode = "${response.code()}", responseMessage = "An error occurred")
+                           val resultData = purchaseResponse?.let {
+                               createTransResultData(
+                                   it,
+                                   iccData,
+                                   transactionName,
+                                   TransactionType.Card,
+                                   terminalData
+                               )
+                           }
+                           saveTransactionResult(resultData)
+                           purchaseResponse?.transTYpe = transactionName
                            purchaseResponse
                        }
                    }
 
                    else -> {
+                       println("got here instead")
                        val token  = Prefs.getString("TOKEN", "")
                        var response  = kimonoInterface.makePurchase(
                            request = purchaseRequest as PurchaseRequest

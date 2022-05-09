@@ -69,6 +69,15 @@ class ProcessingFragment : Fragment(), EMVEvents {
                     this
                 )
             }
+
+            "CASHOUT" -> {
+                viewmodel.startTransaction(amount.toLong(),
+                    0,
+                    PaymentType.CASHOUT.value,
+                    this.requireContext(),
+                    this
+                )
+            }
         }
     }
 
@@ -105,7 +114,15 @@ class ProcessingFragment : Fragment(), EMVEvents {
             iccData = data
             println("request data => ${data}")
             data.let {
-            viewmodel.makeOnlineRequest()
+            when (TRANSACTIONTYPE) {
+                "PURCHASE" -> {
+                    viewmodel.makeOnlineRequest("purchase")
+                }
+
+                "CASHOUT" -> {
+                    viewmodel.makeOnlineRequest("cashout")
+                }
+            }
 //                findNavController().navigate(R.id.receiptFragment)
             }
         }

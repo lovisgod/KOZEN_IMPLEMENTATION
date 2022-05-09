@@ -87,7 +87,7 @@ class ReceiptFragment : Fragment() {
                 binding.tid.text = terminalInfo.terminalCode.toString()
                 binding.merchantLocation.text = "${terminalInfo.merchantAddress1} ${terminalInfo.merchantAddress2}"
             }
-            binding.transactionType.text = "PURCHASE"
+            binding.transactionType.text = it.transTYpe
 
             binding.stan.text = it.stan.toString()
             binding.rrn.text = it.stan.padStart(12, '0')

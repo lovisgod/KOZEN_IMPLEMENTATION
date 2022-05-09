@@ -12,6 +12,7 @@ import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.core.utilities.DateUtils
 import com.isw.iswkozen.core.utilities.DisplayUtils
+import java.util.*
 
 abstract class GenericListAdapter<T : Any>(
     @IdRes val layoutId: Int,
@@ -42,7 +43,8 @@ fun getGenericAdapter(layoutId: Int,  terminalInfo: TerminalInfo): GenericListAd
                 this.findViewById<TextView>(R.id.amount).text =
                     DisplayUtils.getAmountWithCurrency(item.amount, terminalInfo)
                 this.findViewById<TextView>(R.id.paymentType).text = item.type.name
-                this.findViewById<TextView>(R.id.date).text = item.dateTime
+                var date = Date(item.txnDate)
+                this.findViewById<TextView>(R.id.date).text = DateUtils.timeOfDateFormat.format(date)
                 this.findViewById<TextView>(R.id.transactionType).text = item.paymentType
                 val isSuccess = item.responseCode == IsoUtils.OK
                 val textColor =

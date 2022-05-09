@@ -42,7 +42,7 @@ class TransactionHistoryFragment : Fragment() {
 
 
     private fun fetchData() {
-        viewmodel.getAllTransactionHistory()
+        viewmodel. getAllTransactionHistory()
         viewmodel.readterminalDetails()
         viewmodel.terminalInfo.observe(viewLifecycleOwner, Observer {
             it?.let {

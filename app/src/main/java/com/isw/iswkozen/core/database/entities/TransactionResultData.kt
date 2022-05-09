@@ -8,13 +8,14 @@ import com.isw.iswkozen.core.data.utilsData.RequestIccData
 import com.isw.iswkozen.core.data.utilsData.TransactionType
 import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.core.utilities.DisplayUtils
+import java.time.LocalDate.now
+import java.util.*
 
 
 @Entity(tableName = "transaction_result_table")
 data class TransactionResultData(
-    @PrimaryKey(autoGenerate = true) val id: Int? = 0,
     val paymentType: String = "",
-    val stan: String = "",
+    @PrimaryKey val stan: String = "",
     val dateTime: String = "",
     val amount: String = "",
     val type: TransactionType,
@@ -69,6 +70,7 @@ fun createTransResultData(purchaseResponse: PurchaseResponse,
             merchantLocation = terminalData.merchantAddress1 + terminalData.merchantAddress2,
             responseMessage = purchaseResponse.description,
             responseCode = purchaseResponse.responseCode,
+            txnDate = Date().time
         )
     }
 }

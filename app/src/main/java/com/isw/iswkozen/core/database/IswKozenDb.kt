@@ -8,7 +8,7 @@ import com.isw.iswkozen.core.database.dao.IswKozenDao
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 
 // Annotates class to be a Room Database with a table (entity) of the TransactionResultData class
-@Database(entities = arrayOf(TransactionResultData::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(TransactionResultData::class), version = 2, exportSchema = false)
 public abstract class IswKozenRoomDb : RoomDatabase() {
 
     abstract fun iswKozenDao(): IswKozenDao
@@ -27,7 +27,7 @@ public abstract class IswKozenRoomDb : RoomDatabase() {
                     context.applicationContext,
                     IswKozenRoomDb::class.java,
                     "iswkozen_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 // return instance
                 instance

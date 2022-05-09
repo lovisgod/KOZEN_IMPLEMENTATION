@@ -15,15 +15,15 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@color/purple_700"
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="70dp"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/get_paid_text"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/_30dp"
+            android:layout_marginTop="@dimen/_20dp"
             android:layout_marginStart="@dimen/dimen_16dp"
-            android:textSize="@dimen/_30sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
@@ -37,10 +37,11 @@
             app:layout_constraintTop_toBottomOf="@+id/top_cover"
             android:layout_marginTop="@dimen/dimen_16dp"
             android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/_10dp"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
             tools:listitem="@layout/transaction_item"
-            android:layout_height="wrap_content"/>
+            android:layout_height="470dp"/>
 
 
         <androidx.cardview.widget.CardView

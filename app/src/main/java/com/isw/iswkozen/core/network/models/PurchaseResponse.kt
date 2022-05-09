@@ -60,6 +60,9 @@ data class PurchaseResponse(
     @field: Element(name = "transactionId", required = false)
     var transactionId: String? = null,
 
+    @field: Element(name = "transtype", required = false)
+    var transTYpe: String? = null,
+
 //    @field: Element(name = "data", required = false)
 //    val inquiryResponse: InquiryResponse? = null,
 
