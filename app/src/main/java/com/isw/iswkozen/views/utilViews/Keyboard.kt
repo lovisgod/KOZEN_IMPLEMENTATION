@@ -45,7 +45,7 @@ class Keyboard(activity: Activity, callback: KeyBoardListener, view: View) : Vie
 
 
 
-        activity.findViewById<View>(R.id.btnClear).let {
+        view.findViewById<View>(R.id.btnClear).let {
             it.setOnClickListener(this)
 
             // clear text on long click

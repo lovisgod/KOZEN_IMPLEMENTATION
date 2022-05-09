@@ -370,24 +370,24 @@ public class PasswordDialog {
     private int onOnlinePin() {
 
         dialog.show();
-        handleKeyInput();
-//        hsmManage.registerListener(pinEventListener);
-//
-//        byte[] data = new byte[24];
-//        if (!isEncrypt) {
-//            byte[] temp = CalcPinBlock.calcPinBlock(pinCard).getBytes();
-//            System.arraycopy(temp, 0, data, 0, 16);
-//        } else {
-//            byte[] temp = pinCard.getBytes();
-//            System.arraycopy(temp, 0, data, 0, 16);
-//        }
-//
-//        byte[] formatData = {0, 0, 0, 0, 0, 0, 0, 0};
-//        System.arraycopy(formatData, 0, data, 16, 8);
-//
-//        int ret  = hsmManage.PedGetPinBlock(keyMode, keyIndex, 0, DEFAULT_TIMEOUT_MS, data, DEFAULT_EXP_PIN_LEN_IND);
-//
-//        System.out.println("pin block ret => " + ret);
+//        handleKeyInput();
+        hsmManage.registerListener(pinEventListener);
+
+        byte[] data = new byte[24];
+        if (!isEncrypt) {
+            byte[] temp = CalcPinBlock.calcPinBlock(pinCard).getBytes();
+            System.arraycopy(temp, 0, data, 0, 16);
+        } else {
+            byte[] temp = pinCard.getBytes();
+            System.arraycopy(temp, 0, data, 0, 16);
+        }
+
+        byte[] formatData = {0, 0, 0, 0, 0, 0, 0, 0};
+        System.arraycopy(formatData, 0, data, 16, 8);
+
+        int ret  = hsmManage.PedGetPinBlock(keyMode, keyIndex, 0, DEFAULT_TIMEOUT_MS, data, DEFAULT_EXP_PIN_LEN_IND);
+
+        System.out.println("pin block ret => " + ret);
         return  0;
     }
 
@@ -552,7 +552,8 @@ public class PasswordDialog {
 
             MemoryPinData memoryPinData = new MemoryPinData(
                     HexUtil.toHexString(pinBlock), "dukpt",
-                    HexUtil.toHexString(pinKsn), "605"
+                    StringManipulator.INSTANCE.dropFirstCharacter( HexUtil.toHexString(pinKsn)),
+                    "605"
             );
             Constants.INSTANCE.setMemoryPinData(memoryPinData);
         }

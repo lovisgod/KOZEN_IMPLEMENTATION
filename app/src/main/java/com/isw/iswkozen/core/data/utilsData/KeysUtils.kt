@@ -9,7 +9,8 @@ object KeysUtils {
     private val ASCII = Charset.forName("US-ASCII")
 
     fun productionKSN() = "0000000002DDDDE00001" //FFFF000002DDDDE0
-    fun testKSN() = "0000000006DDDDE00000"
+//    fun testKSN() = "0000000006DDDDE00000"
+    fun testKSN() = "0000000006DDDDE000001"
     fun productionIPEK() = "3F2216D8297BCE9C"
     fun testIPEK() = "9F8011E7E71E483B"
 
