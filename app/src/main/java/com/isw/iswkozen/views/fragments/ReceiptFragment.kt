@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.utilities.DisplayUtils
 import com.isw.iswkozen.core.utilities.DisplayUtils.hide
 import com.isw.iswkozen.databinding.FragmentReceiptBinding
@@ -114,6 +115,7 @@ class ReceiptFragment : Fragment() {
 
 
         }
+
     }
 
 

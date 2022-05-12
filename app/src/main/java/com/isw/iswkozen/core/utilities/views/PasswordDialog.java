@@ -101,7 +101,7 @@ public class PasswordDialog {
         }
 
         if (bundle.containsKey(EmvPinConstraints.PIN_ENCRYPT)) {
-            isEncrypt = true;
+            isEncrypt = false;
         }
         if (bundle.containsKey(EmvPinConstraints.PIN_CARD)) {
             pinCard = bundle.getString(EmvPinConstraints.PIN_CARD);
@@ -385,7 +385,10 @@ public class PasswordDialog {
         byte[] formatData = {0, 0, 0, 0, 0, 0, 0, 0};
         System.arraycopy(formatData, 0, data, 16, 8);
 
-        int ret  = hsmManage.PedGetPinBlock(keyMode, keyIndex, 0, DEFAULT_TIMEOUT_MS, data, DEFAULT_EXP_PIN_LEN_IND);
+        int ret  = hsmManage.PedGetPinBlock(keyMode, keyIndex,
+                0,
+                DEFAULT_TIMEOUT_MS,
+                data, DEFAULT_EXP_PIN_LEN_IND);
 
         System.out.println("pin block ret => " + ret);
         return  0;

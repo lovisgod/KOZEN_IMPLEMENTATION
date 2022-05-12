@@ -53,6 +53,10 @@ class EmvHandler {
     ) {
 
         try {
+            // clear previous pinblock and ksn data
+
+            Constants.memoryPinData.pinBlock = ""
+            Constants.memoryPinData.ksn = ""
             this.emvEvents = emvEvents
             this.emvEvents!!.onInsertCard()
 
@@ -166,7 +170,8 @@ class EmvHandler {
                 this@EmvHandler.emvEvents?.onPinInput()
                 val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
                 val dialog =
-                    PasswordDialog( this@EmvHandler.context, isIcSlot, bundle, KeysUtils.DUKPTKEY_INDEX)
+                    PasswordDialog( this@EmvHandler.context, isIcSlot,
+                        bundle, KeysUtils.DUKPTKEY_INDEX)
                 dialog.showDialog()
             }
 
@@ -455,7 +460,11 @@ class EmvHandler {
                                 "}"
                     )
 
-                    iccData?.let { this@EmvHandler.emvEvents?.onEmvProcessed(it) }
+                    iccData?.let {
+                        this@EmvHandler.emvEvents?.onEmvProcessed(it)
+//                        Constants.memoryPinData.ksn = ""
+//                        Constants.memoryPinData.pinBlock = ""
+                    }
                 }
 //                else if (vasData != null) {
 //                    if (vasResult == PosEmvErrorCode.APPLE_VAS_APPROVED) {
