@@ -8,7 +8,16 @@ package com.isw.iswkozen.core.data.utilsData
 enum class TransactionType {
     PayCode,
     Card,
-    Cash
+    Cash,
+    Transfer,
+    QR,
+    Ussd
+}
+
+enum class CardLessTransactionType {
+    Transfer,
+    QR,
+    Ussd
 }
 
 enum class PaymentType(val value: Int) {

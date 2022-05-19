@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
             if (destination.id == R.id.amountFragment || destination.id == R.id.processingFragment
                 || destination.id == R.id.receiptFragment
                 || destination.id == R.id.transactionHistoryFragment
-                || destination.id == R.id.settingsLandingFragment) {
+                || destination.id == R.id.settingsLandingFragment
+//                || destination.id == R.id.choosePaymentTypeDialogFragment
+                || destination.id == R.id.transferFragment) {
                 bottomNav.hide()
             } else {
                 bottomNav.show()

@@ -6,11 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gojuno.koptional.Optional
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.database.entities.TransactionResultData
+import com.isw.iswkozen.core.network.CardLess.CardLessPaymentRequest
+import com.isw.iswkozen.core.network.CardLess.CardLessPaymentType
+import com.isw.iswkozen.core.network.CardLess.response.CodeResponse
+import com.isw.iswkozen.core.network.CardLess.response.PaymentStatus
 import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.views.repo.IswDataRepo
 import com.pixplicity.easyprefs.library.Prefs
@@ -51,6 +56,68 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     private val _terminalInfo = MutableLiveData<TerminalInfo>()
     val terminalInfo: LiveData<TerminalInfo> = _terminalInfo
+
+    private val _virtualAccount = MutableLiveData<Optional<CodeResponse>>()
+    val virtualAccount :LiveData<Optional<CodeResponse>> = _virtualAccount
+
+    private val _ussdDetail = MutableLiveData<Optional<CodeResponse>>()
+    val ussdDetail :LiveData<Optional<CodeResponse>> = _ussdDetail
+
+    private val _qrDetails = MutableLiveData<Optional<CodeResponse>>()
+    val qrDetails :LiveData<Optional<CodeResponse>> = _qrDetails
+
+    private val _paymentStatus = MutableLiveData<PaymentStatus>()
+    val paymentStatus :LiveData<PaymentStatus> = _paymentStatus
+
+
+
+
+    /*
+    CARD-LESS TRANSACTIONS
+    **/
+
+    fun initiateTransfer(request: CardLessPaymentRequest) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                val resultData = dataRepo.initiateTransfer(request)
+                _virtualAccount.postValue(resultData)
+            }
+        }
+    }
+
+    fun initiateQr(request: CardLessPaymentRequest) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                val resultData = dataRepo.initiateQrcode(request)
+                _qrDetails.postValue(resultData)
+
+            }
+        }
+    }
+
+    fun initiateUssd(request: CardLessPaymentRequest) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                val resultData = dataRepo.initiateUssd(request)
+                _ussdDetail.postValue(resultData)
+
+            }
+        }
+    }
+
+    fun checkPaymentStatus(transactionReference: String,
+                           merchantCode: String, paymentType: CardLessPaymentType
+    ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                val resultData = dataRepo.checkPaymentStatus(
+                    transactionReference, merchantCode, paymentType
+                )
+                _paymentStatus.postValue(resultData!!)
+
+            }
+        }
+    }
 
     fun setupTerminal () {
        viewModelScope.launch {
@@ -127,6 +194,25 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         }
 
     }
+
+    fun saveTransaction(transactionResultData: TransactionResultData ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                dataRepo.saveTransactionResult(transactionResultData)
+            }
+        }
+
+    }
+
+    fun updateTransaction(transactionResultData: TransactionResultData ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                dataRepo.updateTransactionResult(transactionResultData)
+            }
+        }
+
+    }
+
 
     fun makeOnlineRequest(transType: String ) {
         println("transtype => $transType")

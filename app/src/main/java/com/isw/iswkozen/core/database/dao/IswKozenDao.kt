@@ -1,9 +1,6 @@
 package com.isw.iswkozen.core.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 import kotlinx.coroutines.flow.Flow
 
@@ -15,5 +12,8 @@ interface IswKozenDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(resultData: TransactionResultData)
+
+    @Update
+    suspend fun updateTransaction(resultData: TransactionResultData)
 
 }

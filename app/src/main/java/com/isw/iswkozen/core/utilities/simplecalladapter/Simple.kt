@@ -1,4 +1,4 @@
-package com.interswitchng.smartpos.simplecalladapter
+package com.isw.iswkozen.core.utilities.simplecalladapter
 
 import com.isw.iswkozen.core.utilities.simplecalladapter.SimpleHandler
 import retrofit2.Call

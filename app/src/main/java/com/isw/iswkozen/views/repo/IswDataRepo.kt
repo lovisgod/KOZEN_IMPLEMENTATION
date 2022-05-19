@@ -3,6 +3,8 @@ package com.isw.iswkozen.views.repo
 import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
+import com.gojuno.koptional.None
+import com.gojuno.koptional.Optional
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
@@ -15,6 +17,12 @@ import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.database.dao.IswKozenDao
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.core.database.entities.createTransResultData
+import com.isw.iswkozen.core.network.CardLess.CardLessPaymentRequest
+import com.isw.iswkozen.core.network.CardLess.CardLessPaymentType
+import com.isw.iswkozen.core.network.CardLess.HttpService
+import com.isw.iswkozen.core.network.CardLess.request.TransactionStatus
+import com.isw.iswkozen.core.network.CardLess.response.CodeResponse
+import com.isw.iswkozen.core.network.CardLess.response.PaymentStatus
 import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
@@ -30,13 +38,77 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                   val context: Context,
                   val kimonoInterface: kimonoInterface,
                   val nibssIsoServiceImpl: NibssIsoServiceImpl,
+                  val cardlessService: HttpService,
                   var iswKozenDao: IswKozenDao
                     ) {
 
 
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    // keys wite, download and parameter downloads
+
+    /**
+     * CARD-LESS PAYMENT SECTIONS*/
+
+    suspend fun initiateTransfer(req: CardLessPaymentRequest):
+            Optional<CodeResponse> {
+        try {
+            return withContext(dispatcher) {
+                return@withContext cardlessService.initiateTransferPayment(req)
+            }
+        } catch (e: Exception) {
+            Log.e("load virtual error =>", e.stackTraceToString())
+            return None
+        }
+    }
+
+
+    suspend fun initiateUssd(req: CardLessPaymentRequest):
+            Optional<CodeResponse> {
+        try {
+            return withContext(dispatcher) {
+                return@withContext cardlessService.initiateUssdPayment(req)
+            }
+        } catch (e: Exception) {
+            Log.e("ussd error =>", e.stackTraceToString())
+            return None
+        }
+    }
+
+    suspend fun initiateQrcode(req: CardLessPaymentRequest):
+            Optional<CodeResponse> {
+        try {
+            return withContext(dispatcher) {
+                return@withContext cardlessService.initiateQrPayment(req)
+            }
+        } catch (e: Exception) {
+            Log.e("qr error =>", e.stackTraceToString())
+            return None
+        }
+    }
+
+    suspend fun checkPaymentStatus(transactionReference: String,
+                                   merchantCode: String, paymentType: CardLessPaymentType):
+            PaymentStatus? {
+        try {
+            return withContext(dispatcher) {
+                val status = TransactionStatus(
+                    reference = transactionReference,
+                    merchantCode = merchantCode
+                )
+                return@withContext cardlessService.checkPayment(type = paymentType,
+                status = status)
+            }
+        } catch (e: Exception) {
+            Log.e("qr error =>", e.stackTraceToString())
+            return null
+        }
+    }
+
+
+
+
+
+    // keys write, download and parameter downloads
 
     suspend fun downLoadNibbsKey(): Boolean {
         try {
@@ -226,6 +298,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                saveTransactionResult(resultData)
                            }
                           purchaseResponse?.transTYpe = transactionName
+                          purchaseResponse?.transactionResultData = resultData
+                           purchaseResponse?.paymentType = "Card"
                           purchaseResponse!!
                        } else {
                            val purchaseResponse =  PurchaseResponse(description = "An error occured",
@@ -241,6 +315,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                            }
                            saveTransactionResult(resultData)
                            purchaseResponse?.transTYpe = transactionName
+                           purchaseResponse?.transactionResultData = resultData
+                           purchaseResponse.paymentType = "Card"
                            purchaseResponse
                        }
                    }
@@ -268,6 +344,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                saveTransactionResult(resultData)
                            }
                            purchaseResponse?.transTYpe = transactionName
+                           purchaseResponse?.transactionResultData = resultData
+                           purchaseResponse?.paymentType = "Card"
                            purchaseResponse!!
                        } else {
                            val purchaseResponse =  PurchaseResponse(description = "An error occured",
@@ -283,6 +361,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                            }
                            saveTransactionResult(resultData)
                            purchaseResponse?.transTYpe = transactionName
+                           purchaseResponse?.transactionResultData = resultData
+                           purchaseResponse.paymentType = "Card"
                            purchaseResponse
                        }
                    }
@@ -297,17 +377,42 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                            response.body()!!
                        } else {
                            PurchaseResponse(description = "An error occured",
-                               responseCode = "${response.code()}", responseMessage = "An error occurred")
+                               responseCode = "${response.code()}",
+                               responseMessage = "An error occurred",
+                               paymentType = "Card")
                        }
                    }
                }
             }
         } catch (e:Exception) {
             Log.e("get trans data error", e.stackTraceToString())
-            return  PurchaseResponse(
+            val purchaseResponse = PurchaseResponse(
                 responseCode = "0x000",
-                description = "An error occurred"
+                description = "An error occurred",
+                responseMessage = "An error occurred",
+                paymentType = "Card"
             )
+            var resultData = purchaseResponse.let {
+                createTransResultData(
+                    it,
+                    iccData,
+                    transactionName,
+                    TransactionType.Card,
+                    terminalData
+                )
+            }
+
+            if (resultData != null) {
+                println("got here for saving")
+                println(resultData)
+                saveTransactionResult(resultData)
+            }
+            purchaseResponse?.transactionResultData = resultData
+            purchaseResponse.paymentType = "Card"
+            purchaseResponse.transTYpe = transactionName
+            return  purchaseResponse
+
+
         }
     }
 
@@ -417,6 +522,12 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     @WorkerThread
     suspend fun saveTransactionResult(result: TransactionResultData) {
         iswKozenDao.insert(resultData = result)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateTransactionResult(result: TransactionResultData) {
+        iswKozenDao.updateTransaction(resultData = result)
     }
 
     val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()

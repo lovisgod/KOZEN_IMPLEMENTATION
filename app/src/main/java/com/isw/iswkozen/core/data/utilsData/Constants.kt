@@ -69,13 +69,13 @@ object Constants {
 
 
 
-//    val ISW_USSD_QR_BASE_URL: String get() {
-////        val iswPos = IswPos.getInstance()
-////        return if (iswPos.config.environment == Environment.Test) Test.ISW_USSD_QR_BASE_URL
-////        else Production.ISW_USSD_QR_BASE_URL
-//        return if (BuildConfig.DEBUG) Production.ISW_USSD_QR_BASE_URL
+    val ISW_USSD_QR_BASE_URL: String get() {
+//        val iswPos = IswPos.getInstance()
+//        return if (iswPos.config.environment == Environment.Test) Test.ISW_USSD_QR_BASE_URL
 //        else Production.ISW_USSD_QR_BASE_URL
-//    }
+        return if (checkEmv()) Production.ISW_USSD_QR_BASE_URL
+        else Production.ISW_USSD_QR_BASE_URL
+    }
 
     val ISW_TOKEN_BASE_URL: String get() {
 //        val iswPos = IswPos.getInstance()

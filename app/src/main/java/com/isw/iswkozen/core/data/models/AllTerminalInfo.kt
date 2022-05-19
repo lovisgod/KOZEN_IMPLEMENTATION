@@ -64,10 +64,10 @@ data class TerminalInfo(
         var merchantCity: String = "Lagos",
 
         @field:Element(name = "qtbMerchantCode", required = false)
-        var qtbMerchantCode: String? = "",
+        var qtbMerchantCode: String? = "MX1065",
 
         @field:Element(name = "qtbMerchantAlias", required = false)
-        var qtbMerchantAlias: String? = "",
+        var qtbMerchantAlias: String? = "002208",
 
         @field:Element(name = "cardAcceptorNameLocation", required = false)
         var cardAcceptorNameLocation: String = "",

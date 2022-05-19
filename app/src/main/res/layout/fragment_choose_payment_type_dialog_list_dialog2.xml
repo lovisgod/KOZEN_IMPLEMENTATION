@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/isw_guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/dimen_32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/isw_guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/dimen_32dp" />
+
+        <View
+            android:id="@+id/isw_view2"
+            android:layout_width="70dp"
+            android:layout_height="5dp"
+            android:background="@drawable/isw_round_handle_gray"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/account_type_text"
+            app:layout_constraintEnd_toEndOf="@id/isw_guideline3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/isw_guideline2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/account_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Payment Option"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/pay_with_transfer"
+            app:layout_constraintEnd_toStartOf="@+id/isw_guideline3"
+            app:layout_constraintStart_toStartOf="@+id/isw_guideline2"
+            app:layout_constraintTop_toBottomOf="@id/isw_view2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/isw_card_payment"
+            android:layout_width="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Pay With Card"
+            app:cornerRadius="8dp"
+            app:elevation="10dp"
+            android:textAllCaps="false"
+            app:rippleColor="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            app:icon="@drawable/ic_baseline_payment_24"
+            app:layout_constraintBottom_toTopOf="@+id/pay_with_transfer"
+            app:layout_constraintEnd_toStartOf="@+id/isw_guideline3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/isw_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/account_type_text"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pay_with_transfer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Pay with Transfer"
+            app:cornerRadius="8dp"
+            app:elevation="10dp"
+            android:textAllCaps="false"
+            app:rippleColor="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            app:icon="@drawable/ic_baseline_payment_24"
+            app:layout_constraintBottom_toTopOf="@+id/pay_with_QR"
+            app:layout_constraintEnd_toStartOf="@+id/isw_guideline3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/isw_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/isw_card_payment"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pay_with_QR"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Pay With QR"
+            app:cornerRadius="8dp"
+            app:elevation="10dp"
+            android:textAllCaps="false"
+            app:rippleColor="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            app:icon="@drawable/ic_baseline_payment_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/isw_guideline3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/isw_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/pay_with_transfer"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

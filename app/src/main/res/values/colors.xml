@@ -15,4 +15,5 @@
     <color name="frag_bg">#E5E5E5</color>
     <color name="amount_page_bg">#181B24</color>
     <color name="orange">#FFA500</color>
+    <color name="iswColorMainBackground">#F2F4F6</color>
 </resources>

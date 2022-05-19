@@ -88,7 +88,7 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
         println("Amount is => $currentAmount")
         when(transType) {
             "PURCHASE" -> {
-                val direction = AmountFragmentDirections.actionAmountFragmentToProcessingFragment("${currentAmount},PURCHASE")
+                val direction = AmountFragmentDirections.actionAmountFragmentToChoosePaymentTypeDialogFragment("${currentAmount},PURCHASE")
                 findNavController().navigate(direction)
             }
 

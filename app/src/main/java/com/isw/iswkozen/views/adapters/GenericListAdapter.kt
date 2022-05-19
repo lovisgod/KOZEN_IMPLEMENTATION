@@ -35,7 +35,7 @@ abstract class GenericListAdapter<T : Any>(
 }
 
 
-fun getGenericAdapter(layoutId: Int,  terminalInfo: TerminalInfo): GenericListAdapter<TransactionResultData> {
+fun getGenericAdapter(layoutId: Int,  terminalInfo: TerminalInfo, clickListener: HistoryItemClickListener): GenericListAdapter<TransactionResultData> {
     return object : GenericListAdapter<TransactionResultData>(
         layoutId,
         bind = { item, holder, itemCount ->
@@ -57,8 +57,16 @@ fun getGenericAdapter(layoutId: Int,  terminalInfo: TerminalInfo): GenericListAd
                     setTextColor(ContextCompat.getColor(this.context, textColor))
                 }
 
+                this.setOnClickListener {
+                    clickListener.onItemClicked(item, terminalInfo)
+                }
+
             }
 
         }
     ) {}
+}
+
+interface HistoryItemClickListener {
+    fun onItemClicked(item: TransactionResultData, terminalInfo: TerminalInfo)
 }

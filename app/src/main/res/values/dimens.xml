@@ -11,4 +11,6 @@
     <dimen name="_5dp">5dp</dimen>
     <dimen name="_20dp">20dp</dimen>
     <dimen name="_50dp">50dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 </resources>

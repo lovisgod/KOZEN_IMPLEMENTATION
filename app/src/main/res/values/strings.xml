@@ -22,4 +22,6 @@
     <string name="get_paid">Get Paid</string>
     <string name="input_pin">Kindly input your pin</string>
     <string name="insert_card">Please insert customer card</string>
+    <string name="isw_title_transfer_amount">Make a bank transfer of %1$s to the account below to complete your payment</string>
+    <string name="isw_title_amount">\u20A6 %1$s</string>
 </resources>

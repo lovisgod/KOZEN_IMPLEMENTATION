@@ -2,6 +2,7 @@ package com.isw.iswkozen.core.network.models
 
 import android.os.Parcelable
 import androidx.room.Entity
+import com.isw.iswkozen.core.database.entities.TransactionResultData
 import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace
@@ -63,8 +64,32 @@ data class PurchaseResponse(
     @field: Element(name = "transtype", required = false)
     var transTYpe: String? = null,
 
+    @field: Element(name = "paymentType", required = false)
+    var paymentType: String? = null,
+
+    var transactionResultData: TransactionResultData? = null,
+
 //    @field: Element(name = "data", required = false)
 //    val inquiryResponse: InquiryResponse? = null,
 
     @field:Element(name = "remoteResponseCode", required = false)
     var remoteResponseCode: String = ""):Parcelable
+
+
+
+        fun fromResponseData(transactionResultData: TransactionResultData?): PurchaseResponse {
+             return transactionResultData.let { response ->
+                return@let PurchaseResponse(
+                    description = response!!.responseMessage,
+                    responseCode = response.responseCode,
+                    referenceNumber = response.ref.toString(),
+                    stan = response.stan,
+                    date = response.txnDate,
+                    responseDescription = response.responseMessage,
+                    transTYpe = response.paymentType,
+                    paymentType = response.type.name,
+                    transactionResultData = transactionResultData
+                )
+            }
+        }
+

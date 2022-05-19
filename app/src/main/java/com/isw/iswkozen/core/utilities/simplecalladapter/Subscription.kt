@@ -1,4 +1,4 @@
-package com.interswitchng.smartpos.simplecalladapter
+package com.isw.iswkozen.core.utilities.simplecalladapter
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.*

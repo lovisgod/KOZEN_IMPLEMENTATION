@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_amountFragment_to_processingFragment"
             app:destination="@id/processingFragment" />
+        <action
+            android:id="@+id/action_amountFragment_to_choosePaymentTypeDialogFragment"
+            app:destination="@id/choosePaymentTypeDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/processingFragment"
@@ -55,6 +58,37 @@
     <fragment
         android:id="@+id/transactionHistoryFragment"
         android:name="com.isw.iswkozen.views.fragments.TransactionHistoryFragment"
-        android:label="TransactionHistoryFragment" />
+        android:label="TransactionHistoryFragment" >
+        <action
+            android:id="@+id/action_transactionHistoryFragment_to_receiptFragment"
+            app:destination="@id/receiptFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/choosePaymentTypeDialogFragment"
+        android:name="com.isw.iswkozen.views.fragments.ChoosePaymentTypeDialogFragment"
+        android:label="ChoosePaymentTypeDialogFragment" >
+
+        <argument
+            android:name="transactiondetails"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_choosePaymentTypeDialogFragment_to_transferFragment"
+            app:destination="@id/transferFragment" />
+        <action
+            android:id="@+id/action_choosePaymentTypeDialogFragment_to_processingFragment"
+            app:destination="@id/processingFragment" />
+
+    </dialog>
+    <fragment
+        android:id="@+id/transferFragment"
+        android:name="com.isw.iswkozen.views.fragments.TransferFragment"
+        android:label="TransferFragment" >
+        <argument
+            android:name="transactionDetails"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_transferFragment_to_receiptFragment"
+            app:destination="@id/receiptFragment" />
+    </fragment>
 
 </navigation>

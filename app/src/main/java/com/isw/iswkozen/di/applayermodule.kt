@@ -14,7 +14,7 @@ val applayerModule = module {
     single<IswKozenRoomDb> { IswKozenRoomDb.getDatabase(androidContext()) }
     single { get<IswKozenRoomDb>().iswKozenDao() }
 
-    single { IswDataRepo(get(), get(), get(), get(), get(), get(), get() ) }
+    single { IswDataRepo(get(), get(), get(), get(), get(), get(), get(), get() ) }
 
     viewModel { IswKozenViewModel(get()) }
 
