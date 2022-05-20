@@ -16,6 +16,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/backBtn"
+            layout="@layout/isw_back_button" />
+
 
         <TextView
             android:id="@+id/ussdTitle"

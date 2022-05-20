@@ -120,4 +120,9 @@ dependencies {
     // zing
     implementation "com.google.zxing:core:3.3.0"
 
+    // picasso
+    api('com.squareup.picasso:picasso:2.71828') {
+        exclude group: "com.android.support"
+    }
+
 }

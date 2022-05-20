@@ -14,6 +14,7 @@ import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.core.network.CardLess.CardLessPaymentRequest
 import com.isw.iswkozen.core.network.CardLess.CardLessPaymentType
+import com.isw.iswkozen.core.network.CardLess.response.Bank
 import com.isw.iswkozen.core.network.CardLess.response.CodeResponse
 import com.isw.iswkozen.core.network.CardLess.response.PaymentStatus
 import com.isw.iswkozen.core.network.models.PurchaseResponse
@@ -63,6 +64,9 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     private val _ussdDetail = MutableLiveData<Optional<CodeResponse>>()
     val ussdDetail :LiveData<Optional<CodeResponse>> = _ussdDetail
 
+    private val _ussdBanks = MutableLiveData<Optional<List<Bank>>>()
+    val ussdBanks :LiveData<Optional<List<Bank>>> = _ussdBanks
+
     private val _qrDetails = MutableLiveData<Optional<CodeResponse>>()
     val qrDetails :LiveData<Optional<CodeResponse>> = _qrDetails
 
@@ -100,6 +104,16 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
             withContext(Dispatchers.Main) {
                 val resultData = dataRepo.initiateUssd(request)
                 _ussdDetail.postValue(resultData)
+
+            }
+        }
+    }
+
+    fun loadUssdBanks() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                val resultData = dataRepo.loadUssdBanks()
+                _ussdBanks.postValue(resultData)
 
             }
         }

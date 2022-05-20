@@ -52,7 +52,12 @@ class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.payWithQR.setOnClickListener {
+            val direction = ChoosePaymentTypeDialogFragmentDirections.
+            actionChoosePaymentTypeDialogFragmentToUssdFragment(
+                details
+            )
 
+            findNavController().navigate(direction)
         }
 
         binding.iswCardPayment.setOnClickListener {

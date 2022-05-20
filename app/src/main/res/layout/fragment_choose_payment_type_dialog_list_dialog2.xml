@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:gravity="start|center_vertical"
             android:padding="10dp"
-            android:text="Pay With QR"
+            android:text="Pay With USSD"
             app:cornerRadius="8dp"
             app:elevation="10dp"
             android:textAllCaps="false"

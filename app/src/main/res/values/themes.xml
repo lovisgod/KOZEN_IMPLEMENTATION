@@ -165,4 +165,21 @@
     <style name="ISW.Progress.Light" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorAccent">@color/iswColorMainBackground</item>
     </style>
+
+    <style name="EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/_5dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingBottom">@dimen/_10dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:layout_marginBottom">@dimen/_5dp</item>
+    </style>
+
+
+    <style name="UssdHint" parent="SubTitle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/iswColorPrimary</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

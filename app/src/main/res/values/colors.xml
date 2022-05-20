@@ -15,5 +15,29 @@
     <color name="frag_bg">#E5E5E5</color>
     <color name="amount_page_bg">#181B24</color>
     <color name="orange">#FFA500</color>
+
+
+    <color name="iswStatusBarColor">#C0C6CB</color>
+
+    <color name="iswColorPrimary">#3C95F9</color>
+    <color name="iswColorPrimaryDark">#00365b</color>
+    <color name="iswColorPrimaryLight">#00b0f8</color>
+    <color name="iswColorTextLightBlue">#003C58</color>
+
+
+    <color name="iswPrimaryIconColor">#E4EDF7</color>
+    <color name="iswPrimaryColorLightBg">#EBF4FE</color>
+
+
+    <color name="iswTextColorPrimary">#FFF</color>
     <color name="iswColorMainBackground">#F2F4F6</color>
+
+
+    <color name="iswTextColorDark">#FF181B24</color>
+    <color name="iswColorError">#F05050</color>
+    <color name="iswColorErrorHighlight">#26F05050</color>
+
+    <color name="iswHintTextColor">#4D181B24</color>
+    <color name="iswUssdBackground">#F0F7FF</color>
+    <color name="iswPaymentOptionBg">#FFF</color>
 </resources>

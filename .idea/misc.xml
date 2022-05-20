@@ -6,7 +6,10 @@
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable-v24/ic_clear.xml" value="0.12552083333333333" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable-v24/isw_cornered_rectangle.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.16510416666666666" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_bank_placeholder.xml" value="0.21875" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_bg_card.xml" value="0.21875" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_cornered_rectangle.xml" value="0.22447916666666667" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_ic_chevron_down.xml" value="0.21875" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_ic_close.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_ic_outline_info.xml" value="0.19537037037037036" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/drawable/isw_ic_printer.xml" value="0.22447916666666667" />
@@ -22,7 +25,10 @@
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/fragment_transaction_history.xml" value="0.115625" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/fragment_transfer.xml" value="0.1" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/fragment_transfer_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/fragment_ussd.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/isw_back_button.xml" value="0.22" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/isw_fragment_transfer.xml" value="0.22" />
+        <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/isw_list_item_bank.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/isw_round_handle_gray.xml" value="0.11775362318840579" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/keypad.xml" value="0.228125" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/layout_password.xml" value="0.1" />

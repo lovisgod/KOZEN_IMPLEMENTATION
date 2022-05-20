@@ -24,4 +24,9 @@
     <string name="insert_card">Please insert customer card</string>
     <string name="isw_title_transfer_amount">Make a bank transfer of %1$s to the account below to complete your payment</string>
     <string name="isw_title_amount">\u20A6 %1$s</string>
+    <string name="isw_action_back">Back</string>
+    <string name="print_qr_code">PRINT QR CODE</string>
+    <string name="isw_select_bank">Select a Bank</string>
+    <string name="isw_hint_select_bank_hint">Select Customer\'s Preferred Bank</string>
+    <string name="isw_hint_enter_ussd_code">Enter this code: %1$s to pay using Quickteller</string>
 </resources>

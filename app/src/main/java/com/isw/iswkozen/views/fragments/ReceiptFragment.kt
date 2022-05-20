@@ -73,16 +73,22 @@ class ReceiptFragment : Fragment() {
             handleShare()
         }
 
-        binding.printBtn.setOnClickListener {
-            binding.loader.show()
+        binding.btnConfirmPayment.setOnClickListener {
+            this.requireActivity().runOnUiThread {
+                binding.loader.show()
+            }
             viewmodel.checkPaymentStatus(
                 transactionResponse.referenceNumber.toString(),
                 terminalInfo.qtbMerchantCode.toString(),
-                paymentType = CardLessPaymentType.Transfer
+                paymentType = if(
+                    transactionResponse.transactionResultData?.type == TransactionType.Ussd
+                ) CardLessPaymentType.USSD else CardLessPaymentType.Transfer
             )
 
             viewmodel.paymentStatus.observe(viewLifecycleOwner, {
-                binding.loader.hide()
+                this.requireActivity().runOnUiThread {
+                    binding.loader.hide()
+                }
                 val transaction = getTransactionStatus(it)
                 val paymentInfo = CardLessPaymentInfo(
                     amount = transactionResponse.transactionResultData?.amount?.toInt()?.div(100) ?: 0,
@@ -94,7 +100,7 @@ class ReceiptFragment : Fragment() {
                     paymentInfo = paymentInfo,
                     paymentStatus = transaction!!,
                     transactionName = "purchase",
-                    transactionType = TransactionType.Transfer,
+                    transactionType = transactionResponse.transactionResultData?.type!!,
                     terminalData = terminalInfo
                 )
 

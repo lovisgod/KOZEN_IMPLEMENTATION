@@ -21,6 +21,7 @@ import com.isw.iswkozen.core.network.CardLess.CardLessPaymentRequest
 import com.isw.iswkozen.core.network.CardLess.CardLessPaymentType
 import com.isw.iswkozen.core.network.CardLess.HttpService
 import com.isw.iswkozen.core.network.CardLess.request.TransactionStatus
+import com.isw.iswkozen.core.network.CardLess.response.Bank
 import com.isw.iswkozen.core.network.CardLess.response.CodeResponse
 import com.isw.iswkozen.core.network.CardLess.response.PaymentStatus
 import com.isw.iswkozen.core.network.kimonoInterface
@@ -101,6 +102,19 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         } catch (e: Exception) {
             Log.e("qr error =>", e.stackTraceToString())
             return null
+        }
+    }
+
+
+    suspend fun loadUssdBanks():
+            Optional<List<Bank>> {
+        try {
+            return withContext(dispatcher) {
+                return@withContext cardlessService.getBanks()
+            }
+        } catch (e: Exception) {
+            Log.e("ussd bank error =>", e.stackTraceToString())
+            return None
         }
     }
 

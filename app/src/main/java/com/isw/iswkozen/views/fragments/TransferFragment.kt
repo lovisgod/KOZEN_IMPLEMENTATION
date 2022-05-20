@@ -72,6 +72,10 @@ class TransferFragment : Fragment() {
     }
 
     private fun handleClick() {
+        binding.backBtn.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.btnConfirmPayment.setOnClickListener {
             binding.loader.show()
             if (codeResponse != null) {
@@ -85,6 +89,7 @@ class TransferFragment : Fragment() {
                   val transaction = getTransactionStatus(it)
                   println("transaction: ${transaction?.amount}")
                   txPaymentInfo.reference = codeResponse?.transactionReference.toString()
+                  txPaymentInfo.amount = txPaymentInfo.amount / 100
                   val transactionResultData = createTransactionResultFromCardLess(
                           paymentInfo = txPaymentInfo,
                           paymentStatus = transaction!!,
@@ -131,7 +136,7 @@ class TransferFragment : Fragment() {
         when (transType) {
             "PURCHASE" -> {
                 val paymentInfo = CardLessPaymentInfo(
-                    amount = AMOUNT.toInt() / 100,
+                    amount = AMOUNT.toInt(),
                     Constants.getNextStan(),
                     surcharge = 0,
                     additionalAmounts = 0)

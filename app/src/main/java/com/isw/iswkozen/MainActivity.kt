@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
                 || destination.id == R.id.receiptFragment
                 || destination.id == R.id.transactionHistoryFragment
                 || destination.id == R.id.settingsLandingFragment
-//                || destination.id == R.id.choosePaymentTypeDialogFragment
+                || destination.id == R.id.ussdFragment
                 || destination.id == R.id.transferFragment) {
                 bottomNav.hide()
             } else {

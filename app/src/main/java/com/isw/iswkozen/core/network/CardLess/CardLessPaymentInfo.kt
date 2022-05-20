@@ -11,7 +11,7 @@ import java.util.*
  * triggered by external source that depends the SDK
  */
  data class CardLessPaymentInfo(
-    val amount: Int,
+    var amount: Int,
     val currentStan: String,
     val surcharge: Int = 0,
     val additionalAmounts: Int = 0,
