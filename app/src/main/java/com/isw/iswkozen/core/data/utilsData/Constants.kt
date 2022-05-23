@@ -128,7 +128,7 @@ object Constants {
 
     val ISW_DUKPT_KSN: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(!checkEmv()) KeysUtils.testKSN()
+        return if(checkEmv()) KeysUtils.testKSN()
         else KeysUtils.productionKSN()
     }
 
