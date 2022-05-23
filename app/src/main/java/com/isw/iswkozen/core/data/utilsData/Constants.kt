@@ -142,7 +142,7 @@ object Constants {
 
 
     val ISW_KIMONO_BASE_URL: String get() {
-        return if(!checkEmv()) Test.ISW_KIMONO_BASE_URL
+        return if(checkEmv()) Production.ISW_KIMONO_BASE_URL
         else Production.ISW_KIMONO_BASE_URL
     }
 

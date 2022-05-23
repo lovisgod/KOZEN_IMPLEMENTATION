@@ -6,6 +6,7 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import org.koin.standalone.StandAloneContext
 import android.content.ContextWrapper
+import android.content.Intent
 
 import com.pixplicity.easyprefs.library.Prefs
 

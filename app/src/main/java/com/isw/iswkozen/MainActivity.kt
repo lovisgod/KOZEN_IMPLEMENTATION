@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         setupTerminals()
     }
 
+
     private fun setupPage(){
 
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
