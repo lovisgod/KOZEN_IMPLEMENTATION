@@ -20,6 +20,7 @@ import com.isw.iswkozen.core.utilities.DateUtils.timeAndDateFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.monthFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.timeFormatter
 import com.isw.iswkozen.core.utilities.FileUtils
+import com.isw.iswkozen.core.utilities.HexUtil
 import com.isw.iswkozen.core.utilities.Logger
 import com.pixplicity.easyprefs.library.Prefs
 import com.solab.iso8583.parse.ConfigParser
@@ -32,8 +33,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
 
     private val logger by lazy { Logger.with("IsoServiceImpl") }
-    private val messageFactory by lazy {
-        try {
+    private val messageFactory = try {
 
             val data = FileUtils.getFromAssets(context)
             val string = String(data!!)
@@ -42,14 +42,14 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             messageFactory.isUseBinaryBitmap = false //NIBSS usebinarybitmap = false
             messageFactory.characterEncoding = "UTF-8"
 
-            return@lazy messageFactory
+            messageFactory
 
         } catch (e: Exception) {
             logger.logErr(e.localizedMessage)
             e.printStackTrace()
             throw e
         }
-    }
+
 
     fun KeyTransactionBuilder(
         terminalId: String,
@@ -74,7 +74,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 .setValue(41, terminalId)
 
             // remove unset fields
-            message.message.removeFields(62, 64)
+            message.message.removeFields(62, 64, 63)
             message.dump(System.out, "request -- ")
 
             // set server Ip and port
@@ -85,8 +85,10 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             // send request and process response
             val response = socket.sendReceive(message.message.writeData())
+            println("response from nibbs : ${HexUtil.toHexString(response)}")
             // close connection
             socket.close()
+
 
             // read message
             val msg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
@@ -121,6 +123,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                                      ip: String,
                                      port: Int, processingCode: String): TerminalInfo? {
         try {
+            println("ip => $ip  port => $port  processingCode => $processingCode")
             val code = processingCode ?: "9C0000"
             val field62 = "01009280824266"
 
@@ -140,6 +143,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             val bytes = message.message.writeData()
             val length = bytes.size
+            println("length => $length")
             val temp = ByteArray(length - 64)
             if (length >= 64) {
                 System.arraycopy(bytes, 0, temp, 0, length - 64)
@@ -155,7 +159,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             message.setValue(64, hashValue)
 
             // remove unset fields
-            message.message.removeFields(63)
+//            message.message.removeFields(63)
             message.dump(System.out, "parameter request ---- ")
 
 
@@ -167,6 +171,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             // send request and receive response
             val response = socket.sendReceive(message.message.writeData())
+            println("response from nibbsparams : ${HexUtil.toHexString(response)}")
             // close connection
             socket.close()
 

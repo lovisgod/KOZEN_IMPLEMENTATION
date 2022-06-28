@@ -11,10 +11,12 @@ interface kimonoInterface {
     fun getISWToken( @Body request: TokenRequestModel):
             Simple<TokenConfigResponse>
 
+    @Headers("Accept: application/xml")
     @POST(Constants.KIMONO_END_POINT)
     fun makePurchase( @Body request: PurchaseRequest):
             Simple<PurchaseResponse>
 
+    @Headers("Accept: application/xml")
     @POST(Constants.KIMONO_END_POINT)
     fun makeCashout(@Body request: TransferRequest, @Header("Authorization") token: String ):
             Simple<PurchaseResponse>

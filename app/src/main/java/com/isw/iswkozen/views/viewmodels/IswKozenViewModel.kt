@@ -303,13 +303,14 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var terminalInfo = dataRepo.readterminalDetails()
-                if (terminalInfo == null) {
-                    dataRepo.downloadTerminalDetails()
-//                    dataRepo.downLoadNibbsKey()
-                } else {
-                    setupTerminal()
-                    getISWToken()
-                }
+                dataRepo.downLoadNibbsKey()
+//                if (terminalInfo == null) {
+//                    dataRepo.downloadTerminalDetails()
+////                    dataRepo.downLoadNibbsKey()
+//                } else {
+//                    setupTerminal()
+//                    getISWToken()
+//                }
             }
         }
     }
@@ -343,7 +344,8 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     fun downloadNibbsParams(){
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                var result = dataRepo.downloadNibbsTerminalDetails("205777VZ")
+
+                var result = dataRepo.downloadNibbsTerminalDetails("2ISW0001")
                 println("terminal Details => $result")
             }
         }

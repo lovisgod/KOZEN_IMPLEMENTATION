@@ -7,9 +7,6 @@ class NibssIsoMessage(val message: IsoMessage)  {
 
 
     fun setValue(fieldId: Int, value: String): NibssIsoMessage {
-        println("messagefield $fieldId")
-        println("messagevalue $value")
-        println("messagexxxx $message")
         val field = message.getField<Any>(fieldId)
         message.setValue(fieldId, value, field.type, field.length)
         return this

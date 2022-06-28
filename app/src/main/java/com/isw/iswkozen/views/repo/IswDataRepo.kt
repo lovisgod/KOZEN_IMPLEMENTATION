@@ -140,7 +140,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 val cms = Constants.getCMS(false)
                 nibssIsoServiceImpl.downloadKey(
 //                    terminalInfo?.terminalCode.toString(),
-                    "205777VZ",
+                    "2ISW0001",
                     ip, port, cms, "9A0000",
                     "9B0000",
                     "9G0000"
@@ -521,7 +521,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             return withContext(dispatcher) {
                // run all the keys related functions
                 eraseKeys()
-                writePinKey()
+//                writePinKey()
                 writeDukptKey()
                 return@withContext 0
             }

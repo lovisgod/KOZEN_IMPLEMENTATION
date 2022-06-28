@@ -117,7 +117,7 @@ sealed class TransactionRequest {
                 minorAmount = requestData.TRANSACTION_AMOUNT
                 stan = Constants.getNextStan()
                 pinData = if (requestData.haspin!!) PinData.create(Constants.memoryPinData) else null
-                keyLabel = if (!Constants.checkEmv()) "000006" else "000002"
+                keyLabel = if (!Constants.checkEnv()) "000006" else "000002"
                 this.purchaseType = TransactionType.Card.name
                 transactionId = System.currentTimeMillis().toString()
             }
@@ -136,7 +136,7 @@ sealed class TransactionRequest {
                 minorAmount = requestData.TRANSACTION_AMOUNT
                 stan = Constants.getNextStan()
                 pinData = if (requestData.haspin!!) PinData.create(Constants.memoryPinData) else null
-                keyLabel = if (!Constants.checkEmv()) "000006" else "000002"
+                keyLabel = if (!Constants.checkEnv()) "000006" else "000002"
                 this.purchaseType = TransactionType.Card.name
                 transactionId = System.currentTimeMillis().toString()
                 extendedTransactionType = Constants.additionalTransactionInfo.extendedTransactionType

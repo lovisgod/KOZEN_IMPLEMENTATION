@@ -6,8 +6,10 @@ import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_PIN_KEY
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_SESSION_KEY
+import com.isw.iswkozen.core.data.utilsData.KeysUtils
 import com.isw.iswkozen.core.network.IsoCommunicator.IsoSocket
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.builders.IsoTransactionBuilder
+import com.isw.pinencrypter.KeyUtils
 import com.pixplicity.easyprefs.library.Prefs
 
 /**
@@ -31,7 +33,7 @@ class NibssIsoServiceImpl(
                             TPK: String
                             ): Boolean {
 
-
+        println("cms: $cms")
         println("ip  => $ip  port => $port")
 
         // getResult master key & save
@@ -52,7 +54,7 @@ class NibssIsoServiceImpl(
                 Prefs.putString(KEY_PIN_KEY, pinKey)
 
                 // load pin key into pos device
-                iswDetailsAndKeyDataSource.writePinKey(1, pinKey)
+                iswDetailsAndKeyDataSource.writePinKey(KeysUtils.PINKEY_INDEX, pinKey)
                 true
             }
 

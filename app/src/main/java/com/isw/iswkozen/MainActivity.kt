@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
             Toast.makeText(this, "Kindly wait while details are being downloaded", Toast.LENGTH_LONG).show()
            runBlocking {
                viewmodel.eraseKeys()
-               viewmodel.writePinKey()
+//               viewmodel.writePinKey()
                viewmodel.writeDukptKey()
 //               viewmodel.dowloadDetails()
            }

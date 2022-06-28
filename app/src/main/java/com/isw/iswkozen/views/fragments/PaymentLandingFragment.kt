@@ -41,8 +41,9 @@ class PaymentLandingFragment : Fragment() {
         }
 
         binding.withdrawal.setOnClickListener {
-            val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
-            findNavController().navigate(direction)
+//            val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
+//            findNavController().navigate(direction)
+            viewModel.downloadNibbsParams()
         }
     }
 

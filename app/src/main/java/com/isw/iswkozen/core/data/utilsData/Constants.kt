@@ -73,91 +73,91 @@ object Constants {
 //        val iswPos = IswPos.getInstance()
 //        return if (iswPos.config.environment == Environment.Test) Test.ISW_USSD_QR_BASE_URL
 //        else Production.ISW_USSD_QR_BASE_URL
-        return if (checkEmv()) Production.ISW_USSD_QR_BASE_URL
+        return if (checkEnv()) Production.ISW_USSD_QR_BASE_URL
         else Production.ISW_USSD_QR_BASE_URL
     }
 
     val ISW_TOKEN_BASE_URL: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TOKEN_BASE_URL
+        return if (checkEnv()) Test.ISW_TOKEN_BASE_URL
         else Production.ISW_TOKEN_BASE_URL
     }
 
     val ISW_IMAGE_BASE_URL: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_IMAGE_BASE_URL
+        return if (checkEnv()) Test.ISW_IMAGE_BASE_URL
         else Production.ISW_IMAGE_BASE_URL
     }
 
     val ISW_TERMINAL_IP: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_IP_CTMS
+        return if (!checkEnv()) Test.ISW_TERMINAL_IP_CTMS
         else Production.ISW_TERMINAL_IP_CTMS
     }
 
     val ISW_DEFAULT_TERMINAL_IP: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_IP_CTMS
+        return if (checkEnv()) Test.ISW_TERMINAL_IP_CTMS
         else Production.ISW_TERMINAL_IP_CTMS
     }
 
     val ISW_DEFAULT_TERMINAL_PORT: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_PORT_CTMS.toString()
+        return if (checkEnv()) Test.ISW_TERMINAL_PORT_CTMS.toString()
         else Production.ISW_TERMINAL_PORT_CTMS.toString()
     }
 
     val ISW_TERMINAL_PORT_CTMS_FOR_SETTINGS: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_PORT_CTMS.toString()
+        return if (checkEnv()) Test.ISW_TERMINAL_PORT_CTMS.toString()
         else Production.ISW_TERMINAL_PORT_CTMS.toString()
     }
 
     val ISW_TERMINAL_IP_CTMS_FOR_SETTINGS: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEmv()) Test.ISW_TERMINAL_IP_CTMS
+        return if (checkEnv()) Test.ISW_TERMINAL_IP_CTMS
         else Production.ISW_TERMINAL_IP_CTMS
     }
 
     val ISW_DUKPT_IPEK: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(checkEmv()) KeysUtils.testIPEK()
+        return if(checkEnv()) KeysUtils.testIPEK()
         else KeysUtils.productionIPEK()
     }
 
 
     val ISW_DUKPT_KSN: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(!checkEmv()) KeysUtils.testKSN()
+        return if(!checkEnv()) KeysUtils.testKSN()
         else KeysUtils.productionKSN()
     }
 
     fun getCMS(isEpms: Boolean): String {
 //        val iswPos = IswPos.getInstance()
         //return KeysUtils.testCMS()
-        return if(checkEmv()) KeysUtils.testCMS(isEpms)
+        return if(!checkEnv()) KeysUtils.testCMS(isEpms)
         else KeysUtils.productionCMS(isEpms)
 
     }
 
 
     val ISW_KIMONO_BASE_URL: String get() {
-        return if(!checkEmv()) Test.ISW_KIMONO_BASE_URL
+        return if(!checkEnv()) Test.ISW_KIMONO_BASE_URL
         else Production.ISW_KIMONO_BASE_URL
     }
 
     val ISW_KIMONO_URL: String get() {
-        return if(checkEmv()) Test.ISW_KIMONO_URL
+        return if(checkEnv()) Test.ISW_KIMONO_URL
         else Production.ISW_KIMONO_URL
     }
 
     val PAYMENT_CODE: String get() {
-        return if(checkEmv()) Test.PAYMENT_CODE
+        return if(checkEnv()) Test.PAYMENT_CODE
         else Production.PAYMENT_CODE
     }
 
     val ISW_TERMINAL_PORT: Int get() {
-        return if(checkEmv()) Test.ISW_TERMINAL_PORT_CTMS
+        return if(!checkEnv()) Test.ISW_TERMINAL_PORT_CTMS
         else Production.ISW_TERMINAL_PORT_CTMS
     }
 
@@ -198,7 +198,7 @@ object Constants {
     }
 
 
-    fun checkEmv () : Boolean {
+    fun checkEnv () : Boolean {
         return BuildConfig.DEBUG
     }
 

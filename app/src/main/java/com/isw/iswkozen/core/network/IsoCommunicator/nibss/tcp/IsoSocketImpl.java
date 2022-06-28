@@ -1,13 +1,13 @@
-/*
+package com.isw.iswkozen.core.network.IsoCommunicator.nibss.tcp;/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.isw.iswkozen.core.network.IsoCommunicator.nibss.tcp;
 
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
 
 import com.isw.iswkozen.core.network.IsoCommunicator.IsoSocket;
 
