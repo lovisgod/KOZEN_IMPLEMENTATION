@@ -235,7 +235,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             .setValue(13, monthFormatter.format(now))
             .setValue(14, expiry)
             .setValue(18, terminalInfo.merchantCategoryCode)
-            .setValue(22, "051")
+            .setValue(22, Constants.POS_ENTRY_MODE)
             .setValue(23, transaction.APP_PAN_SEQUENCE_NUMBER)
             .setValue(25, "00")
             .setValue(26, "06")
