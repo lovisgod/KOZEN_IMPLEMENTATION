@@ -62,6 +62,7 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterfac
                    if (it != null) {
                        convertConfigResponseToAllTerminalInfo(it).let {
                            it.terminalInfo?.let { info ->
+                               info.nibbsKey = it.tmsRouteTypeConfig?.key.toString()
                                saveTerminalInfo(info)
                            }
                        }

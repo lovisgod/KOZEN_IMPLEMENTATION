@@ -65,6 +65,18 @@ class SettingsLandingFragment : Fragment() {
                 }
             }
         })
+
+
+        viewModel.nibbsKeyMStatus.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.loaderCard.visibility = View.GONE
+                if (it) {
+                    Toast.makeText(requireContext(), "Successful", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "Not successful", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     private fun handleClicks() {
@@ -76,6 +88,12 @@ class SettingsLandingFragment : Fragment() {
         binding.downloadConfigCard.setOnClickListener {
             binding.loaderCard.visibility = View.VISIBLE
             viewModel.loadAllKeys()
+        }
+
+
+        binding.downloadNibssKeyCard.setOnClickListener {
+            binding.loaderCard.visibility = View.VISIBLE
+            viewModel.downloadNibbsKey()
         }
 
     }

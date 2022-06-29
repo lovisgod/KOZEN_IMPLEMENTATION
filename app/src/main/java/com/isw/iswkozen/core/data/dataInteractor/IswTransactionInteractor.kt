@@ -25,4 +25,6 @@ class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionData
 
     suspend fun setEmvContect(context: Context) =
         iswTransactionDataSource.setEmvContect(context)
+
+    suspend fun setPinMode(pinMode: Int) = iswTransactionDataSource.setEmvPINMODE(pinMode)
 }

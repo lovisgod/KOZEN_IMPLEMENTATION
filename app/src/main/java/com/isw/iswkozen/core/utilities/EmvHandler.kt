@@ -8,14 +8,14 @@ import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.EmvPinData
 import com.isw.iswkozen.core.data.models.TransactionData
-import com.isw.iswkozen.core.data.utilsData.Constants
-import com.isw.iswkozen.core.data.utilsData.KeysUtils
-import com.isw.iswkozen.core.data.utilsData.RequestIccData
+import com.isw.iswkozen.core.data.utilsData.*
 import com.isw.iswkozen.core.data.utilsData.getIccData
+import com.isw.iswkozen.core.utilities.EmvUtils.bcd2Str
 import com.isw.iswkozen.core.utilities.views.PasswordDialog
 import com.pos.sdk.emvcore.IPosEmvCoreListener
 import com.pos.sdk.emvcore.POIEmvCoreManager
 import com.pos.sdk.emvcore.PosEmvErrorCode
+import com.pos.sdk.security.POIHsmManage
 import kotlinx.coroutines.delay
 import java.lang.Exception
 
@@ -37,10 +37,22 @@ class EmvHandler {
     var context: Context? = null
     var activity: Activity? = null
     var emvEvents: EMVEvents ? = null
+    var pinMode :Int ?  = POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT
+    var pinKey: Int? = KeysUtils.DUKPTKEY_INDEX
 
 
     fun setEmvContext(context: Context) {
         this.context = context
+    }
+
+    fun setEmvPINMODE(pinMode: Int) {
+        this.pinMode = pinMode
+
+        if (pinMode == POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT) {
+            this.pinKey = KeysUtils.DUKPTKEY_INDEX
+        } else {
+            this.pinKey = KeysUtils.PINKEY_INDEX
+        }
     }
 
      fun startTransaction(
@@ -171,7 +183,7 @@ class EmvHandler {
                 val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
                 val dialog =
                     PasswordDialog( this@EmvHandler.context, isIcSlot,
-                        bundle, KeysUtils.DUKPTKEY_INDEX)
+                        bundle, pinKey!!, pinMode!!)
                 dialog.showDialog()
             }
 
@@ -217,25 +229,46 @@ class EmvHandler {
                     bundle.getByteArray(POIEmvCoreManager.EmvOnlineConstraints.ENCRYPT_DATA)
                 if (encryptData != null) {
                     Log.d(TAG, "Encrypt Data : " + HexUtil.toHexString(encryptData))
-                    iccData?.iccAsString = HexUtil.toHexString(data)
+                    if (!HexUtil.toHexString(encryptData).isNullOrEmpty()) {
+                        iccData?.iccAsString = HexUtil.toHexString(data)
+
+                    }
                 }
                 if (data != null) {
                     val tlvBuilder = BerTlvBuilder()
                     val tlvParser = BerTlvParser()
                     val tlvs = tlvParser.parse(data)
-                    for (tlv: BerTlv? in tlvs.list) {
-                        tlvBuilder.addBerTlv(tlv!!)
+
+                    for (tag in REQUEST_TAGS) {
+                        if (tlvs.find(BerTag(tag.tag)) != null) {
+                            println("not null here ::::")
+                            tlvBuilder.addBerTlv(tlvs.find(BerTag(tag.tag))!!)
+                        }
                     }
+//                    for (tlv: BerTlv? in tlvs.list) {
+//                        tlvBuilder.addBerTlv(tlv!!)
+//                    }
                     if (encryptResult == PosEmvErrorCode.EMV_OK && encryptData != null) {
                         val encryptTlvs = BerTlvParser().parse(encryptData)
-                        for (tlv: BerTlv? in encryptTlvs.list) {
-                            tlvBuilder.addBerTlv(tlv!!)
+
+                        for (tag in REQUEST_TAGS) {
+                            if (encryptTlvs.find(BerTag(tag.tag)) != null) {
+                                println("not null here ::::")
+                                tlvBuilder.addBerTlv(encryptTlvs.find(BerTag(tag.tag))!!)
+                            }
                         }
+//                        for (tlv: BerTlv? in encryptTlvs.list) {
+//                            tlvBuilder.addBerTlv(tlv!!)
+//                        }
                     }
                     data = tlvBuilder.buildArray()
                 }
                 if (data != null) {
+                    iccString = HexUtil.toHexString(data)
+                    Log.d(TAG, "Trans Data ccccccc: " + iccString)
                     transData?.setTransData(data)
+                    iccString = HexUtil.toHexString(data)
+
                 }
 //                if (vasResult != PosEmvErrorCode.APPLE_VAS_UNTREATED) {
 //                    val tlvBuilder = BerTlvBuilder()
@@ -312,7 +345,9 @@ class EmvHandler {
                     bundle.getByteArray(POIEmvCoreManager.EmvResultConstraints.ENCRYPT_DATA)
                 if (encryptData != null) {
                     Log.d(TAG, "Encrypt Data : " + HexUtil.toHexString(encryptData))
-                    iccData?.iccAsString = HexUtil.toHexString(data)
+                    if (!HexUtil.toHexString(encryptData).isNullOrEmpty()) {
+                        iccData?.iccAsString = HexUtil.toHexString(data)
+                    }
                 }
                 scriptResult =
                     bundle.getByteArray(POIEmvCoreManager.EmvResultConstraints.SCRIPT_RESULT)
@@ -323,8 +358,14 @@ class EmvHandler {
                     val tlvBuilder = BerTlvBuilder()
                     val tlvParser = BerTlvParser()
                     val tlvs = tlvParser.parse(data)
+                    for (tag in REQUEST_TAGS) {
+                        if (tlvs.find(BerTag(tag.tag)) != null) {
+                            println("not null here ::::")
+                            tlvBuilder.addBerTlv(tlvs.find(BerTag(tag.tag))!!)
+                        }
+                    }
                     for (tlv: BerTlv in tlvs.list) {
-                        tlvBuilder.addBerTlv(tlv)
+//                        tlvBuilder.addBerTlv(tlv)
                         if (tlv.isConstructed()!!) {
                             Log.d(
                                 TAG,
@@ -360,8 +401,16 @@ class EmvHandler {
                     }
                     if (encryptResult == PosEmvErrorCode.EMV_OK && encryptData != null) {
                         val encryptTlvs = BerTlvParser().parse(encryptData)
+
+
+                        for (tag in REQUEST_TAGS) {
+                            if (encryptTlvs.find(BerTag(tag.tag)) != null) {
+                                println("not null here ::::")
+                                tlvBuilder.addBerTlv(encryptTlvs.find(BerTag(tag.tag))!!)
+                            }
+                        }
                         for (tlv: BerTlv in encryptTlvs.list) {
-                            tlvBuilder.addBerTlv(tlv)
+//                            tlvBuilder.addBerTlv(tlv)
                             Log.d(
                                 TAG,
                                 java.lang.String.format("Tag : %1$-4s", tlv.getTag()?.berTagHex)
@@ -412,6 +461,8 @@ class EmvHandler {
 //                }
             if (data != null) {
                 transData?.setTransData(data)
+                iccString = HexUtil.toHexString(data)
+                Log.d(TAG, "Trans Data ccccccc:::::::: " + iccString)
             }
                 transData?.setTransResult(result)
                 if (data != null) {
@@ -457,8 +508,19 @@ class EmvHandler {
                                 "amount: ${iccData?.TRANSACTION_AMOUNT} " +
                                 "Track2Data ${iccData?.TRACK_2_DATA}" +
                                 "haspin ${iccData?.haspin}" +
-                                "}"
+                                "iccString ${iccData?.iccAsString}" +
+                        "}"
                     )
+
+//                    for (tag in REQUEST_TAGS) {
+//                        println("tag value ::::::::::::::: $tag")
+//                        val tlv = tag.getTlvBytes(data)
+//                        tagValues.add(Pair(tag, tlv))
+//                    }
+//
+//                    iccString = buildIccString(tagValues)
+
+                    println("iccccc =>->=>>>>>>>>>>>>>>> ${iccString}")
 
                     iccData?.let {
                         this@EmvHandler.emvEvents?.onEmvProcessed(it)
@@ -477,6 +539,43 @@ class EmvHandler {
 //                }, 1000)
         }
     }
+
+
+    companion object {
+        var iccString = ""
+
+        val tagValues: MutableList<Pair<ICCData, ByteArray?>> = mutableListOf()
+
+
+        @JvmStatic
+         fun buildIccString(tagValues: List<Pair<ICCData, ByteArray?>>): String {
+            var hex = ""
+            println("getting here")
+            for (tagValue in tagValues) {
+                println("tag valuex ::::::::::::::: ${tagValue.first.tagName}")
+                tagValue.second?.apply {
+                    println("getting here here here")
+                    val tag = Integer.toHexString(tagValue.first.tag.toInt()).toUpperCase()
+                    var value = bcd2Str(this)
+                    var length = Integer.toHexString(size)
+
+                    // truncate tag value if it exceeds max length
+                    if (size > tagValue.first.max) {
+                        val expectedLength = 2 * tagValue.first.max // hex is double the length
+                        value = value.substring(0 until expectedLength)
+                        length = Integer.toHexString(tagValue.first.max)
+                    }
+
+                    // prepend 0 based on value length
+                    val lengthStr = (if (length.length > 1) length else "0$length").toUpperCase()
+                    hex = "$hex$tag$lengthStr$value"
+                }
+            }
+
+            return hex
+        }
+    }
+
 
 }
 

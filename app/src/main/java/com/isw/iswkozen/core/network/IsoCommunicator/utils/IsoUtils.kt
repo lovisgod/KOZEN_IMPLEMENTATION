@@ -1,6 +1,12 @@
 package com.interswitchng.smartpos.shared.services.utils
 
+import android.os.Build
+import java.nio.CharBuffer
+import java.nio.charset.CharsetEncoder
+import java.nio.charset.CodingErrorAction
+import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.util.*
 
 object IsoUtils {
 
@@ -20,6 +26,7 @@ object IsoUtils {
 
         return bytes
     }
+
 
     @JvmStatic
     fun bytesToHex(bytes: ByteArray): String {

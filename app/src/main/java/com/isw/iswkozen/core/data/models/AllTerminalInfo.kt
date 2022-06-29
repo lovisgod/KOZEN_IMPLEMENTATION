@@ -81,7 +81,8 @@ data class TerminalInfo(
         var terminalType: String = "22",
         var terminalCapabilities: String = "E0F8C8",
         var terminalExtCapabilities: String = "F000F0F001",
-        var terminalEntryMode: String = "05"
+        var terminalEntryMode: String = "05",
+        var nibbsKey: String = Constants.getCMS(false)
 ): Parcelable {
         override fun toString(): String {
                 """code: ${terminalCode}

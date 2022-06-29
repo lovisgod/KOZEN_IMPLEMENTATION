@@ -49,7 +49,7 @@ public class PasswordDialog {
     private int    DEFAULT_TIMEOUT_MS      = 30000;
 
     private int keyIndex;
-    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT;
+    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_TPK;
     private int icSlot;
 
     private boolean isKeyboardFix = true;
@@ -76,7 +76,7 @@ public class PasswordDialog {
     private ImageView btnClear;
     private TextView  btnEsc, btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
 
-    public PasswordDialog(Context context, boolean isIcSlot, Bundle bundle, int keyIndex) {
+    public PasswordDialog(Context context, boolean isIcSlot, Bundle bundle, int keyIndex, int pinMode) {
         this.hsmManage = POIHsmManage.getDefault();
         this.pinEventListener = new PinEventListener();
         if (isIcSlot) {
@@ -85,6 +85,7 @@ public class PasswordDialog {
             this.icSlot = 10;
         }
         this.keyIndex = keyIndex;
+        this.keyMode = pinMode;
 
         switch (bundle.getInt(EmvPinConstraints.PIN_TYPE, -1)) {
             case POIEmvCoreManager.PIN_PLAIN_PIN:
@@ -553,12 +554,21 @@ public class PasswordDialog {
             Log.d("KSN", "KSN " + pinKsn);
             Log.d("PINBLOCK", "PINBLOCK " + HexUtil.toHexString(pinBlock));
 
-            MemoryPinData memoryPinData = new MemoryPinData(
-                    HexUtil.toHexString(pinBlock), "dukpt",
-                    StringManipulator.INSTANCE.dropFirstCharacter( HexUtil.toHexString(pinKsn)),
-                    "605"
-            );
-            Constants.INSTANCE.setMemoryPinData(memoryPinData);
+           if (pinKsn != null) {
+               MemoryPinData memoryPinData = new MemoryPinData(
+                       HexUtil.toHexString(pinBlock), "dukpt",
+                       StringManipulator.INSTANCE.dropFirstCharacter( HexUtil.toHexString(pinKsn)),
+                       "605"
+               );
+               Constants.INSTANCE.setMemoryPinData(memoryPinData);
+           } else {
+               MemoryPinData memoryPinData = new MemoryPinData(
+                       HexUtil.toHexString(pinBlock), "tpk",
+                       "",
+                       "605"
+               );
+               Constants.INSTANCE.setMemoryPinData(memoryPinData);
+           }
         }
         Bundle bundle = new Bundle();
         bundle.putInt(EmvPinConstraints.OUT_PIN_VERIFY_RESULT, EmvPinConstraints.VERIFY_SUCCESS);

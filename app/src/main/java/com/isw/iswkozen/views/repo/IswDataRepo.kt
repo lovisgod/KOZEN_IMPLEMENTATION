@@ -28,6 +28,7 @@ import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
 import com.pixplicity.easyprefs.library.Prefs
+import com.pos.sdk.security.POIHsmManage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -138,13 +139,17 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
                 // getResult clear master key
                 val cms = Constants.getCMS(false)
-                nibssIsoServiceImpl.downloadKey(
-//                    terminalInfo?.terminalCode.toString(),
-                    "2ISW0001",
+                val success = nibssIsoServiceImpl.downloadKey(
+                    terminalInfo?.terminalCode.toString(),
+//                    "2ISW0001",
                     ip, port, cms, "9A0000",
                     "9B0000",
                     "9G0000"
                 )
+                if (success) {
+                    downloadNibbsTerminalDetails(terminalInfo?.terminalCode.toString())
+                }
+                return@withContext success
             }
         } catch (e: Exception) {
             Log.e("key error", e.stackTraceToString())
@@ -206,10 +211,19 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 println("info =>  ${info.toString()}")
                 println("info =>  ${info?.terminalCountryCode}")
                 println("info =>  ${info?.terminalCode}")
+                println("nibbskey => ${info?.nibbsKey}")
                 if (info != null) {
 
                     // load the details into the terminal
-                    loadTerminal(info)
+                    if (info.tmsRouteType != "KIMONO_DEFAULT" ) {
+                        Prefs.putString("NIBSS_KEY", info.nibbsKey)
+                        Prefs.putBoolean("ISNIBSS", true)
+                        downLoadNibbsKey()
+                    } else {
+                        loadTerminal(info)
+                        getISWToken(info)
+                    }
+
                 }
                 true
             }
@@ -237,15 +251,15 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                     processingCode = "9C0000")
 
                 // read the data
-                var info = readterminalDetails()
+//                var info = readterminalDetails()
 
                 println("info =>  ${nibbsInfo.toString()}")
                 println("info =>  ${nibbsInfo?.terminalCountryCode}")
-                println("info =>  ${info?.terminalCode}")
-                if (info != null) {
-
+                println("info =>  ${nibbsInfo?.terminalCode}")
+                if (nibbsInfo != null) {
+                    iswDetailsAndKeySourceInteractor.saveTerminalInfo(nibbsInfo)
                     // load the details into the terminal
-                    loadTerminal(info)
+                    loadTerminal(nibbsInfo)
                 }
                 true
             }
@@ -264,6 +278,11 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         try {
             return withContext(dispatcher) {
                 iswTransactionInteractor.setEmvContect(contextX)
+                if (Prefs.getBoolean("ISNIBSS", false)) {
+                    iswTransactionInteractor.setPinMode(POIHsmManage.PED_PINBLOCK_FETCH_MODE_TPK)
+                } else {
+                    iswTransactionInteractor.setPinMode(POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT)
+                }
                 iswTransactionInteractor.startTransaction(
                     hasContactless, hasContact, amount, amountOther, transType, emvEvents)
                    true
@@ -291,13 +310,17 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                var purchaseRequest = TransactionRequest.createPurchaseRequest(terminalInfoX = terminalData, requestData = iccData)
                return@withContext when (transactionName) {
                    "purchase" -> {
-                       val token = Prefs.getString("TOKEN", "")
-                       var response = kimonoInterface.makePurchase(
-                           request = purchaseRequest as PurchaseRequest
-                       ).run()
-                       if (response.isSuccessful) {
-                           val purchaseResponse = response.body()
-                           var resultData = purchaseResponse?.let {
+                       println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
+                       if (Prefs.getBoolean("ISNIBSS", false)) {
+                           val port = Constants.ISW_TERMINAL_PORT.toInt()
+                           val ip = Constants.ISW_TERMINAL_IP
+                           val responseIso = nibssIsoServiceImpl.get200Request(
+                               ip, port,
+                               terminalData,
+                               iccData,
+                               Constants.additionalTransactionInfo.accountType
+                           )
+                           var resultData = responseIso.let {
                                createTransResultData(
                                    it,
                                    iccData,
@@ -306,32 +329,59 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                    terminalData
                                )
                            }
-                           if (resultData != null) {
-                               println("got here for saving")
-                               println(resultData)
-                               saveTransactionResult(resultData)
-                           }
-                          purchaseResponse?.transTYpe = transactionName
-                          purchaseResponse?.transactionResultData = resultData
-                           purchaseResponse?.paymentType = "Card"
-                          purchaseResponse!!
+                               if (resultData != null) {
+                                   println("got here for saving")
+                                   println(resultData)
+                                   saveTransactionResult(resultData)
+                               }
+                               responseIso?.transTYpe = transactionName
+                               responseIso?.transactionResultData = resultData
+                               responseIso?.paymentType = "Card"
+                               responseIso!!
+
                        } else {
-                           val purchaseResponse =  PurchaseResponse(description = "An error occured",
-                               responseCode = "${response.code()}", responseMessage = "An error occurred")
-                           val resultData = purchaseResponse?.let {
-                               createTransResultData(
-                                   it,
-                                   iccData,
-                                   transactionName,
-                                   TransactionType.Card,
-                                   terminalData
-                               )
+                           val token = Prefs.getString("TOKEN", "")
+                           var response = kimonoInterface.makePurchase(
+                               request = purchaseRequest as PurchaseRequest
+                           ).run()
+                           if (response.isSuccessful) {
+                               val purchaseResponse = response.body()
+                               var resultData = purchaseResponse?.let {
+                                   createTransResultData(
+                                       it,
+                                       iccData,
+                                       transactionName,
+                                       TransactionType.Card,
+                                       terminalData
+                                   )
+                               }
+                               if (resultData != null) {
+                                   println("got here for saving")
+                                   println(resultData)
+                                   saveTransactionResult(resultData)
+                               }
+                               purchaseResponse?.transTYpe = transactionName
+                               purchaseResponse?.transactionResultData = resultData
+                               purchaseResponse?.paymentType = "Card"
+                               purchaseResponse!!
+                           } else {
+                               val purchaseResponse =  PurchaseResponse(description = "An error occured",
+                                   responseCode = "${response.code()}", responseMessage = "An error occurred")
+                               val resultData = purchaseResponse?.let {
+                                   createTransResultData(
+                                       it,
+                                       iccData,
+                                       transactionName,
+                                       TransactionType.Card,
+                                       terminalData
+                                   )
+                               }
+                               saveTransactionResult(resultData)
+                               purchaseResponse?.transTYpe = transactionName
+                               purchaseResponse?.transactionResultData = resultData
+                               purchaseResponse.paymentType = "Card"
+                               purchaseResponse
                            }
-                           saveTransactionResult(resultData)
-                           purchaseResponse?.transTYpe = transactionName
-                           purchaseResponse?.transactionResultData = resultData
-                           purchaseResponse.paymentType = "Card"
-                           purchaseResponse
                        }
                    }
 

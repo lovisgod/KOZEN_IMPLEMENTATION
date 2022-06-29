@@ -18,4 +18,6 @@ interface IswTransactionDataSource {
     suspend fun getTransactionData(): RequestIccData
 
     suspend fun setEmvContect(context: Context)
+
+    suspend fun setEmvPINMODE(pinMode: Int)
 }

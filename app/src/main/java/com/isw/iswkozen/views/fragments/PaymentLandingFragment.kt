@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.isw.iswkozen.R
 import com.isw.iswkozen.databinding.FragmentPaymentLandingBinding
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
+import com.pixplicity.easyprefs.library.Prefs
+import com.pos.sdk.security.POIHsmManage
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class PaymentLandingFragment : Fragment() {
@@ -41,9 +43,16 @@ class PaymentLandingFragment : Fragment() {
         }
 
         binding.withdrawal.setOnClickListener {
-//            val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
-//            findNavController().navigate(direction)
-            viewModel.downloadNibbsParams()
+            val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
+            findNavController().navigate(direction)
+//            viewModel.downloadNibbsParams()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Prefs.getBoolean("ISNIBSS", false)) {
+            binding.withdrawal.visibility = View.GONE
         }
     }
 

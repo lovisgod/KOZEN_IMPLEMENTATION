@@ -60,7 +60,8 @@ internal val REQUEST_TAGS = listOf(ICCData.AUTHORIZATION_REQUEST,
     ICCData.APP_VERSION_NUMBER,
     ICCData.ANOTHER_AMOUNT,
     ICCData.APP_PAN_SEQUENCE_NUMBER,
-    ICCData.CARD_HOLDER_NAME)
+    ICCData.CARD_HOLDER_NAME,
+    ICCData.TRACK_2_DATA)
 
 
 internal fun getIccData(data: ByteArray): RequestIccData {
@@ -76,7 +77,7 @@ internal fun getIccData(data: ByteArray): RequestIccData {
         ISSUER_APP_DATA = ICCData.ISSUER_APP_DATA.getTlv(data) ?: "",
         TERMINAL_VERIFICATION_RESULT = ICCData.TERMINAL_VERIFICATION_RESULT.getTlv(data) ?: "",
         // remove leading zero in currency and country codes
-        TRANSACTION_CURRENCY_CODE = ICCData.TRANSACTION_CURRENCY_CODE.getTlv(data)?.substring(1) ?: "",
+        TRANSACTION_CURRENCY_CODE = ICCData.TERMINAL_COUNTRY_CODE.getTlv(data)?.substring(1) ?: "",
         TERMINAL_COUNTRY_CODE = ICCData.TERMINAL_COUNTRY_CODE.getTlv(data)?.substring(1) ?: "",
 
         TERMINAL_TYPE = ICCData.TERMINAL_TYPE.getTlv(data) ?: "",
@@ -85,14 +86,6 @@ internal fun getIccData(data: ByteArray): RequestIccData {
         TRANSACTION_TYPE = ICCData.TRANSACTION_TYPE.getTlv(data) ?: "",
         UNPREDICTABLE_NUMBER = ICCData.UNPREDICTABLE_NUMBER.getTlv(data) ?: "",
         DEDICATED_FILE_NAME = ICCData.DEDICATED_FILE_NAME.getTlv(data) ?: "").apply {
-
-
-//        val tagValues: MutableList<Pair<ICCData, ByteArray?>> = mutableListOf()
-//
-//        for (tag in REQUEST_TAGS) {
-//            val tlv = tag.getTlv()
-//            tagValues.add(Pair(tag, tlv))
-//        }
 
 
         INTERFACE_DEVICE_SERIAL_NUMBER = ICCData.INTERFACE_DEVICE_SERIAL_NUMBER.getTlv(data) ?: ""
@@ -114,6 +107,17 @@ fun ICCData.getTlv(data: ByteArray): String{
        return tlv.getHexValue().toString()
     } else {
         return ""
+    }
+}
+
+fun ICCData.getTlvBytes(data: ByteArray): ByteArray? {
+    val tlvParser = BerTlvParser()
+    val tlvs = tlvParser.parse(data)
+    var tlv = tlvs.find(BerTag("${this.tag}"))
+    if (tlv != null) {
+        return tlv.getBytesValue()
+    } else {
+        return byteArrayOf(0)
     }
 }
 

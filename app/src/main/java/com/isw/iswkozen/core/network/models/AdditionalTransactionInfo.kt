@@ -12,6 +12,7 @@ data class AdditionalTransactionInfo (
     var extendedTransactionType: String = "6101",
     var receivingInstitutionId: String = "",
     var destinationAccountNumber: String = "",
-    var fromAccount: String = ""
+    var fromAccount: String = "",
+    var accountType: AccountType = AccountType.Default
 
  ): Parcelable

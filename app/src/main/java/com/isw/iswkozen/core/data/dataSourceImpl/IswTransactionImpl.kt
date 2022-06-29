@@ -32,4 +32,8 @@ class IswTransactionImpl(val emvHandler: EmvHandler): IswTransactionDataSource {
     override suspend fun setEmvContect(context: Context) {
         emvHandler.setEmvContext(context)
     }
+
+    override suspend fun setEmvPINMODE(pinMode: Int) {
+        emvHandler.setEmvPINMODE(pinMode)
+    }
 }

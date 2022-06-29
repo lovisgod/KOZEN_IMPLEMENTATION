@@ -149,6 +149,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var teminalInfo = dataRepo.readterminalDetails()
+                println("tms route => ${teminalInfo?.tmsRouteType}")
                 var loaded = teminalInfo?.let { dataRepo.getISWToken(it) }
                 println("getToken: ${loaded}")
             }
@@ -173,6 +174,8 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                           transType: Int, context: Context, emvEvents: EMVEvents) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
+//                loadAllConfig()
+                setupTerminal()
                 var status = dataRepo.startTransaction(
                     amount = amount, amountOther = amountOther, transType = transType,
                     contextX = context, emvEvents = emvEvents
@@ -233,6 +236,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var transactionData = dataRepo.getTransactionData()
+                println("transactionicc => ${transactionData.iccAsString}")
                 var terminalInfo = dataRepo.readterminalDetails()
                 var response = terminalInfo?.let {
                     dataRepo.makeOnlineRequest(transactionName = transType,
@@ -291,9 +295,6 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                 println(" nibbs key result: ${result}")
                 Prefs.putBoolean("NIBSSKEYSUCCESS", result)
                 _nibbsKeyMStatus.postValue(result)
-                if (result) {
-                    downloadNibbsParams()
-                }
             }
 
         }
@@ -303,14 +304,17 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 var terminalInfo = dataRepo.readterminalDetails()
-                dataRepo.downLoadNibbsKey()
-//                if (terminalInfo == null) {
-//                    dataRepo.downloadTerminalDetails()
-////                    dataRepo.downLoadNibbsKey()
-//                } else {
-//                    setupTerminal()
-//                    getISWToken()
-//                }
+//                dataRepo.downLoadNibbsKey()
+                if (terminalInfo == null) {
+                    dataRepo.downloadTerminalDetails()
+//                    dataRepo.downLoadNibbsKey()
+                } else if (terminalInfo?.merchantId == "000000000000000") {
+                    dataRepo.downloadTerminalDetails()
+                }
+                else {
+                    setupTerminal()
+                    getISWToken()
+                }
             }
         }
     }
@@ -341,15 +345,15 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         }
     }
 
-    fun downloadNibbsParams(){
-        viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-
-                var result = dataRepo.downloadNibbsTerminalDetails("2ISW0001")
-                println("terminal Details => $result")
-            }
-        }
-    }
+//    fun downloadNibbsParams(){
+//        viewModelScope.launch {
+//            withContext(Dispatchers.Main) {
+//
+//                var result = dataRepo.downloadNibbsTerminalDetails("2ISW0001")
+//                println("terminal Details => $result")
+//            }
+//        }
+//    }
 
      fun readterminalDetails() {
         viewModelScope.launch {
@@ -375,14 +379,6 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     }
 
 
-    fun nullifyValues() {
-        // get payment status
-        viewModelScope.launch  {
-            withContext(Dispatchers.IO) {
-               _terminalSetupStatus.postValue(null)
-            }
-        }
-    }
 
 
 }

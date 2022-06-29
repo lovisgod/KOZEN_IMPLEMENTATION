@@ -19,6 +19,7 @@ import com.isw.iswkozen.core.network.models.PurchaseResponse
 import com.isw.iswkozen.core.utilities.DateUtils.timeAndDateFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.monthFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.timeFormatter
+import com.isw.iswkozen.core.utilities.EmvHandler
 import com.isw.iswkozen.core.utilities.FileUtils
 import com.isw.iswkozen.core.utilities.HexUtil
 import com.isw.iswkozen.core.utilities.Logger
@@ -32,7 +33,7 @@ import java.util.*
 class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
 
-    private val logger by lazy { Logger.with("IsoServiceImpl") }
+    private val logger by lazy { Logger.with("ISOTransactionBuilder") }
     private val messageFactory = try {
 
             val data = FileUtils.getFromAssets(context)
@@ -97,10 +98,12 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
 
             // extract encrypted key with clear key
             val encryptedKey = msg.message.getField<String>(SRCI)
-            println("typeaaaaaa ${key}")
-            println("typeaaaaaa ${encryptedKey}")
-            val decryptedKey = TripleDES.soften(key, encryptedKey.toString())
-            logger.log("Decrypted Key => $decryptedKey")
+            println("typeaaaaaa ${encryptedKey.value}")
+//            val encKTs = encryptedKey.toString()
+//            val encKTsSub = encKTs.substring(0, 35)
+//            println("substring" + encKTsSub)
+            val decryptedKey = TripleDES.soften(key, encryptedKey.value)
+            logger.log("Decrypted Key => ${decryptedKey.toString()}")
 
             return decryptedKey
         } catch (e: UnsupportedEncodingException) {
@@ -110,7 +113,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             logger.logErr(e.localizedMessage)
             e.printStackTrace()
         } catch (e: java.lang.Exception) {
-            logger.logErr(e.localizedMessage)
+            logger.logErr(e.message.toString())
             e.printStackTrace()
         }
 
@@ -188,7 +191,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             // parse and save terminal info
             val terminalData =
                 TerminalInfoParser.parse(terminalId, ip, port, terminalDataString)
-            logger.log("Terminal Data => $terminalData")
+            logger.log("Terminal Data => " +
+                    "currency code  :: ${terminalData?.transCurrencyCode}")
 
             return terminalData!!
         } catch (e: Exception) {
@@ -199,7 +203,9 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
         return null
     }
 
-    fun get200Requeste(
+    fun get200Request(
+        ip: String,
+        port: Int,
         terminalInfo: TerminalInfo,
         transaction: RequestIccData,
         accountType: AccountType
@@ -222,7 +228,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
         message
             .setValue(2, panX)
             .setValue(3, processCode)
-            .setValue(4, String.format(Locale.getDefault(), "%012d", transaction.TRANSACTION_AMOUNT))
+            .setValue(4, transaction.TRANSACTION_AMOUNT)
             .setValue(7, timeAndDateFormatter.format(now))
             .setValue(11, stan)
             .setValue(12, timeFormatter.format(now))
@@ -241,7 +247,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             .setValue(42, terminalInfo.merchantId)
             .setValue(43, terminalInfo.merchantName)
             .setValue(49, terminalInfo.transCurrencyCode)
-            .setValue(55, transaction.iccAsString)
+            .setValue(55, EmvHandler.iccString)
+
 
         if (hasPin == true) {
             message.setValue(52, transaction.EMV_CARD_PIN_DATA.CardPinBlock)
@@ -253,6 +260,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             // remove unset fields
             message.message.removeFields(32, 52, 59)
         }
+
+        message.message.removeFields(53, 54, 56, 60, 62, 64, 124)
 
         // set message hash
         val bytes = message.message.writeData()
@@ -268,6 +277,9 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
         message.dump(System.out, "request -- ")
 
         try {
+
+            // set server Ip and port
+            socket.setIpAndPort(ip, port)
             // open connection
             val isConnected = socket.open()
             if (!isConnected) return PurchaseResponse(
@@ -283,6 +295,10 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             logger.log("Purchase Request HEX ---> ${IsoUtils.bytesToHex(request)}")
 
             val response = socket.sendReceive(request)
+            println("response from nibbspurchase : ${HexUtil.toHexString(response)}")
+
+            println("response from nibbspurchase length : ${response?.size}")
+
             // close connection
             socket.close()
 
