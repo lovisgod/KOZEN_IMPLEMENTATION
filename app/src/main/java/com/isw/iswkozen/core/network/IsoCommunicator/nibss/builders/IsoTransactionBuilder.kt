@@ -2,12 +2,13 @@ package com.isw.iswkozen.core.network.IsoCommunicator.nibss.builders
 
 import android.content.Context
 import com.interswitchng.smartpos.shared.services.utils.IsoUtils
-import com.isw.iswkozen.core.data.datasource.IswDetailsAndKeyDataSource
+import com.interswitchng.smartpos.shared.services.utils.IsoUtils.generatePan
+import com.interswitchng.smartpos.shared.utilities.console
+import com.isw.iswkozen.core.data.models.CardDetail
+import com.isw.iswkozen.core.data.models.CardType
 import com.isw.iswkozen.core.data.models.TerminalInfo
-import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.AccountType
 import com.isw.iswkozen.core.data.utilsData.Constants
-import com.isw.iswkozen.core.data.utilsData.Constants.KEY_MASTER_KEY
 import com.isw.iswkozen.core.data.utilsData.Constants.KEY_SESSION_KEY
 import com.isw.iswkozen.core.data.utilsData.Constants.getNextStan
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
@@ -16,9 +17,11 @@ import com.isw.iswkozen.core.network.IsoCommunicator.utils.NibssIsoMessage
 import com.isw.iswkozen.core.network.IsoCommunicator.utils.TerminalInfoParser
 import com.isw.iswkozen.core.network.IsoCommunicator.utils.TripleDES
 import com.isw.iswkozen.core.network.models.PurchaseResponse
+import com.isw.iswkozen.core.utilities.DateUtils.dateFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.timeAndDateFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.monthFormatter
 import com.isw.iswkozen.core.utilities.DateUtils.timeFormatter
+import com.isw.iswkozen.core.utilities.DateUtils.yearAndMonthFormatter
 import com.isw.iswkozen.core.utilities.EmvHandler
 import com.isw.iswkozen.core.utilities.FileUtils
 import com.isw.iswkozen.core.utilities.HexUtil
@@ -287,7 +290,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 authCode = "",
                 stan = "",
                 scripts = "",
-                date = now.time
+                date = now.time,
+                description=  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
             )
 
 
@@ -311,12 +315,16 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 val authCode = it.getObjectValue<String?>(38) ?: ""
                 val code = it.getObjectValue<String>(39)
                 val scripts = it.getObjectValue<String>(55)
+
+                val responseMsg = IsoUtils.getIsoResultMsg(code) ?: "Unknown Error"
+
                 return@let PurchaseResponse(
                     responseCode = code,
                     authCode = authCode,
                     stan = stan,
                     scripts = scripts,
-                    date = now.time
+                    date = now.time,
+                    description = responseMsg.toString()
                 )
             }
         } catch (e: Exception) {
@@ -331,146 +339,153 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 authCode = "",
                 stan = stan,
                 scripts = "",
-                date = now.time
+                date = now.time,
+                description=  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
             )
         }
     }
 //
-//    override fun initiatePaycodePurchase(
-//        terminalInfo: TerminalInfo,
-//        code: String,
-//        iswPaymentInfo: IswPaymentInfo
-//    ): Pair<CardDetail, TransactionResponse?> {
-//
-//        val pan = generatePan(code)
-//        val amount = String.format(Locale.getDefault(), "%012d", iswPaymentInfo.amount)
-//        val now = Date()
-//        val message = NibssIsoMessage(messageFactory.newMessage(0x200))
-//        val processCode = "001000"
-//        val stan = getNextStan()
-//        val randomReference = "000000$stan"
-//        val date = dateFormatter.format(now)
-//        val src = "501"
-//
-//        val expiryDate = Calendar.getInstance().let {
-//            it.time = now
-//            val currentYear = it.get(Calendar.YEAR)
-//            it.set(Calendar.YEAR, currentYear + 1)
-//            it.time
-//        }
-//
-//        // format track 2
-//        val expiry = yearAndMonthFormatter.format(expiryDate)
-//        val track2 = "${pan}D$expiry"
-//
-//        // create card detail
-//        val card = CardDetail(
-//            pan = pan,
-//            expiry = expiry,
-//            type = CardType.VERVE
-//        )
-//
-//        // format iccString data
-//        val authorizedAmountTLV = String.format("9F02%02d%s", amount.length / 2, amount)
-//        val transactionDateTLV = String.format("9A%02d%s", date.length / 2, date)
-//        val iccData =
-//            "9F260831BDCBC7CFF6253B9F2701809F10120110A50003020000000000000000000000FF9F3704F435D8A29F3602052795050880000000" +
-//                    "${transactionDateTLV}9C0100${authorizedAmountTLV}5F2A020566820238009F1A0205669F34034103029F3303E0F8C89F3501229F0306000000000000"
-//
-//        message
-//            .setValue(2, pan)
-//            .setValue(3, processCode)
-//            .setValue(4, amount)
-//            .setValue(7, timeAndDateFormatter.format(now))
-//            .setValue(11, stan)
-//            .setValue(12, timeFormatter.format(now))
-//            .setValue(13, monthFormatter.format(now))
-//            .setValue(14, expiry)
-//            .setValue(18, terminalInfo.merchantCategoryCode)
-//            .setValue(22, "051")
-//            .setValue(23, "000")
-//            .setValue(25, "00")
-//            .setValue(26, "06")
-//            .setValue(28, "C00000000")
-//            .setValue(35, track2)
-//            .setValue(37, randomReference)
-//            .setValue(40, src)
-//            .setValue(41, terminalInfo.terminalId)
-//            .setValue(42, terminalInfo.merchantId)
-//            .setValue(43, terminalInfo.merchantNameAndLocation)
-//            .setValue(49, terminalInfo.currencyCode)
-//            .setValue(55, iccData)
-//            .setValue(59, "00") //""90")
-//            .setValue(123, "510101561344101")
-//
-//        message.message.removeFields(32, 52)
-//
-//
-//        // set message hash
-//        val bytes = message.message.writeData()
-//        val length = bytes.size
-//        val temp = ByteArray(length - 64)
-//        if (length >= 64) {
-//            System.arraycopy(bytes, 0, temp, 0, length - 64)
-//        }
-//
-//        val sessionKey = store.getString(KEY_SESSION_KEY, "")
-//        val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
-//        message.setValue(128, hashValue)
-//        message.dump(System.out, "request -- ")
-//
-//        try {
-//
-//            // open connection
-//            val isConnected = socket.open()
-//            if (!isConnected) return Pair(card, TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = iswPaymentInfo.currentStan,
-//                scripts = "",
-//                date = now.time
-//            ))
-//
-//            val request = message.message.writeData()
-//            val response = socket.sendReceive(request)
-//            // close connection
-//            socket.close()
-//
-//            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
-//            responseMsg.dump(System.out, "")
-//
-//
-//            // return response
-//            return responseMsg.message.let {
-//                val authCode = it.getObjectValue<String?>(38) ?: ""
-//                val scripts = it.getObjectValue<String>(55) ?: ""
-//                val responseCode = it.getObjectValue<String>(39)
-//
-//                return@let Pair(card, TransactionResponse(
-//                    responseCode,
-//                    authCode = authCode,
-//                    stan = stan,
-//                    scripts = scripts,
-//                    date = now.time
-//                ))
-//            }
-//
-//        } catch (e: Exception) {
-//            // error message
-//            logger.log(e.localizedMessage)
-//            e.printStackTrace()
-//            // auto reverse txn purchase
-//            reversePurchase(message)
-//            // return response
-//            return Pair(card, TransactionResponse(
-//                TIMEOUT_CODE,
-//                authCode = "",
-//                stan = iswPaymentInfo.currentStan,
-//                scripts = "",
-//                date = now.time
-//            ))
-//        }
-//    }
+     fun getPaycodePurchase(
+        terminalInfo: TerminalInfo,
+        code: String,
+        amountString: String,
+        ip: String,
+        port: Int,
+    ): PurchaseResponse {
+        console.log("amount", amountString)
+        val pan = generatePan(code)
+        val amount = String.format(Locale.getDefault(), "%012d", Integer.parseInt(amountString))
+        val now = Date()
+        val message = NibssIsoMessage(messageFactory.newMessage(0x200))
+        val processCode = "001000"
+        val stan = getNextStan()
+        val randomReference = "000000$stan"
+        val date = dateFormatter.format(now)
+        val src = "501"
+
+        val expiryDate = Calendar.getInstance().let {
+            it.time = now
+            val currentYear = it.get(Calendar.YEAR)
+            it.set(Calendar.YEAR, currentYear + 1)
+            it.time
+        }
+
+        // format track 2
+        val expiry = yearAndMonthFormatter.format(expiryDate)
+        val track2 = "${pan}D$expiry"
+
+        // create card detail
+        val card = CardDetail(
+            pan = pan,
+            expiry = expiry,
+            type = CardType.VERVE
+        )
+
+        // format iccString data
+        val authorizedAmountTLV = String.format("9F02%02d%s", amount.length / 2, amount)
+        val transactionDateTLV = String.format("9A%02d%s", date.length / 2, date)
+        val iccData =
+            "9F260831BDCBC7CFF6253B9F2701809F10120110A50003020000000000000000000000FF9F3704F435D8A29F3602052795050880000000" +
+                    "${transactionDateTLV}9C0100${authorizedAmountTLV}5F2A020566820238009F1A0205669F34034103029F3303E0F8C89F3501229F0306000000000000"
+
+        message
+            .setValue(2, pan)
+            .setValue(3, processCode)
+            .setValue(4, amount)
+            .setValue(7, timeAndDateFormatter.format(now))
+            .setValue(11, stan)
+            .setValue(12, timeFormatter.format(now))
+            .setValue(13, monthFormatter.format(now))
+            .setValue(14, expiry)
+            .setValue(18, terminalInfo.merchantCategoryCode)
+            .setValue(22, "051")
+            .setValue(23, "000")
+            .setValue(25, "00")
+            .setValue(26, "06")
+            .setValue(28, "C00000000")
+            .setValue(35, track2)
+            .setValue(37, randomReference)
+            .setValue(40, src)
+            .setValue(41, terminalInfo.terminalCode)
+            .setValue(42, terminalInfo.merchantId)
+            .setValue(43, terminalInfo.merchantName)
+            .setValue(49, terminalInfo.terminalCountryCode)
+            .setValue(55, iccData)
+            .setValue(59, "00") //""90")
+            .setValue(123, "510101561344101")
+
+        message.message.removeFields(32, 52)
+
+
+        // set message hash
+        val bytes = message.message.writeData()
+        val length = bytes.size
+        val temp = ByteArray(length - 64)
+        if (length >= 64) {
+            System.arraycopy(bytes, 0, temp, 0, length - 64)
+        }
+
+        val sessionKey = Prefs.getString(KEY_SESSION_KEY, "")
+        val hashValue = IsoUtils.getMac(sessionKey, temp) //SHA256
+        message.setValue(128, hashValue)
+        message.dump(System.out, "request -- ")
+
+        try {
+
+            // set server Ip and port
+            socket.setIpAndPort(ip, port)
+            // open connection
+            val isConnected = socket.open()
+            if (!isConnected) return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = "",
+                scripts = "",
+                date = now.time
+            )
+
+            val request = message.message.writeData()
+            val response = socket.sendReceive(request)
+            // close connection
+            socket.close()
+
+            val responseMsg = NibssIsoMessage(messageFactory.parseMessage(response, 0))
+            responseMsg.dump(System.out, "")
+
+
+            // return response
+            return responseMsg.message.let {
+                val authCode = it.getObjectValue<String?>(38) ?: ""
+                val scripts = it.getObjectValue<String>(55) ?: ""
+                val responseCode = it.getObjectValue<String>(39)
+
+                return@let PurchaseResponse(
+                    responseCode = code,
+                    authCode = authCode,
+                    stan = stan,
+                    scripts = scripts,
+                    date = now.time,
+                    description =  IsoUtils.getIsoResultMsg(responseCode) ?: "Unknown Error"
+                )
+            }
+
+        } catch (e: Exception) {
+            // error message
+            logger.log(e.localizedMessage)
+            e.printStackTrace()
+            // auto reverse txn purchase
+            reversePurchase(message)
+            // return response
+            return PurchaseResponse(
+                responseCode = Constants.TIMEOUT_CODE,
+                authCode = "",
+                stan = stan,
+                scripts = "",
+                date = now.time,
+                description=  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
+            )
+        }
+    }
 //
 //    /**
 //     * Initiates a pre-authorization transaction using the provided terminal and transaction info, and returns the
@@ -1168,7 +1183,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 authCode = "",
                 stan = stan,
                 scripts = "",
-                date = now.time
+                date = now.time,
+                description=  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
             )
 
             logger.log("D/IsoServiceImpl++++sending reversal")
@@ -1184,14 +1200,15 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             // return response
             return responseMsg.message.let {
                 val authCode = it.getObjectValue(38) ?: ""
-                val code = it.getObjectValue<String>(39)
-                val scripts = it.getObjectValue<String>(55)
+                val code = it.getObjectValue<String>(39)?:""
+                val scripts = it.getObjectValue<String>(55)?: ""
                 return@let PurchaseResponse(
                     responseCode = code,
                     authCode = authCode,
                     stan = stan,
-                    scripts = scripts,
-                    date = now.time
+                    scripts = scripts.toString(),
+                    date = now.time,
+                    description=  IsoUtils.getIsoResultMsg(code) ?: "Unknown Error"
                 )
             }
         } catch (e: Exception) {
@@ -1202,7 +1219,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 authCode = "",
                 stan = stan,
                 scripts = "",
-                date = now.time
+                date = now.time,
+                description=  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
             )
         }
     }

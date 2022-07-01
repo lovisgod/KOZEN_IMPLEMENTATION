@@ -29,6 +29,12 @@ class Transaction (
             return Transaction(int, int, str, str, str, false, str, 0, str)
         }
 
+        fun getForPayCode(description: String, amount: Int, responseCode: String): Transaction {
+            val int = 0
+            val str = ""
+            return Transaction(int, amount = amount, str, responseCode, str, false, str, 0, description)
+        }
+
         fun getForError(description: String): Transaction {
             val int = 0
             val str = "0X00"

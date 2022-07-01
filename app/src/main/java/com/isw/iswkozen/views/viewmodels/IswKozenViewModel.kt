@@ -253,6 +253,27 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     }
 
+
+    fun makePayCodeRequest(amount: String, transactionName: String, code:String ) {
+        println("transtype => $transactionName")
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                var terminalInfo = dataRepo.readterminalDetails()
+                var response = terminalInfo?.let {
+                    dataRepo.makePayCodeRequest(transactionName = transactionName,
+                         terminalData = it, code = code, amount = amount
+                    )
+                }
+                println("Online request response: ${response?.responseCode}," +
+                        " description: ${response?.description}," +
+                        " responseMesssage: ${response?.responseMessage}")
+
+                _transactionResponse.postValue(response!!)
+            }
+        }
+
+    }
+
     fun loadAllConfig () {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {

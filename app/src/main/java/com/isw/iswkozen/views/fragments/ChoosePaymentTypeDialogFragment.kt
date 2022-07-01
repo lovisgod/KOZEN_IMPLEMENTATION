@@ -68,6 +68,15 @@ class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
 
             findNavController().navigate(direction)
         }
+
+        binding.payWithPaycode.setOnClickListener {
+            val direction = ChoosePaymentTypeDialogFragmentDirections.
+            actionChoosePaymentTypeDialogFragmentToPayCodeFragment(
+                details
+            )
+
+            findNavController().navigate(direction)
+        }
     }
 
 

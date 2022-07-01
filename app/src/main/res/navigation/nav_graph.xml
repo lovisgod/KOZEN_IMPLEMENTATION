@@ -80,6 +80,9 @@
         <action
             android:id="@+id/action_choosePaymentTypeDialogFragment_to_ussdFragment"
             app:destination="@id/ussdFragment" />
+        <action
+            android:id="@+id/action_choosePaymentTypeDialogFragment_to_payCodeFragment"
+            app:destination="@id/payCodeFragment" />
 
     </dialog>
     <fragment
@@ -106,5 +109,18 @@
             app:destination="@id/receiptFragment" />
 
     </fragment>
+    <fragment
+        android:id="@+id/payCodeFragment"
+        android:name="com.isw.iswkozen.views.fragments.PayCodeFragment"
+        android:label="PayCodeFragment">
+
+        <argument
+            android:name="transactionDetails"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_payCodeFragment_to_receiptFragment"
+            app:destination="@id/receiptFragment" />
+    </fragment>
+
 
 </navigation>

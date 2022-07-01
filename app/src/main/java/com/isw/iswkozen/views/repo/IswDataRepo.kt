@@ -17,6 +17,8 @@ import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.database.dao.IswKozenDao
 import com.isw.iswkozen.core.database.entities.TransactionResultData
 import com.isw.iswkozen.core.database.entities.createTransResultData
+import com.isw.iswkozen.core.database.entities.createTransactionResultFromCardLess
+import com.isw.iswkozen.core.network.CardLess.CardLessPaymentInfo
 import com.isw.iswkozen.core.network.CardLess.CardLessPaymentRequest
 import com.isw.iswkozen.core.network.CardLess.CardLessPaymentType
 import com.isw.iswkozen.core.network.CardLess.HttpService
@@ -24,6 +26,7 @@ import com.isw.iswkozen.core.network.CardLess.request.TransactionStatus
 import com.isw.iswkozen.core.network.CardLess.response.Bank
 import com.isw.iswkozen.core.network.CardLess.response.CodeResponse
 import com.isw.iswkozen.core.network.CardLess.response.PaymentStatus
+import com.isw.iswkozen.core.network.CardLess.response.Transaction
 import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.network.models.*
 import com.isw.iswkozen.core.utilities.DeviceUtils
@@ -301,6 +304,96 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         } catch (e:Exception) {
             Log.e("get trans data error", e.stackTraceToString())
             return  RequestIccData()
+        }
+    }
+
+
+    suspend fun makePayCodeRequest(
+        transactionName: String,
+        amount: String,
+        code: String,
+        terminalData: TerminalInfo
+    ): PurchaseResponse {
+        val paymentInfo = CardLessPaymentInfo(
+            amount = amount.toInt(),
+            Constants.getNextStan(),
+            surcharge = 0,
+            additionalAmounts = 0)
+        try {
+            return withContext(dispatcher) {
+
+                println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
+                if (Prefs.getBoolean("ISNIBSS", false)) {
+                    val port = Constants.ISW_TERMINAL_PORT.toInt()
+                    val ip = Constants.ISW_TERMINAL_IP
+                    val responseIso = nibssIsoServiceImpl.getPaycodeRequest(
+                        ip, port, code,
+                        terminalData,
+                       amount = amount.toLong()
+                    )
+                    var resultData = responseIso.let {
+                        var transaction = Transaction.Companion.getForPayCode(
+                            description = responseIso.description,
+                            amount = paymentInfo.amount,
+                            responseCode = responseIso.responseCode
+                        )
+                        createTransactionResultFromCardLess(
+                            paymentStatus = transaction,
+                            paymentInfo = paymentInfo,
+                            transactionName = transactionName,
+                            transactionType = TransactionType.PayCode,
+                            terminalData = terminalData
+                        )
+                    }
+                    if (resultData != null) {
+                        println("got here for saving")
+                        println(resultData)
+                        saveTransactionResult(resultData)
+                    }
+                    responseIso.transTYpe = transactionName
+                    responseIso.transactionResultData = resultData
+                    responseIso.paymentType = "Card"
+                    responseIso
+
+                } else {
+                    PurchaseResponse(
+                        responseCode = "0x000",
+                        description = "An error occurred,\nTransaction not permitted for this route",
+                        responseMessage = "An error occurred \nTransaction not permitted for this route",
+                        paymentType = "Card"
+                    )
+                }
+            }
+
+        } catch (e:Exception) {
+            Log.e("get trans data error", e.stackTraceToString())
+            val purchaseResponse = PurchaseResponse(
+                responseCode = "0x000",
+                description = "An error occurred",
+                responseMessage = "An error occurred",
+                paymentType = "Card"
+            )
+
+            var transaction = Transaction.Companion.getForError("An error occurred")
+            var resultData = createTransactionResultFromCardLess(
+                paymentStatus = transaction,
+                paymentInfo = paymentInfo,
+                transactionName = transactionName,
+                transactionType = TransactionType.PayCode,
+                terminalData = terminalData
+            )
+
+            if (resultData != null) {
+                println("got here for saving")
+                println(resultData)
+                saveTransactionResult(resultData)
+            }
+            purchaseResponse?.transactionResultData = resultData
+            purchaseResponse.paymentType = "Card"
+            purchaseResponse.transTYpe = transactionName
+            return  purchaseResponse
+
+
         }
     }
 

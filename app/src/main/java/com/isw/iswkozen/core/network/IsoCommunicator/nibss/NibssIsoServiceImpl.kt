@@ -103,4 +103,22 @@ class NibssIsoServiceImpl(
         return responseIso
     }
 
+
+    suspend fun getPaycodeRequest(
+        ip: String,
+        port: Int,
+        code: String,
+        terminalData: TerminalInfo,
+       amount: Long
+    ): PurchaseResponse {
+        val responseIso = isoTransactionBuilder.getPaycodePurchase(
+            terminalData,
+            code,
+            amount.toString(),
+            ip,
+            port,)
+
+        return responseIso
+    }
+
 }
