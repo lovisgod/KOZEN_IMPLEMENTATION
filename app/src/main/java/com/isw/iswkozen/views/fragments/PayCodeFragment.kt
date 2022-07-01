@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.interswitchng.smartpos.shared.utilities.console
 import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
@@ -81,10 +82,8 @@ class PayCodeFragment : Fragment() {
     private fun manageData() {
         viewmodel.transactionResponse.observe(viewLifecycleOwner, Observer{
             binding.loaderCard.hide()
-            println("got here")
-            println(it.description)
             it.let {
-                println("response data => ${it.responseMessage}  ${it.responseCode}")
+                console.log("response data", "${it.responseMessage}  ${it.responseCode}")
                 val direction = PayCodeFragmentDirections.actionPayCodeFragmentToReceiptFragment(
                     it,
                     RequestIccData(TRANSACTION_AMOUNT = AMOUNT),

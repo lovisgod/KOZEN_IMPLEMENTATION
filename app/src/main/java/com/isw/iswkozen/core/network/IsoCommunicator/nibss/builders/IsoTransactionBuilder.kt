@@ -441,7 +441,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 authCode = "",
                 stan = "",
                 scripts = "",
-                date = now.time
+                date = now.time,
+                description =  IsoUtils.getIsoResultMsg(Constants.TIMEOUT_CODE) ?: "Unknown Error"
             )
 
             val request = message.message.writeData()
@@ -460,7 +461,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
                 val responseCode = it.getObjectValue<String>(39)
 
                 return@let PurchaseResponse(
-                    responseCode = code,
+                    responseCode = responseCode,
                     authCode = authCode,
                     stan = stan,
                     scripts = scripts,

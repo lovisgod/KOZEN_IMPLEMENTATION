@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import com.interswitchng.smartpos.shared.utilities.console
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.EmvPinData
@@ -129,13 +130,13 @@ class EmvHandler {
                 cardType = type
                 when (type) {
                     POIEmvCoreManager.DEVICE_CONTACT -> {
-                        println("Contact Card Trans")
+                        console.log("card transaction type","Contact Card Trans")
                         this@EmvHandler.emvEvents?.onEmvProcessing(message = "Contact Card Trans")
                     }
                     POIEmvCoreManager.DEVICE_CONTACTLESS -> {
-                        println("Contactless Card Trans")
+                        console.log("card transaction type", "Contactless Card Trans")
                     }
-                    POIEmvCoreManager.DEVICE_MAGSTRIPE -> { println("Magstripe Card Trans") }
+                    POIEmvCoreManager.DEVICE_MAGSTRIPE -> { console.log("card transaction type","Magstripe Card Trans") }
                     else -> {
                     }
                 }
@@ -143,7 +144,7 @@ class EmvHandler {
         }
 
         override fun onSelectApplication(list: List<String>, isFirstSelect: Boolean) {
-            println("called application selection")
+            console.log("", "called application selection")
                 val names = list.toTypedArray()
                 emvCoreManager?.onSetSelectResponse(1)
 //                val dialog = MaterialDialog(this@TransActivity)
@@ -174,7 +175,7 @@ class EmvHandler {
         }
 
         override fun onSecondTapCard() {
-            println("second tap needed")
+            console.log("","second tap needed")
         }
 
         override fun onRequestInputPin(bundle: Bundle?) {
@@ -190,7 +191,7 @@ class EmvHandler {
         }
 
         override fun onRequestOnlineProcess(bundle: Bundle) {
-           println("  Authorizing,Please Wait  ")
+           console.log("", "  Authorizing,Please Wait  ")
                 var data: ByteArray?
                 val vasResult: Int
                 val vasData: ByteArray?
@@ -422,22 +423,22 @@ class EmvHandler {
                 }
                 when (result) {
                     PosEmvErrorCode.EMV_MULTI_CONTACTLESS -> {
-                        println("multi contactless")
+                        console.log("result","multi contactless")
                     }
                     PosEmvErrorCode.EMV_FALLBACK -> {
 
-                        println("Please Magnetic Stripe")
-                        println("FallBack")
+                        console.log("result", "Please Magnetic Stripe")
+                        console.log("result", "FallBack")
                     }
                     PosEmvErrorCode.EMV_OTHER_ICC_INTERFACE -> {
-                        println("Please Insert Card")
+                        console.log("result", "Please Insert Card")
                     }
                     PosEmvErrorCode.EMV_APP_EMPTY -> {
-                        println("Please Magnetic Stripe")
-                        println("AID Empty")
+                        console.log("result","Please Magnetic Stripe")
+                        console.log("result","AID Empty")
                     }
                     PosEmvErrorCode.EMV_SEE_PHONE, PosEmvErrorCode.APPLE_VAS_WAITING_INTERVENTION, PosEmvErrorCode.APPLE_VAS_WAITING_ACTIVATION -> {
-                        println("Please See Phone")
+                        console.log("result","Please See Phone")
                     }
                     else -> {
                     }
