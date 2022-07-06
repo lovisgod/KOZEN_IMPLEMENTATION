@@ -66,7 +66,7 @@ class ReceiptFragment : Fragment() {
 
     private fun handleclicks() {
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(R.id.paymentLandingFragment)
+            findNavController().popBackStack(R.id.paymentLandingFragment, false)
         }
 
         binding.shareBtn.setOnClickListener {
@@ -74,9 +74,12 @@ class ReceiptFragment : Fragment() {
         }
 
         binding.btnConfirmPayment.setOnClickListener {
-            this.requireActivity().runOnUiThread {
-                binding.loader.show()
-            }
+
+            binding.loaderCard.show()
+
+//            this.requireActivity().runOnUiThread {
+//                binding.loaderCard.show()
+//            }
             viewmodel.checkPaymentStatus(
                 transactionResponse.referenceNumber.toString(),
                 terminalInfo.qtbMerchantCode.toString(),
@@ -86,9 +89,11 @@ class ReceiptFragment : Fragment() {
             )
 
             viewmodel.paymentStatus.observe(viewLifecycleOwner, {
-                this.requireActivity().runOnUiThread {
-                    binding.loader.hide()
-                }
+
+                binding.loaderCard.hide()
+//                this.requireActivity().runOnUiThread {
+//                    binding.loader.hide()
+//                }
                 val transaction = getTransactionStatus(it)
                 val paymentInfo = CardLessPaymentInfo(
                     amount = transactionResponse.transactionResultData?.amount?.toInt()?.div(100) ?: 0,
@@ -196,7 +201,7 @@ class ReceiptFragment : Fragment() {
             object : OnBackPressedCallback(true)
             {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.paymentLandingFragment)
+                    findNavController().popBackStack(R.id.paymentLandingFragment, false)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(

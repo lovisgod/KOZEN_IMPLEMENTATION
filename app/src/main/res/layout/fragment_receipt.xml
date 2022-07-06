@@ -595,6 +595,61 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/loader_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:cardBackgroundColor="@color/cardview_dark_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="1dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:rippleColor="@color/colorPrimary"
+                    app:strokeColor="@color/colorBlack"
+                    app:strokeWidth="0.2dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/loadingMessage"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:textColor="@color/white"
+                            android:text="Checking payment status!!!"
+                            android:fontFamily="monospace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/loadingMessage"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            app:trackThickness="@dimen/_10dp"
+                            android:indeterminate="true"
+                            app:trackColor="@color/orange"
+                            app:indeterminateAnimationType="disjoint"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

@@ -83,6 +83,9 @@
         <action
             android:id="@+id/action_choosePaymentTypeDialogFragment_to_payCodeFragment"
             app:destination="@id/payCodeFragment" />
+        <action
+            android:id="@+id/action_choosePaymentTypeDialogFragment_to_qrcodeFragment"
+            app:destination="@id/qrcodeFragment" />
 
     </dialog>
     <fragment
@@ -120,6 +123,19 @@
         <action
             android:id="@+id/action_payCodeFragment_to_receiptFragment"
             app:destination="@id/receiptFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrcodeFragment"
+        android:name="com.isw.iswkozen.views.fragments.QrcodeFragment"
+        android:label="QrcodeFragment">
+
+        <argument
+            android:name="transactionDetails"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_qrcodeFragment_to_receiptFragment"
+            app:destination="@id/receiptFragment" />
+
     </fragment>
 
 

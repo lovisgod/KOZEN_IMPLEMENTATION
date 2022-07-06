@@ -36,7 +36,7 @@ import com.isw.iswkozen.core.utilities.DisplayUtils
 
 
     @Throws(WriterException::class)
-    internal fun setBitmap(context: Context, lengthInDp: Int = 240) {
+    fun setBitmap(context: Context, lengthInDp: Int = 240) {
         qrCodeData?.let { qrCodeImage = setBitmap(context, it, lengthInDp) }
     }
 

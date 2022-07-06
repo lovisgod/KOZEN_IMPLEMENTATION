@@ -313,8 +313,8 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             // return response
             return responseMsg.message.let {
                 val authCode = it.getObjectValue<String?>(38) ?: ""
-                val code = it.getObjectValue<String>(39)
-                val scripts = it.getObjectValue<String>(55)
+                val code = it.getObjectValue<String>(39) ?: ""
+                val scripts = it.getObjectValue<String>(55) ?: ""
 
                 val responseMsg = IsoUtils.getIsoResultMsg(code) ?: "Unknown Error"
 
@@ -458,7 +458,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             return responseMsg.message.let {
                 val authCode = it.getObjectValue<String?>(38) ?: ""
                 val scripts = it.getObjectValue<String>(55) ?: ""
-                val responseCode = it.getObjectValue<String>(39)
+                val responseCode = it.getObjectValue<String>(39) ?: ""
 
                 return@let PurchaseResponse(
                     responseCode = responseCode,
