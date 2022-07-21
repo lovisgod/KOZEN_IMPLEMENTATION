@@ -102,7 +102,7 @@ class Keyboard(activity: Activity, callback: KeyBoardListener, view: View) : Vie
 //                result += "000"
 //            }
             R.id.btnClear -> {
-                if (result.isNotEmpty()) {
+                if (result.length > 0) {
                     result = result.substring(0, result.length - 1)
                 }
             }

@@ -34,6 +34,7 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
     private val amountFragmentArgs by navArgs<AmountFragmentArgs>()
     private val transType by lazy { amountFragmentArgs.transtype }
     private lateinit var accountTYpeDialogFragment: AccountTypeFragment
+    var current = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +62,7 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
     }
 
     override fun onTextChange(text: String) {
-        if (text != "") {
+        if (text != current) {
             val text = if (text.isEmpty()) defaultAmount else text
             val cleanString = text.replace("[$,.]".toRegex(), "")
             val parsed = cleanString.toDouble()
@@ -71,6 +72,7 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
             val formatted = numberFormat.format(parsed / 100)
             currentAmount = Integer.valueOf(cleanString)
             binding.output.text = formatted
+            current = cleanString
             keyboard!!.setText(cleanString)
         }
     }

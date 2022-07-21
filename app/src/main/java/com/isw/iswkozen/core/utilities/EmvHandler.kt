@@ -76,7 +76,6 @@ class EmvHandler {
             emvCoreManager = POIEmvCoreManager.getDefault()
             emvCoreListener = POIEmvCoreListener()
 
-            println("checkRead: it got here for read card startttt")
             val bundle = Bundle()
             bundle.putInt(POIEmvCoreManager.EmvTransDataConstraints.TRANS_TYPE, transType)
             bundle.putLong(POIEmvCoreManager.EmvTransDataConstraints.TRANS_AMOUNT, amount)
@@ -85,7 +84,6 @@ class EmvHandler {
                 amountOther
             )
 
-                println("checkRead: it got here for read card non fallback")
                 var mode = 0
                 if (hasContact) {
                     mode = mode or POIEmvCoreManager.DEVICE_CONTACT
@@ -105,9 +103,7 @@ class EmvHandler {
             transData?.setTransResult(PosEmvErrorCode.EMV_OTHER_ERROR)
 
             // check if it gets here
-            println("checkRead: it got here for read card")
             val result = emvCoreManager!!.startTransaction(bundle, emvCoreListener)
-            println("checkRead: it got here for read card result $result")
             if (PosEmvErrorCode.EXCEPTION_ERROR == result) {
                 transData?.setTransResult(PosEmvErrorCode.EXCEPTION_ERROR)
             } else if (PosEmvErrorCode.EMV_ENCRYPT_ERROR == result) {
