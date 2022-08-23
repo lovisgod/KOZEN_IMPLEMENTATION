@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.interswitchng.smartpos.shared.utilities.console
 import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.utilsData.AccountType
 import com.isw.iswkozen.core.data.utilsData.Constants
@@ -87,7 +88,7 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
     }
 
     private fun makePayment(currentAmount: Int) {
-        println("Amount is => $currentAmount")
+        console.log("amount","Amount is => $currentAmount")
         when(transType) {
             "PURCHASE" -> {
                 val direction = AmountFragmentDirections.actionAmountFragmentToChoosePaymentTypeDialogFragment("${currentAmount},PURCHASE")

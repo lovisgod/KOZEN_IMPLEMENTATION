@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_paymentLandingFragment_to_amountFragment"
             app:destination="@id/amountFragment" />
+        <action
+            android:id="@+id/action_paymentLandingFragment_to_choosePaymentTypeDialogFragment"
+            app:destination="@id/choosePaymentTypeDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/amountFragment"

@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException
 import java.text.ParseException
 import java.util.*
 
-class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
+class IsoTransactionBuilder(val context: Context, val socket: IsoSocket) {
 
 
     private val logger by lazy { Logger.with("ISOTransactionBuilder") }
@@ -249,7 +249,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket,) {
             .setValue(41, terminalInfo.terminalCode)
             .setValue(42, terminalInfo.merchantId)
             .setValue(43, terminalInfo.merchantName)
-            .setValue(49, terminalInfo.transCurrencyCode)
+            .setValue(49, "566")
             .setValue(55, EmvHandler.iccString)
 
 

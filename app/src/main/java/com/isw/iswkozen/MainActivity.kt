@@ -19,7 +19,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.isw.iswkozen.core.utilities.DeviceUtils.requestPermissionsCompat
 import com.isw.iswkozen.core.utilities.DisplayUtils.hide
 import com.isw.iswkozen.core.utilities.DisplayUtils.show
+import com.isw.iswkozen.views.viewmodels.BluetoothViewModel
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
+import com.isw_smart_bluetooth.enums.TillReturnCodes
+import com.isw_smart_bluetooth.interfaces.TillCallBackListener
+import com.isw_smart_bluetooth.interfaces.TillCommand
+import com.isw_smart_bluetooth.service.TillBluetoothManager
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.runBlocking
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -29,6 +34,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
     private val viewmodel : IswKozenViewModel by viewModel()
 
+    private val blueviewmodel: BluetoothViewModel by viewModel()
+    lateinit var tillBluetooth : TillBluetoothManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,6 +45,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         setupPage()
         checkPermission()
         setupTerminals()
+
+        tillBluetooth = TillBluetoothManager(this, listener)
+        tillBluetooth.startBluetooth()
+
+        with(blueviewmodel) {
+            bluetoothTransactionResponse.observe(this@MainActivity, Observer {
+                tillBluetooth.sendTransactionResponse(it)
+            })
+        }
     }
 
     private fun setupPage(){
@@ -57,6 +74,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
                 bottomNav.show()
             }
         }
+    }
+
+    val listener = object: TillCallBackListener {
+
+        override fun onMessageReceived(message: String) {
+            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onCommandReceived(command: TillCommand) {
+            when(command) {
+                is TillCommand.Purchase -> {
+                    Toast.makeText(this@MainActivity, command.command.amount, Toast.LENGTH_SHORT).show()
+                    blueviewmodel.pushCommand(command)
+                }
+            }
+        }
+
+        override fun onConnected(device: String) {
+            Toast.makeText(this@MainActivity, "Connected to $device", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onStateChanged() {
+            TODO("Not yet implemented")
+        }
+
+        override fun onError(error: TillReturnCodes, message: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onDisConnected() {
+            Toast.makeText(this@MainActivity, "Disconnected", Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 
 

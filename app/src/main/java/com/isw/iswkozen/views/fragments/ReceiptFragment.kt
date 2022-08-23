@@ -30,7 +30,10 @@ import com.isw.iswkozen.core.utilities.DisplayUtils
 import com.isw.iswkozen.core.utilities.DisplayUtils.hide
 import com.isw.iswkozen.core.utilities.DisplayUtils.show
 import com.isw.iswkozen.databinding.FragmentReceiptBinding
+import com.isw.iswkozen.views.viewmodels.BluetoothViewModel
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
+import com.isw_smart_bluetooth.enums.TillPaymentOptions
+import com.isw_smart_bluetooth.models.response.TillTransactionResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -42,6 +45,7 @@ class ReceiptFragment : Fragment() {
 
     private lateinit var binding: FragmentReceiptBinding
     val viewmodel: IswKozenViewModel by viewModel()
+    private val blViewModel: BluetoothViewModel by viewModel()
     private val arguements by navArgs<ReceiptFragmentArgs>()
     private val transactionResponse by lazy { arguements.transResponse }
     private val transactionData by lazy { arguements.transdata }
@@ -190,6 +194,26 @@ class ReceiptFragment : Fragment() {
 //            description.text = "Transaction Not permitted for cardholder"
 
 
+
+            val tillResponse = TillTransactionResponse(
+                Stan = it?.stan ,
+                RespCode = it?.responseCode,
+                AuthCode = it?.authCode,
+                RespMessage = it?.description,
+                Amount = transactionData.TRANSACTION_AMOUNT.toString(),
+                TerminalId = terminalInfo.terminalCode,
+                TransactionRef = it.stan.padStart(12, '0'),
+                Staff = terminalInfo?.merchantId,
+                PaymentOption = when(it.paymentType) {
+                    "Card" -> TillPaymentOptions.CARD
+                    "Tranfer" -> TillPaymentOptions.TRANSFER
+                    "QR" -> TillPaymentOptions.QR
+                    "Ussd" -> TillPaymentOptions.USSD
+                    "PayCode" -> TillPaymentOptions.PAYCODE
+                    else -> TillPaymentOptions.CARD
+                }
+            )
+            blViewModel.sendTransactionResponse(tillResponse)
         }
 
     }

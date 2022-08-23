@@ -25,6 +25,13 @@ class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+//        getTillevents()
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,57 +44,88 @@ class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
 
     }
 
+    private fun getTillevents() {
+        val payMentOptions = details.split(",").get(2)
+        if (!payMentOptions.isNullOrEmpty()) {
+            handleNavogation(payMentOptions.lowercase())
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
       handleClicks()
     }
 
     private fun handleClicks() {
         binding.payWithTransfer.setOnClickListener {
-            val direction = ChoosePaymentTypeDialogFragmentDirections.
-                    actionChoosePaymentTypeDialogFragmentToTransferFragment(
-                        details
-                    )
-
-            findNavController().navigate(direction)
+           handleNavogation("transfer")
         }
 
         binding.payWithUssd.setOnClickListener {
-            val direction = ChoosePaymentTypeDialogFragmentDirections.
-            actionChoosePaymentTypeDialogFragmentToUssdFragment(
-                details
-            )
-
-            findNavController().navigate(direction)
+          handleNavogation("ussd")
         }
 
         binding.payWithQR.setOnClickListener {
-            val direction = ChoosePaymentTypeDialogFragmentDirections.
-            actionChoosePaymentTypeDialogFragmentToQrcodeFragment(
-                details
-            )
-
-            findNavController().navigate(direction)
+          handleNavogation("qr")
         }
 
         binding.iswCardPayment.setOnClickListener {
-            val direction = ChoosePaymentTypeDialogFragmentDirections.
-            actionChoosePaymentTypeDialogFragmentToProcessingFragment(
-                details
-            )
-
-            findNavController().navigate(direction)
+           handleNavogation("card")
         }
 
         binding.payWithPaycode.setOnClickListener {
-            val direction = ChoosePaymentTypeDialogFragmentDirections.
-            actionChoosePaymentTypeDialogFragmentToPayCodeFragment(
-                details
-            )
-
-            findNavController().navigate(direction)
+           handleNavogation("paycode")
         }
     }
 
+
+    fun handleNavogation(option: String) {
+        when (option) {
+            "card" -> {
+                val direction = ChoosePaymentTypeDialogFragmentDirections.
+                actionChoosePaymentTypeDialogFragmentToProcessingFragment(
+                    details
+                )
+
+                findNavController().navigate(direction)
+            }
+
+            "ussd" -> {
+                val direction = ChoosePaymentTypeDialogFragmentDirections.
+                actionChoosePaymentTypeDialogFragmentToUssdFragment(
+                    details
+                )
+
+                findNavController().navigate(direction)
+            }
+
+            "paycode" -> {
+                val direction = ChoosePaymentTypeDialogFragmentDirections.
+                actionChoosePaymentTypeDialogFragmentToPayCodeFragment(
+                    details
+                )
+
+                findNavController().navigate(direction)
+            }
+
+            "qr" -> {
+                val direction = ChoosePaymentTypeDialogFragmentDirections.
+                actionChoosePaymentTypeDialogFragmentToQrcodeFragment(
+                    details
+                )
+
+                findNavController().navigate(direction)
+            }
+
+            "transfer" -> {
+                val direction = ChoosePaymentTypeDialogFragmentDirections.
+                actionChoosePaymentTypeDialogFragmentToTransferFragment(
+                    details
+                )
+
+                findNavController().navigate(direction)
+            }
+        }
+    }
 
     companion object {
 
