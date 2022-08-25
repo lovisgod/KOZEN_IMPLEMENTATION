@@ -153,7 +153,7 @@
     </style>
 
     <style name="CancelButtonText">
-        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textColor">@color/iswColorPrimary</item>
         <item name="android:textSize">15sp</item>
     </style>
 
