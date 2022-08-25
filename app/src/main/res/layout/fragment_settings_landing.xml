@@ -7,13 +7,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/frag_bg"
+        android:background="@color/white"
         tools:context=".views.fragments.SettingsLandingFragment">
 
         <View
             android:id="@+id/top_cover"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/purple_700"
+            android:background="@color/iswColorPrimary"
             android:layout_width="match_parent"
             android:layout_height="200dp"/>
 
@@ -28,7 +28,7 @@
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
+            android:fontFamily="sans-serif"
             android:text="Settings" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -40,7 +40,7 @@
             android:textSize="@dimen/_14sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:fontFamily="monospace"
+            android:fontFamily="sans-serif"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:text="Welcome, " />
@@ -54,7 +54,7 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:fontFamily="monospace"
+            android:fontFamily="sans-serif"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:text="2ISW0001" />
@@ -71,7 +71,7 @@
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="5dp"
-            app:cardElevation="1dp"
+            app:cardElevation="5dp"
             app:layout_constraintTop_toBottomOf="@+id/top_cover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +117,7 @@
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="5dp"
-            app:cardElevation="1dp"
+            app:cardElevation="5dp"
             app:layout_constraintTop_toBottomOf="@+id/reset_config_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
