@@ -42,8 +42,10 @@
         <entry key="app/src/main/res/drawable/ic_purchase_red.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/isw_bg_card.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/isw_cornered_rectangle.xml" value="0.174" />
+        <entry key="app/src/main/res/layout/fragment_amount.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/fragment_choose_payment_type_dialog_list_dialog2.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/fragment_payment_landing.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/keypad.xml" value="0.18125" />
       </map>
     </option>
   </component>
