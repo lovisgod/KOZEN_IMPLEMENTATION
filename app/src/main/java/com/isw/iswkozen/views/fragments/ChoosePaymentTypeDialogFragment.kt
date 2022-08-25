@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.isw.iswkozen.core.data.utilsData.PaymentType
@@ -14,7 +15,7 @@ import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
+class ChoosePaymentTypeDialogFragment : Fragment() {
 
     private var _binding: FragmentChoosePaymentTypeDialogListDialog2Binding? = null
     val viewmodel: IswKozenViewModel by viewModel()
@@ -51,7 +52,7 @@ class ChoosePaymentTypeDialogFragment : BottomSheetDialogFragment() {
             findNavController().navigate(direction)
         }
 
-        binding.payWithQR.setOnClickListener {
+        binding.payWithUssd.setOnClickListener {
             val direction = ChoosePaymentTypeDialogFragmentDirections.
             actionChoosePaymentTypeDialogFragmentToUssdFragment(
                 details

@@ -34,8 +34,15 @@
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/layout_password.xml" value="0.1" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/transaction_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/drawable/ic_baseline_credit_card_24.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/ic_baseline_key_24.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/ic_baseline_qr_code_24.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/ic_baseline_smartphone_24.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/ic_purchase.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/ic_purchase_red.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/isw_bg_card.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/isw_cornered_rectangle.xml" value="0.174" />
+        <entry key="app/src/main/res/layout/fragment_choose_payment_type_dialog_list_dialog2.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/fragment_payment_landing.xml" value="0.165" />
       </map>
     </option>
