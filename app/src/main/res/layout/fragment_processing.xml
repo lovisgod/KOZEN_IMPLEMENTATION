@@ -17,11 +17,11 @@
             android:layout_marginTop="@dimen/_30dp"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:textSize="@dimen/_30sp"
-            android:textStyle="normal"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
+            android:fontFamily="sans-serif"
             android:text="Smart POS" />
 
         <com.google.android.material.textview.MaterialTextView
