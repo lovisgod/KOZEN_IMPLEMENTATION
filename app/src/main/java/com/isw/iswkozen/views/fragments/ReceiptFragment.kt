@@ -150,7 +150,7 @@ class ReceiptFragment : Fragment() {
             terminalInfo?.let {
                 binding.merchantName.text = terminalInfo.merchantName.toString()
                 binding.tid.text = terminalInfo.terminalCode.toString()
-                binding.merchantLocation.text = "${terminalInfo.merchantAddress1} ${terminalInfo.merchantAddress2}"
+                binding.merchantLocation.text = if (terminalInfo.merchantName.isEmpty()) "${terminalInfo.merchantAddress1} ${terminalInfo.merchantAddress2}" else terminalInfo.merchantName
             }
             binding.transactionType.text = it.transTYpe
 
