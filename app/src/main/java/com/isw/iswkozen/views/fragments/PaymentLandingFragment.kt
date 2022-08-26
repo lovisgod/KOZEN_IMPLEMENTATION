@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.isw.iswkozen.R
 import com.isw.iswkozen.databinding.FragmentPaymentLandingBinding
+import com.isw.iswkozen.views.utilViews.Greetings
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
@@ -49,6 +50,8 @@ class PaymentLandingFragment : Fragment() {
 
         val formatter = java.text.SimpleDateFormat("EEE, MMM, d", Locale.ROOT)
         binding.timeText.text = formatter.format(Date())
+
+        binding.getPaidText.text = Greetings.greet()
     }
 
 
