@@ -63,7 +63,7 @@
             android:id="@+id/action_transactionHistoryFragment_to_receiptFragment"
             app:destination="@id/receiptFragment" />
     </fragment>
-    <dialog
+    <fragment
         android:id="@+id/choosePaymentTypeDialogFragment"
         android:name="com.isw.iswkozen.views.fragments.ChoosePaymentTypeDialogFragment"
         android:label="ChoosePaymentTypeDialogFragment" >
@@ -81,7 +81,7 @@
             android:id="@+id/action_choosePaymentTypeDialogFragment_to_ussdFragment"
             app:destination="@id/ussdFragment" />
 
-    </dialog>
+    </fragment>
     <fragment
         android:id="@+id/transferFragment"
         android:name="com.isw.iswkozen.views.fragments.TransferFragment"
