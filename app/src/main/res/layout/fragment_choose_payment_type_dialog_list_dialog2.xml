@@ -22,8 +22,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/isw_card_payment"
             style="@style/Theme.MaterialComponents.Light"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="40dp"
@@ -92,8 +92,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_transfer"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="40dp"
@@ -162,8 +162,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_ussd"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="40dp"
         android:clickable="true"
         android:focusable="true"
