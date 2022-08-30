@@ -47,6 +47,8 @@ class SettingsLandingFragment : Fragment() {
             it?.let {
                binding.merchantNameText.text = it.merchantName ?: "Merchant"
                binding.tidText.text = it.terminalCode
+               binding.routeText.text = it.tmsRouteType
+
             }
         })
         viewModel.terminalSetupStatus.observe(viewLifecycleOwner, Observer {

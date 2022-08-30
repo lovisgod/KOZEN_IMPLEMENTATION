@@ -83,7 +83,8 @@ class TransactionHistoryFragment : Fragment(), HistoryItemClickListener {
             RequestIccData(
                 TRANSACTION_AMOUNT = item.amount
             ),
-            item.paymentType.uppercase()
+            item.paymentType.uppercase(),
+            "history"
         )
         findNavController().navigate(direction)
     }

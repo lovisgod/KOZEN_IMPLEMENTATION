@@ -1,11 +1,13 @@
 package com.isw.iswkozen.views.fragments
 
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.isw.iswkozen.R
@@ -52,6 +54,30 @@ class PaymentLandingFragment : Fragment() {
         binding.timeText.text = formatter.format(Date())
 
         binding.getPaidText.text = Greetings.greet()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        val formatter = java.text.SimpleDateFormat("EEE, MMM, d", Locale.ROOT)
+        binding.timeText.text = formatter.format(Date())
+
+        binding.getPaidText.text = Greetings.greet()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                  this@PaymentLandingFragment.activity?.finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            callback
+        )
     }
 
 

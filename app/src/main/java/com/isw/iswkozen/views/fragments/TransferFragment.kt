@@ -114,7 +114,7 @@ class TransferFragment : Fragment() {
                     val direction =TransferFragmentDirections.actionTransferFragmentToReceiptFragment(
                         purchaseResponse,
                         RequestIccData(TRANSACTION_AMOUNT = AMOUNT),
-                        TRANSACTIONTYPE
+                        TRANSACTIONTYPE, "processing"
                     )
                     findNavController().navigate(direction)
                 })

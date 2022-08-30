@@ -22,6 +22,7 @@
     <color name="iswColorPrimary">#3C95F9</color>
     <color name="iswColorPrimaryDark">#00365b</color>
     <color name="iswColorPrimaryLight">#00b0f8</color>
+    <color name="iswColorPrimaryLighter">#e4f2f7</color>
     <color name="iswColorTextLightBlue">#003C58</color>
 
 

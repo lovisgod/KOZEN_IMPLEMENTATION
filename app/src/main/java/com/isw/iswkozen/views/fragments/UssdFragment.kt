@@ -133,7 +133,8 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
                     val direction =UssdFragmentDirections.actionUssdFragmentToReceiptFragment(
                         purchaseResponse,
                         RequestIccData(TRANSACTION_AMOUNT = AMOUNT),
-                        TRANSACTIONTYPE
+                        TRANSACTIONTYPE,
+                        "ussdfragment"
                     )
                     findNavController().navigate(direction)
                 })

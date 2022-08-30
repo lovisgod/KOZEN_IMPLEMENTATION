@@ -36,6 +36,14 @@
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/layout_password.xml" value="0.1" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/layout/transaction_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/ayooluwa.olosunde/AndroidStudioProjects/ISWKozen/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/drawable/bottom_sheet_rounded_bg.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/ic_getpaid.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/isw_bg_card.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/isw_bg_card_primary_color_light.xml" value="0.174" />
+        <entry key="app/src/main/res/drawable/isw_cornered_rectangle.xml" value="0.174" />
+        <entry key="app/src/main/res/layout/fragment_account_type.xml" value="0.13768115942028986" />
+        <entry key="app/src/main/res/layout/fragment_payment_landing.xml" value="0.13768115942028986" />
+        <entry key="app/src/main/res/layout/fragment_settings_landing.xml" value="0.13768115942028986" />
       </map>
     </option>
   </component>

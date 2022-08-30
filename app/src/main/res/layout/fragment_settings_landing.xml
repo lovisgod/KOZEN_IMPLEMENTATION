@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@color/iswColorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="210dp"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/get_paid_text"
@@ -58,6 +58,20 @@
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:text="2ISW0001" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/route_text"
+            app:layout_constraintTop_toBottomOf="@+id/tid_text"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/_15dp"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="Kimono" />
 
 
         <androidx.cardview.widget.CardView

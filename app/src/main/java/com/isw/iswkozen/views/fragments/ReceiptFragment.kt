@@ -45,6 +45,7 @@ class ReceiptFragment : Fragment() {
     private val arguements by navArgs<ReceiptFragmentArgs>()
     private val transactionResponse by lazy { arguements.transResponse }
     private val transactionData by lazy { arguements.transdata }
+    private val fromPage by lazy { arguements.from }
     private lateinit var terminalInfo: TerminalInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +67,12 @@ class ReceiptFragment : Fragment() {
 
     private fun handleclicks() {
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(R.id.paymentLandingFragment)
+            when (fromPage) {
+                "processing" -> findNavController().navigate(R.id.paymentLandingFragment)
+
+
+                "history" ->  findNavController().popBackStack()
+            }
         }
 
         binding.shareBtn.setOnClickListener {
@@ -196,7 +202,12 @@ class ReceiptFragment : Fragment() {
             object : OnBackPressedCallback(true)
             {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.paymentLandingFragment)
+                   when (fromPage) {
+                       "processing" -> findNavController().navigate(R.id.paymentLandingFragment)
+
+
+                       "history" ->  findNavController().popBackStack()
+                   }
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(

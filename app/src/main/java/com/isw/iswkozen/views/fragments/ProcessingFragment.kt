@@ -49,7 +49,7 @@ class ProcessingFragment : Fragment(), EMVEvents {
             println(it.description)
             it.let {
                 println("response data => ${it.responseMessage}  ${it.responseCode}")
-                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it, iccData, TRANSACTIONTYPE)
+                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it, iccData, TRANSACTIONTYPE, "processing")
                 findNavController().navigate(direction)
             }
         })
