@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/account_type_text"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="@dimen/_70dp"
             android:text="Select Account Type"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/isw_default_account"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -51,7 +51,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/isw_savings_account"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -71,7 +71,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/isw_current_account"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
