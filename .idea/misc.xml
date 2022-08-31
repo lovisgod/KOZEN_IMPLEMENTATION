@@ -44,6 +44,7 @@
         <entry key="app/src/main/res/layout/fragment_account_type.xml" value="0.13768115942028986" />
         <entry key="app/src/main/res/layout/fragment_payment_landing.xml" value="0.13768115942028986" />
         <entry key="app/src/main/res/layout/fragment_settings_landing.xml" value="0.13768115942028986" />
+        <entry key="app/src/main/res/layout/fragment_transaction_history.xml" value="0.18489583333333334" />
       </map>
     </option>
   </component>

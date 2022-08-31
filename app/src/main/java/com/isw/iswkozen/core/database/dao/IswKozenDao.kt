@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface IswKozenDao {
 
-    @Query("SELECT * FROM transaction_result_table ORDER BY stan ASC")
+    @Query("SELECT * FROM transaction_result_table ORDER BY stan DESC")
     fun getAllTransaction(): Flow<List<TransactionResultData>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

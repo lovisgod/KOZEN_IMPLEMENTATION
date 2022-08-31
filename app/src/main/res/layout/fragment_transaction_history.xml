@@ -13,7 +13,7 @@
         <View
             android:id="@+id/top_cover"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/purple_700"
+            android:background="@color/iswColorPrimary"
             android:layout_width="match_parent"
             android:layout_height="70dp"/>
 
@@ -28,7 +28,7 @@
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
+            android:fontFamily="sans-serif"
             android:text="Transactions" />
 
 
