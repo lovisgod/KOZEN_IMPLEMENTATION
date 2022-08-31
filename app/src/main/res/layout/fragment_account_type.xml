@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/account_type_text"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="@dimen/_70dp"
             android:text="Select Account Type"
             android:textStyle="bold"
@@ -30,6 +30,7 @@
             android:layout_marginTop="20dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/isw_default_account"
             android:layout_width="350dp"
             android:layout_marginTop="20dp"
@@ -38,7 +39,7 @@
             android:padding="@dimen/_20dp"
             android:text="Default Account"
             android:fontFamily="sans-serif"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:cornerRadius="8dp"
             android:background="@drawable/isw_bg_card"
             android:textAllCaps="false"
@@ -50,6 +51,7 @@
             app:strokeWidth="1dp" />
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/isw_savings_account"
             android:layout_width="350dp"
             android:layout_marginTop="10dp"
@@ -58,7 +60,7 @@
             android:padding="@dimen/_20dp"
             android:text="Savings Account"
             android:fontFamily="sans-serif"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:cornerRadius="8dp"
             android:background="@drawable/isw_bg_card"
             android:textAllCaps="false"
@@ -70,6 +72,7 @@
             app:strokeWidth="1dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/isw_current_account"
             android:layout_width="350dp"
             android:layout_marginTop="10dp"
@@ -78,7 +81,7 @@
             android:padding="@dimen/_20dp"
             android:text="Current Account"
             android:fontFamily="sans-serif"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:cornerRadius="8dp"
             android:background="@drawable/isw_bg_card"
             android:textAllCaps="false"
