@@ -21,7 +21,8 @@ import com.pos.sdk.security.PedKeyInfo
 import kotlin.jvm.Throws
 import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTypeDeserializer
 
-class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
+class IswDetailsAndKeysImpl(val authInterface: AuthInterface,
+                            val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
     override suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int {
         Log.d("KSN", "KSN $KsnData")
         val kcvInfo = PedKcvInfo(0, ByteArray(5))
