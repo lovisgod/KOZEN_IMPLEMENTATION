@@ -108,10 +108,10 @@ class ProcessingFragment : Fragment(), EMVEvents {
         })
     }
 
-    override fun onEmvProcessed(data: RequestIccData) {
+    override fun onEmvProcessed(data: Any) {
         this.requireActivity().runOnUiThread {
             binding.introText.text = "Card reading finished, Sending request to remote server"
-            iccData = data
+            iccData = data as RequestIccData
             println("request data => ${data}")
             data.let {
             when (TRANSACTIONTYPE) {

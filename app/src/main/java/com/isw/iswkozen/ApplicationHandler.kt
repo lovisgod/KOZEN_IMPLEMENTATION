@@ -9,14 +9,8 @@ import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
-import com.isw.iswkozen.core.database.dao.IswKozenDao
-import com.isw.iswkozen.core.network.CardLess.HttpService
-import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
-import com.isw.iswkozen.core.network.kimonoInterface
 import com.isw.iswkozen.core.utilities.DeviceUtils
-import kotlinx.coroutines.withContext
 import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
 import org.koin.standalone.inject
 
 class ApplicationHandler: KoinComponent {
