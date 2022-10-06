@@ -103,7 +103,7 @@ class Keyboard(activity: Activity, callback: KeyBoardListener, view: View) : Vie
 //            }
             R.id.btnClear -> {
                 if (result.isNotEmpty()) {
-                    result = result.substring(0, result.length - 1)
+                    result = result.substring(0, result.length -1)
                 }
             }
             R.id.btnConfirm -> {

@@ -39,6 +39,9 @@ import com.isw.iswkozen.core.utilities.DisplayUtils
 import com.isw.iswkozen.core.utilities.DisplayUtils.hide
 import com.isw.iswkozen.core.utilities.DisplayUtils.show
 import com.isw.iswkozen.databinding.FragmentTransferBinding
+import com.isw.iswkozen.views.utilViews.Animator.Companion.hideMe
+import com.isw.iswkozen.views.utilViews.Animator.Companion.makeHidden
+import com.isw.iswkozen.views.utilViews.Animator.Companion.makeVisible
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -170,11 +173,11 @@ class TransferFragment : Fragment() {
                    is Some -> {
                        if (!it.value.accountName.isNullOrEmpty()) {
                            codeResponse = it.value
-                           binding.detailsContainer.show()
-                           binding.btnConfirmPayment.show()
+                           binding.detailsContainer.makeVisible()
+                           binding.btnConfirmPayment.makeVisible()
                            binding.tvAccountNumber.text = it?.value.accountNumber
                            binding.tvBeneficiaryName.text = it?.value.accountName
-                           binding.loader.hide()
+                           binding.loader.makeHidden()
                            binding.tvBankName.text = it?.value.bankName
 
 
@@ -198,7 +201,7 @@ class TransferFragment : Fragment() {
                            )
 
                            // set the hint for pin
-                           binding.tvTransferHint.show()
+                           binding.tvTransferHint.makeVisible()
                            binding.tvTransferHint.text = spannableHint
                        }
                    }

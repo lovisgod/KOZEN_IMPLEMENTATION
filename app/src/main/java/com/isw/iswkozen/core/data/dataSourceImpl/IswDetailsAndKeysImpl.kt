@@ -63,6 +63,8 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface,
                    if (it != null) {
                        convertConfigResponseToAllTerminalInfo(it).let {
                            it.terminalInfo?.let { info ->
+                               info.qtbMerchantCode = "MX1065"
+                               info.qtbMerchantAlias = "002208"
                                saveTerminalInfo(info)
                            }
                        }
