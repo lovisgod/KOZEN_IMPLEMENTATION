@@ -97,54 +97,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
     }
 
-//    fun handleClicks(){
-//        eraseKeyBtn.setOnClickListener(this)
-//        dukptKeyBtn.setOnClickListener(this)
-//        pinKeyBtn.setOnClickListener(this)
-//        readTermInfoBtn.setOnClickListener(this)
-//        downloadTermInfoBtn.setOnClickListener(this)
-//        getISWToken.setOnClickListener(this)
-//        startTransactionBtn.setOnClickListener(this)
-//        getTransactionDataBtn.setOnClickListener(this)
-//    }
 
     override fun onClick(p0: View?) {
         when(p0) {
-//            eraseKeyBtn -> {
-//              viewmodel.eraseKeys()
-//            }
-//
-//            dukptKeyBtn -> {
-//                viewmodel.writeDukptKey()
-//            }
-//
-//            pinKeyBtn -> {
-//                viewmodel.writePinKey()
-//            }
-//
-//            readTermInfoBtn -> {
-//                viewmodel.readterminalDetails()
-//            }
-//
-//            downloadTermInfoBtn -> {
-//                viewmodel.dowloadDetails()
-//                viewmodel.downloadterminalDetailsStatus.observe(this, Observer {
-//                   println("download successful => $it")
-//                })
-//            }
-//
-//            getISWToken -> {
-//                viewmodel.getISWToken()
-//            }
-//
-//            startTransactionBtn -> {
-//                viewmodel.startTransaction(1000, 0, 0, this)
-//            }
-//
-//            getTransactionDataBtn -> {
-//                viewmodel.getTransactionData()
-//                viewmodel.makeOnlineRequest()
-//            }
+
         }
     }
 
