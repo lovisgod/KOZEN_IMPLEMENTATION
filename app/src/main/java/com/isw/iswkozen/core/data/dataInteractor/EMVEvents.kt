@@ -9,5 +9,5 @@ interface EMVEvents {
     fun onRemoveCard()
     fun onPinInput()
     fun onEmvProcessing(message: String = "Please wait while we read card")
-    fun onEmvProcessed(data: RequestIccData)
+    fun onEmvProcessed(data: Any)
 }

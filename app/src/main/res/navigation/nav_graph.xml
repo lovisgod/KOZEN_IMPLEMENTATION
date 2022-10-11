@@ -53,6 +53,10 @@
         <argument
             android:name="transtype"
             app:argType="string" />
+        <argument
+            android:name="from"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/settingsLandingFragment"
@@ -66,7 +70,7 @@
             android:id="@+id/action_transactionHistoryFragment_to_receiptFragment"
             app:destination="@id/receiptFragment" />
     </fragment>
-    <dialog
+    <fragment
         android:id="@+id/choosePaymentTypeDialogFragment"
         android:name="com.isw.iswkozen.views.fragments.ChoosePaymentTypeDialogFragment"
         android:label="ChoosePaymentTypeDialogFragment" >
@@ -90,7 +94,7 @@
             android:id="@+id/action_choosePaymentTypeDialogFragment_to_qrcodeFragment"
             app:destination="@id/qrcodeFragment" />
 
-    </dialog>
+    </fragment>
     <fragment
         android:id="@+id/transferFragment"
         android:name="com.isw.iswkozen.views.fragments.TransferFragment"

@@ -19,6 +19,8 @@ class IswDetailsAndKeySourceInteractor(
     suspend fun eraseKey() =
         iswDetailsAndKeyDataSource.eraseKey()
 
+    suspend fun loadMasterKey(masterKey: String) = iswDetailsAndKeyDataSource.loadMasterKey(masterKey)
+
     suspend fun saveTerminalInfo(data: TerminalInfo) =
         iswDetailsAndKeyDataSource.saveTerminalInfo(data)
 

@@ -7,7 +7,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/frag_bg"
+    android:background="@color/white"
     tools:context=".views.fragments.PaymentLandingFragment">
 
     <com.google.android.material.textview.MaterialTextView
@@ -17,42 +17,57 @@
         android:layout_marginTop="@dimen/_30dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:textSize="@dimen/_30sp"
-        android:textStyle="normal"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
         android:text="Smart POS" />
 
+
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/intro_text"
+        android:id="@+id/time_text"
         app:layout_constraintTop_toBottomOf="@+id/get_paid_text"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/_15dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:textSize="@dimen/_14sp"
-        android:textColor="@color/grey"
-        android:textStyle="normal"
+        android:textColor="@color/iswColorPrimary"
+        android:textStyle="bold"
         android:fontFamily="monospace"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="What transaction do you want to perform?" />
+        android:text="Thu, Aug 25" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/intro_text"
+        app:layout_constraintTop_toBottomOf="@+id/time_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:textSize="@dimen/_14sp"
+        android:textColor="@color/grey"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="What would you like to do?" />
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/instant_payment"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="40dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="5dp"
-        app:cardElevation="1dp"
+        app:cardElevation="5dp"
         app:layout_constraintTop_toBottomOf="@+id/intro_text"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/withdrawal"
         app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="@color/colorPrimary"
         app:strokeColor="@color/colorBlack"
@@ -61,35 +76,48 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/instant_payment_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_purchase"
+                android:layout_width="@dimen/_50dp"
+                android:layout_height="@dimen/_50dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/instant_payment_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
-                android:text="Instant Payment"
-                android:fontFamily="casual"
-                android:layout_marginStart="@dimen/_10dp"
+                android:text="Purchase"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/instant_payment_icon" />
 
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/instant_payment_text_explain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pay for Goods using your payment cards and confirm instant payments"
+                android:gravity="center"
+                android:text="Receive payments for item purchased"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
-                android:textStyle="italic"
-                android:fontFamily="monospace"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
                 android:layout_marginTop="@dimen/_5dp"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginEnd="@dimen/_5dp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instant_payment_text"/>
 
 
@@ -100,26 +128,35 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/withdrawal"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="40dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="5dp"
-        app:cardElevation="1dp"
-        app:layout_constraintTop_toBottomOf="@+id/instant_payment"
+        app:cardElevation="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/intro_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/instant_payment"
         app:rippleColor="@color/colorPrimary"
         app:strokeColor="@color/colorBlack"
         app:strokeWidth="0.2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/withdrawal_payment_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_purchase_red"
+                android:layout_width="@dimen/_50dp"
+                android:layout_height="@dimen/_50dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/withdrawal_text"
@@ -127,27 +164,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:text="Withdrawal"
-                android:fontFamily="casual"
-                android:layout_marginStart="@dimen/_10dp"
+                android:gravity="center"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/withdrawal_text_explain"
+                app:layout_constraintTop_toBottomOf="@id/withdrawal_payment_icon" />
 
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/withdrawal_text_explain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Withdraw funds easily and quickly"
+                android:gravity="center"
+                android:text="Initiate a cash withdrawal"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
-                android:textStyle="italic"
-                android:fontFamily="monospace"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
                 android:layout_marginTop="@dimen/_5dp"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/withdrawal_text"/>
 
 

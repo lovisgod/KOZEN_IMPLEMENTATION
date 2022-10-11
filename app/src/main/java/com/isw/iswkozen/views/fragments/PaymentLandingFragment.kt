@@ -1,10 +1,13 @@
 package com.isw.iswkozen.views.fragments
 
+import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -13,11 +16,13 @@ import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.utilsData.PaymentType
 import com.isw.iswkozen.databinding.FragmentPaymentLandingBinding
 import com.isw.iswkozen.views.viewmodels.BluetoothViewModel
+import com.isw.iswkozen.views.utilViews.Greetings
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import com.isw_smart_bluetooth.interfaces.TillCommand
 import com.pixplicity.easyprefs.library.Prefs
 import com.pos.sdk.security.POIHsmManage
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
 class PaymentLandingFragment : Fragment() {
 
@@ -79,6 +84,26 @@ class PaymentLandingFragment : Fragment() {
                 }
             })
         }
+
+        val formatter = java.text.SimpleDateFormat("EEE, MMM, d", Locale.ROOT)
+        binding.timeText.text = formatter.format(Date())
+
+        binding.getPaidText.text = Greetings.greet()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                  this@PaymentLandingFragment.activity?.finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            callback
+        )
     }
 
 

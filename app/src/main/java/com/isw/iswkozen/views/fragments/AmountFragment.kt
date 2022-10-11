@@ -76,6 +76,12 @@ class AmountFragment : Fragment(), Keyboard.KeyBoardListener {
             current = cleanString
             keyboard!!.setText(cleanString)
         }
+        if (text == "") {
+            val text = defaultAmount
+            val cleanString = text.replace("[$,.]".toRegex(), "")
+            binding.output.text = text
+            keyboard!!.setText(cleanString)
+        }
     }
 
     override fun onSubmit(text: String) {

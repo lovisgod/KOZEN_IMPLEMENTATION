@@ -1,11 +1,11 @@
 package com.isw.iswkozen.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,10 +13,11 @@ import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.utilsData.PaymentType
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
-import com.isw.iswkozen.databinding.FragmentAmountBinding
 import com.isw.iswkozen.databinding.FragmentProcessingBinding
+import com.isw.iswkozen.views.utilViews.Animator.Companion.changeText
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class ProcessingFragment : Fragment(), EMVEvents {
 
@@ -49,7 +50,7 @@ class ProcessingFragment : Fragment(), EMVEvents {
             println(it.description)
             it.let {
                 println("response data => ${it.responseMessage}  ${it.responseCode}")
-                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it, iccData, TRANSACTIONTYPE)
+                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it, iccData, TRANSACTIONTYPE, "processing")
                 findNavController().navigate(direction)
             }
         })
@@ -88,7 +89,9 @@ class ProcessingFragment : Fragment(), EMVEvents {
     }
 
     override fun onInsertCard() {
-        binding.introText.text = getString(R.string.insert_card)
+        this.requireActivity().runOnUiThread(Runnable {
+            binding.introText.changeText(getString(R.string.insert_card))
+        })
     }
 
     override fun onRemoveCard() {
@@ -97,7 +100,7 @@ class ProcessingFragment : Fragment(), EMVEvents {
 
     override fun onPinInput() {
         this.requireActivity().runOnUiThread {
-           binding.introText.text = getString(R.string.input_pin)
+           binding.introText.changeText(getString(R.string.input_pin))
         }
     }
 
@@ -108,10 +111,10 @@ class ProcessingFragment : Fragment(), EMVEvents {
         })
     }
 
-    override fun onEmvProcessed(data: RequestIccData) {
+    override fun onEmvProcessed(data: Any) {
         this.requireActivity().runOnUiThread {
-            binding.introText.text = "Card reading finished, Sending request to remote server"
-            iccData = data
+            binding.introText.changeText("Card reading finished, Sending request to remote server")
+            iccData = data as RequestIccData
             println("request data => ${data}")
             data.let {
             when (TRANSACTIONTYPE) {

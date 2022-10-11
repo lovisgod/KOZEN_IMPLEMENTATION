@@ -21,7 +21,8 @@ import com.pos.sdk.security.PedKeyInfo
 import kotlin.jvm.Throws
 import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTypeDeserializer
 
-class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
+class IswDetailsAndKeysImpl(val authInterface: AuthInterface,
+                            val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
     override suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int {
         Log.d("KSN", "KSN $KsnData")
         val kcvInfo = PedKcvInfo(0, ByteArray(5))
@@ -62,6 +63,8 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface, val kimonoInterfac
                    if (it != null) {
                        convertConfigResponseToAllTerminalInfo(it).let {
                            it.terminalInfo?.let { info ->
+                               info.qtbMerchantCode = "MX1065"
+                               info.qtbMerchantAlias = "002208"
                                info.nibbsKey = it.tmsRouteTypeConfig?.key.toString()
                                saveTerminalInfo(info)
                            }

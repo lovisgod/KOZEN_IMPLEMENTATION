@@ -49,6 +49,7 @@ class ReceiptFragment : Fragment() {
     private val arguements by navArgs<ReceiptFragmentArgs>()
     private val transactionResponse by lazy { arguements.transResponse }
     private val transactionData by lazy { arguements.transdata }
+    private val fromPage by lazy { arguements.from }
     private lateinit var terminalInfo: TerminalInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,12 @@ class ReceiptFragment : Fragment() {
 
     private fun handleclicks() {
         binding.closeBtn.setOnClickListener {
-            findNavController().popBackStack(R.id.paymentLandingFragment, false)
+            when (fromPage) {
+                "processing" -> findNavController().popBackStack(R.id.paymentLandingFragment, false)
+
+
+                "history" ->  findNavController().popBackStack()
+            }
         }
 
         binding.shareBtn.setOnClickListener {
@@ -159,7 +165,7 @@ class ReceiptFragment : Fragment() {
             terminalInfo?.let {
                 binding.merchantName.text = terminalInfo.merchantName.toString()
                 binding.tid.text = terminalInfo.terminalCode.toString()
-                binding.merchantLocation.text = "${terminalInfo.merchantAddress1} ${terminalInfo.merchantAddress2}"
+                binding.merchantLocation.text = if (terminalInfo.merchantName.isEmpty()) "${terminalInfo.merchantAddress1} ${terminalInfo.merchantAddress2}" else terminalInfo.merchantName
             }
             binding.transactionType.text = it.transTYpe
 
@@ -225,7 +231,12 @@ class ReceiptFragment : Fragment() {
             object : OnBackPressedCallback(true)
             {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack(R.id.paymentLandingFragment, false)
+                   when (fromPage) {
+                       "processing" -> findNavController().popBackStack(R.id.paymentLandingFragment, false)
+
+
+                       "history" ->  findNavController().popBackStack()
+                   }
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(

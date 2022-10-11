@@ -128,7 +128,7 @@ object Constants {
 
     val ISW_DUKPT_KSN: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(!checkEnv()) KeysUtils.testKSN()
+        return if(checkEnv()) KeysUtils.testKSN()
         else KeysUtils.productionKSN()
     }
 
@@ -142,7 +142,7 @@ object Constants {
 
 
     val ISW_KIMONO_BASE_URL: String get() {
-        return if(!checkEnv()) Test.ISW_KIMONO_BASE_URL
+        return if(checkEnv()) Production.ISW_KIMONO_BASE_URL
         else Production.ISW_KIMONO_BASE_URL
     }
 

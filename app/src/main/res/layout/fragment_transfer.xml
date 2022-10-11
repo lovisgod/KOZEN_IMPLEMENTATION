@@ -161,7 +161,7 @@
                 android:layout_width="0dp"
                 android:layout_marginTop="@dimen/_10dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/purple_700"
+                app:cardBackgroundColor="@color/iswColorPrimary"
                 app:cardCornerRadius="@dimen/_5dp"
                 android:visibility="gone">
 
@@ -207,7 +207,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:rippleColor="@color/colorPrimary"
+            app:rippleColor="@color/iswColorPrimary"
             app:strokeColor="@color/colorBlack"
             app:strokeWidth="0.2dp">
 

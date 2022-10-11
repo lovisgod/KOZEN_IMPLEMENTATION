@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+//    id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
@@ -49,6 +50,7 @@ android {
         dataBinding true
         viewBinding true
     }
+    buildToolsVersion '30.0.2'
 }
 
 dependencies {

@@ -43,10 +43,10 @@ data class TerminalInfo(
         var merchantName: String = "Railway Operator",
 
         @field:Element(name = "merchantAddress1", required = false)
-        var merchantAddress1: String = "merchantAddress1",
+        var merchantAddress1: String = "",
 
         @field:Element(name = "merchantAddress2", required = false)
-        var merchantAddress2: String = "merchantAddress2",
+        var merchantAddress2: String = "",
 
         @field:Element(name = "merchantPhoneNumber", required = false)
         var merchantPhoneNumber: String = "08000000000",

@@ -204,7 +204,6 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 dataRepo.allTransactions.collect {
-                    println("this is the list => ${it}")
                     _transactionDataList.postValue(it)
                 }
             }

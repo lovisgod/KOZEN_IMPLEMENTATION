@@ -39,6 +39,8 @@ import com.isw.iswkozen.core.utilities.DisplayUtils.show
 import com.isw.iswkozen.core.utilities.Logger
 import com.isw.iswkozen.databinding.FragmentUssdBinding
 import com.isw.iswkozen.views.adapters.BankListAdapter
+import com.isw.iswkozen.views.utilViews.Animator.Companion.makeVisible
+import com.isw.iswkozen.views.utilViews.Animator.Companion.showMe
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -133,7 +135,8 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
                     val direction =UssdFragmentDirections.actionUssdFragmentToReceiptFragment(
                         purchaseResponse,
                         RequestIccData(TRANSACTION_AMOUNT = AMOUNT),
-                        TRANSACTIONTYPE
+                        TRANSACTIONTYPE,
+                        "processing"
                     )
                     findNavController().navigate(direction)
                 })
@@ -169,7 +172,7 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
                         Snackbar.make(binding.btnsContainer,
                             "Unable to load bank issuers, please try again.",
                             Snackbar.LENGTH_LONG).show()
-                        this::loadBanks
+//                        this::loadBanks
                     }
 
                     is Some -> {
@@ -278,7 +281,7 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
 
                     // set the text value
                     binding.tvUssdHint.text = spannableHint
-                    binding.tvUssdHint.visibility = View.VISIBLE
+                    binding.tvUssdHint.showMe()
                 }
 
 
@@ -297,7 +300,7 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
             "Unable to generate bank code",
             Snackbar.LENGTH_LONG).show()
             // retry getting ussd code
-            getBankCode(selectedBank)
+//            getBankCode(selectedBank)
 
 
     }
@@ -339,7 +342,7 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
 
     private fun showUssdButtons() {
         arrayOf(binding.btnsContainer, binding.ussdContainer, binding.tvUssdHint).forEach {
-            it.visibility = View.VISIBLE
+            it.makeVisible()
         }
     }
 }
