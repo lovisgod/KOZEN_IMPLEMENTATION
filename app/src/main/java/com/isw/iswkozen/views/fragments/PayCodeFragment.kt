@@ -87,7 +87,7 @@ class PayCodeFragment : Fragment() {
                 val direction = PayCodeFragmentDirections.actionPayCodeFragmentToReceiptFragment(
                     it,
                     RequestIccData(TRANSACTION_AMOUNT = AMOUNT),
-                    TRANSACTIONTYPE)
+                    TRANSACTIONTYPE, "processing")
                 findNavController().navigate(direction)
             }
         })

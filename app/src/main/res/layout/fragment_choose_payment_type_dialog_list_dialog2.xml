@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="500dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,7 +30,7 @@
             android:layout_height="150dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="15dp"
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="5dp"
@@ -96,7 +100,7 @@
         android:layout_height="150dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="5dp"
@@ -164,7 +168,7 @@
         style="@style/Theme.MaterialComponents.Light"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="5dp"
@@ -227,6 +231,145 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+        android:id="@+id/pay_with_paycode"
+        style="@style/Theme.MaterialComponents.Light"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/pay_with_ussd"
+        app:layout_constraintEnd_toEndOf="@id/pay_with_ussd"
+        app:layout_constraintStart_toStartOf="@id/pay_with_ussd"
+        app:rippleColor="@color/colorPrimary"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="0.2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/paycode_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/pay_code_icon"
+                android:layout_width="@dimen/_50dp"
+                android:layout_height="@dimen/_50dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/paycode_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="Pay with Paycode"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/paycode_icon" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/paycode_text_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pay using generated Paycode"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paycode_text"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+        android:id="@+id/pay_with_qr"
+        style="@style/Theme.MaterialComponents.Light"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/pay_with_transfer"
+        app:layout_constraintEnd_toEndOf="@id/pay_with_transfer"
+        app:layout_constraintStart_toStartOf="@id/pay_with_transfer"
+        app:rippleColor="@color/colorPrimary"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="0.2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/qr_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_baseline_qr_code_24"
+                android:tint="@color/colorBlack"
+                android:layout_width="@dimen/_50dp"
+                android:layout_height="@dimen/_50dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/qr_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="Pay with QR"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/qr_icon" />
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/qr_text_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pay using generated QR code"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qr_text"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

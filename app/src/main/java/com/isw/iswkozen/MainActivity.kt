@@ -45,12 +45,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
         checkPermission()
         setupTerminals()
 
-        tillBluetooth = TillBluetoothManager(this, listener)
-        tillBluetooth.startBluetooth()
+//        tillBluetooth = TillBluetoothManager(this, listener)
+//        tillBluetooth.startBluetooth()
 
         with(blueviewmodel) {
             bluetoothTransactionResponse.observe(this@MainActivity, Observer {
-                tillBluetooth.sendTransactionResponse(it)
+//                tillBluetooth.sendTransactionResponse(it)
             })
         }
     }

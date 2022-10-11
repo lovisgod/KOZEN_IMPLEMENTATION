@@ -65,7 +65,7 @@ class ChoosePaymentTypeDialogFragment : Fragment() {
           handleNavogation("ussd")
         }
 
-        binding.payWithQR.setOnClickListener {
+        binding.payWithQr.setOnClickListener {
           handleNavogation("qr")
         }
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -23,8 +24,11 @@ import com.pixplicity.easyprefs.library.Prefs
 import com.pos.sdk.security.POIHsmManage
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
+import kotlin.properties.Delegates
 
 class PaymentLandingFragment : Fragment() {
+
+    var isNibbs by Delegates.notNull<Boolean>()
 
     private lateinit var binding: FragmentPaymentLandingBinding
     private val viewModel: IswKozenViewModel by viewModel()
@@ -46,6 +50,7 @@ class PaymentLandingFragment : Fragment() {
         setupUI()
         observeBluetooth()
         return binding.root
+
     }
 
 
@@ -56,6 +61,10 @@ class PaymentLandingFragment : Fragment() {
         }
 
         binding.withdrawal.setOnClickListener {
+            if (isNibbs) {
+                Toast.makeText(this.requireContext(), "Transactions not allowed on this terminal", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
             findNavController().navigate(direction)
 //            viewModel.downloadNibbsParams()
@@ -65,7 +74,14 @@ class PaymentLandingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (Prefs.getBoolean("ISNIBSS", false)) {
-            binding.withdrawal.visibility = View.GONE
+            println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
+//            binding.withdrawal.visibility = View.GONE
+            isNibbs = true
+            if (!Prefs.getBoolean("NIBSSKEYSUCCESS", false)) {
+               println("NIBBS key already downloaded")
+            } else {
+                viewModel.downloadNibbsKey()
+            }
         }
     }
 

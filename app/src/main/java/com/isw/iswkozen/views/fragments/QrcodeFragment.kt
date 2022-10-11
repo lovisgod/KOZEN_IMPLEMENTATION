@@ -119,7 +119,7 @@ class QrcodeFragment : Fragment() {
                     val direction =QrcodeFragmentDirections.actionQrcodeFragmentToReceiptFragment(
                         purchaseResponse,
                         RequestIccData(TRANSACTION_AMOUNT = AMOUNT),
-                        TRANSACTIONTYPE
+                        TRANSACTIONTYPE, "processing"
                     )
                     findNavController().navigate(direction)
                 })
