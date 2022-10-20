@@ -110,7 +110,8 @@ val networkModule = module {
 
         }
         // set base url based on env
-        val iswBaseUrl = Constants.ISW_KIMONO_BASE_URL
+        val iswBaseUrl = Constants.Test.ISW_KIMONO_BASE_URL
+//        val iswBaseUrl = Constants.ISW_KIMONO_BASE_URL
 
         val logger = HttpLoggingInterceptor()
         logger.level = HttpLoggingInterceptor.Level.BODY
@@ -146,7 +147,8 @@ val networkModule = module {
     single {
 
         // set base url based on env
-        val iswBaseUrl = Constants.ISW_KIMONO_BASE_URL
+        val iswBaseUrl = Constants.Test.ISW_KIMONO_BASE_URL
+//        val iswBaseUrl = Constants.ISW_KIMONO_BASE_URL
 
         val logger = HttpLoggingInterceptor()
         logger.level = HttpLoggingInterceptor.Level.BODY

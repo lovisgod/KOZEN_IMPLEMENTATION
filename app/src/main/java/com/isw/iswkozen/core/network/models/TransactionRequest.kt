@@ -120,6 +120,7 @@ sealed class TransactionRequest {
                 keyLabel = if (Constants.checkEnv()) "000006" else "000002"
                 this.purchaseType = TransactionType.Card.name
                 transactionId = System.currentTimeMillis().toString()
+                receivingInstitutionId = "13133"
             }
 
         }

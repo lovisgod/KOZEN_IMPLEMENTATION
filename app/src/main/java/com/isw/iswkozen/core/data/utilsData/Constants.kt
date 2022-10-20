@@ -30,7 +30,7 @@ object Constants {
 
 
     //    internal const val KIMONO_END_POINT = "kmw/v2/kimonoservice"
-    internal const val KIMONO_END_POINT = "kmw/kimonoservice"
+    internal const val KIMONO_END_POINT = "kmw/kimonoservice/amex"
     internal const val KIMONO_MERCHANT_DETAILS_END_POINT = "kmw/serialid/{terminalSerialNo}.xml"
     internal const val KIMONO_MERCHANT_DETAILS_END_POINT_AUTO = "kmw/v2/serialid/{terminalSerialNo}"
 
@@ -128,7 +128,7 @@ object Constants {
 
     val ISW_DUKPT_KSN: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if(checkEnv()) KeysUtils.testKSN()
+        return if(!checkEnv()) KeysUtils.testKSN()
         else KeysUtils.productionKSN()
     }
 
@@ -166,7 +166,7 @@ object Constants {
             return Production.ISW_KEY_DOWNLOAD_URL
         }
 
-    private object Production {
+    object Production {
 
         const val ISW_USSD_QR_BASE_URL = "https://api.interswitchng.com/paymentgateway/api/v1/"
         const val ISW_TOKEN_BASE_URL = "https://passport.interswitchng.com/passport/"
@@ -182,7 +182,7 @@ object Constants {
         const val PAYMENT_CODE = "04358001"
     }
 
-    private object Test {
+    object Test {
 //        const val ISW_USSD_QR_BASE_URL = "https://api.interswitchng.com/paymentgateway/api/v1/"
         const val ISW_USSD_QR_BASE_URL = "https://project-x-merchant.k8.isw.la/paymentgateway/api/v1/"
         const val ISW_TOKEN_BASE_URL = "https://passport.interswitchng.com/passport/"
