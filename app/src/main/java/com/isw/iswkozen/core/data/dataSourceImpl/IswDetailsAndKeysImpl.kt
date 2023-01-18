@@ -63,6 +63,7 @@ class IswDetailsAndKeysImpl(val authInterface: AuthInterface,
                    if (it != null) {
                        convertConfigResponseToAllTerminalInfo(it).let {
                            it.terminalInfo?.let { info ->
+                               println("terminal info ::::: ${info.toString()}")
                                info.qtbMerchantCode = "MX1065"
                                info.qtbMerchantAlias = "002208"
                                info.nibbsKey = it.tmsRouteTypeConfig?.key.toString()

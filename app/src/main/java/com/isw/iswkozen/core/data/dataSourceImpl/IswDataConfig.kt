@@ -1,6 +1,7 @@
 package com.isw.iswkozen.core.data.dataSourceImpl
 
 import android.os.Bundle
+import com.interswitchng.smartpos.shared.utilities.console
 import com.isw.iswkozen.core.data.datasource.IswConfigDataSource
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.utilities.BerTag
@@ -16,6 +17,7 @@ import kotlin.experimental.or
 class IswDataConfig : IswConfigDataSource {
 
     override suspend fun loadTerminal(terminalData: TerminalInfo) {
+        console.log("load terminal info", "load terminal info")
         val emvCoreManager = getDefault()
         val bundle = Bundle()
 
@@ -77,6 +79,7 @@ class IswDataConfig : IswConfigDataSource {
     }
 
     override suspend fun loadAid() {
+        console.log("load terminal aid", "load terminal aid")
         val emvCoreManager = getDefault()
         emvCoreManager.EmvDeleteAid()
         var aid: PosEmvAid
@@ -235,17 +238,17 @@ class IswDataConfig : IswConfigDataSource {
 
 
         // Verve
-        aid = addAid("A0000003710002", "0001")
+        aid = addAid("A0000003710002", "0096")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")
-        aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
-        aid.TACOnline = PosUtils.hexStringToBytes("f850acf800")
-        aid.TACDefault = PosUtils.hexStringToBytes("fc50aca000")
+        aid.TACDenial = PosUtils.hexStringToBytes("0000008000")
+        aid.TACOnline = PosUtils.hexStringToBytes("BCF8049800")
+        aid.TACDefault = PosUtils.hexStringToBytes("BCF8049800")
         aid.ContactlessCVMLimit = 50000
-        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
+        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("6C00800000000000")
         emvCoreManager.EmvSetAid(aid)
 
-        aid = addAid("A0000003710001", "0096")
+        aid = addAid("A0000003710001", "0001")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")
         aid.TACDenial = PosUtils.hexStringToBytes("0400000000")

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,7 +51,8 @@ class ProcessingFragment : Fragment(), EMVEvents {
             println(it.description)
             it.let {
                 println("response data => ${it.responseMessage}  ${it.responseCode}")
-                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it, iccData, TRANSACTIONTYPE, "processing")
+                val direction = ProcessingFragmentDirections.actionProcessingFragmentToReceiptFragment(it,
+                    iccData, TRANSACTIONTYPE, "processing")
                 findNavController().navigate(direction)
             }
         })
@@ -96,6 +98,10 @@ class ProcessingFragment : Fragment(), EMVEvents {
 
     override fun onRemoveCard() {
         println("card to be removed")
+        this.requireActivity().runOnUiThread {
+            Toast.makeText(this.requireContext(), "Kindly remove the card", Toast.LENGTH_LONG).show()
+            findNavController().popBackStack(R.id.paymentLandingFragment, false)
+        }
     }
 
     override fun onPinInput() {

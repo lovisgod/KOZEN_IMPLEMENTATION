@@ -39,12 +39,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <meta-data android:name="io.sentry.dsn" android:value="https://4f90dc35da5e47f3888b97eb40a6cd07@o4503982055489536.ingest.sentry.io/4503982743027712"/>
+        <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
+        <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
     </application>
 
 </manifest>

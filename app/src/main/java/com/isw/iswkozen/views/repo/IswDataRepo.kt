@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
+import com.interswitchng.smartpos.shared.utilities.console
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
@@ -208,6 +209,9 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
                 iswDetailsAndKeySourceInteractor.downloadTerminalDetails(data)
 
+
+
+
                 // read the data from saved pref
                 var info = readterminalDetails()
 
@@ -215,7 +219,12 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                 println("info =>  ${info?.terminalCountryCode}")
                 println("info =>  ${info?.terminalCode}")
                 println("nibbskey => ${info?.nibbsKey}")
+                println("tmsroutetype => ${info?.tmsRouteType}")
                 if (info != null) {
+
+                    if (info?.terminalCode == "Terminal") {
+                        return@withContext false
+                    }
 
                     // load the details into the terminal
                     if (info.tmsRouteType != "KIMONO_DEFAULT" ) {
@@ -223,6 +232,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                         Prefs.putBoolean("ISNIBSS", true)
                         downLoadNibbsKey()
                     } else {
+                        Prefs.putBoolean("ISNIBSS", false)
                         loadTerminal(info)
                         getISWToken(info)
                     }
@@ -280,6 +290,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
                                   transType: Int, contextX: Context, emvEvents: EMVEvents): Boolean {
         try {
             return withContext(dispatcher) {
+                println("transaction started")
                 iswTransactionInteractor.setEmvContect(contextX)
                 if (Prefs.getBoolean("ISNIBSS", false)) {
                     iswTransactionInteractor.setPinMode(POIHsmManage.PED_PINBLOCK_FETCH_MODE_TPK)
@@ -620,6 +631,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
     suspend fun loadAllConfig(): Boolean {
+        console.log("load all config", "Loading config")
        try {
            return withContext(dispatcher) {
 
@@ -649,7 +661,10 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             return withContext(dispatcher) {
                 // first download terminal parameters
                 // the download parameter function has the loadparameter function implemented in it
-                downloadTerminalDetails()
+                val downloadedGood = downloadTerminalDetails()
+                if (!downloadedGood) {
+                    return@withContext false
+                }
                 loadAllConfig()
                 return@withContext true
             }

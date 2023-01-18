@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_16dp"
-                    android:text="Download Terminal key/Details"
+                    android:text="Download Terminal key"
                     android:fontFamily="casual"
                     android:layout_marginStart="@dimen/_10dp"
                     android:textColor="@color/black"

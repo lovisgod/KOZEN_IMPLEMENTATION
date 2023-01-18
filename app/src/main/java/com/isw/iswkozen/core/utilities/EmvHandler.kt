@@ -175,6 +175,7 @@ class EmvHandler {
         }
 
         override fun onRequestInputPin(bundle: Bundle?) {
+            console.log("pin input", "kindly input pin")
             AppExecutors.getInstance().mainThread().execute {
                 this@EmvHandler.emvEvents?.onPinInput()
                 val isIcSlot = cardType == POIEmvCoreManager.DEVICE_CONTACT
@@ -298,6 +299,13 @@ class EmvHandler {
                 PosEmvErrorCode.EMV_CANCEL, PosEmvErrorCode.EMV_TIMEOUT -> {
 //                    onTransEnd()
                     println("transaction timed out")
+                    return
+                }
+
+                PosEmvErrorCode.EMV_TERMINATED, PosEmvErrorCode.EMV_COMMAND_FAIL -> {
+                    println("An emv error just occurred")
+                    this@EmvHandler.emvEvents?.onRemoveCard()
+
                     return
                 }
                 else -> {

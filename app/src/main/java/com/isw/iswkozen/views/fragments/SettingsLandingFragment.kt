@@ -54,6 +54,11 @@ class SettingsLandingFragment : Fragment() {
         viewModel.terminalSetupStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.loaderCard.visibility = View.GONE
+                if (it) {
+                    Toast.makeText(requireContext(), " Config reconfigured Successfully", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "Config configuration Not successful", Toast.LENGTH_LONG).show()
+                }
             }
         })
 

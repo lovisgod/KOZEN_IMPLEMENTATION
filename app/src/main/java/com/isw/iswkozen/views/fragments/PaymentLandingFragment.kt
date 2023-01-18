@@ -82,6 +82,8 @@ class PaymentLandingFragment : Fragment() {
             } else {
                 viewModel.downloadNibbsKey()
             }
+        } else {
+            isNibbs = false
         }
     }
 
