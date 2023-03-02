@@ -130,6 +130,7 @@ class EmvHandler {
                         this@EmvHandler.emvEvents?.onEmvProcessing(message = "Contact Card Trans")
                     }
                     POIEmvCoreManager.DEVICE_CONTACTLESS -> {
+                        this@EmvHandler.emvEvents?.onEmvProcessing(message = "Contactless Card Trans")
                         console.log("card transaction type", "Contactless Card Trans")
                     }
                     POIEmvCoreManager.DEVICE_MAGSTRIPE -> { console.log("card transaction type","Magstripe Card Trans") }

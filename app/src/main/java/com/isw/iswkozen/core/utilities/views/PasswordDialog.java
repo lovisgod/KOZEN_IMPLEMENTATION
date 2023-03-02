@@ -49,7 +49,7 @@ public class PasswordDialog {
     private int    DEFAULT_TIMEOUT_MS      = 30000;
 
     private int keyIndex;
-    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_TPK;
+    private int keyMode = POIHsmManage.PED_PINBLOCK_FETCH_MODE_DUKPT;
     private int icSlot;
 
     private boolean isKeyboardFix = true;

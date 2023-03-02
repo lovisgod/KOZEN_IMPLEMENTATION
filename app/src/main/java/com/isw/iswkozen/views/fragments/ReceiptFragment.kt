@@ -252,7 +252,7 @@ class ReceiptFragment : Fragment() {
     }
 
 
-    private  fun shareImage(bitmap: Bitmap) {
+    private fun shareImage(bitmap: Bitmap) {
         val path: String = MediaStore.Images.Media.insertImage(
             requireContext().contentResolver,
             bitmap, "Design", null
@@ -268,11 +268,29 @@ class ReceiptFragment : Fragment() {
         startActivity(sendIntent)
     }
 
+    private fun shareImageX(bitmap: Bitmap) {
+        val path: String = MediaStore.Images.Media.insertImage(
+            requireContext().contentResolver,
+            bitmap, "Design" + System.currentTimeMillis(), null
+        )
+        val uri: Uri = Uri.parse(path)
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(
+            Intent.EXTRA_STREAM,
+            uri
+        )
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
+    }
+
+
+
     fun handleRecpSharing() {
         DisplayUtils.getScreenBitMap(this.requireActivity(),
             binding.receiptPage
         )?.let {
-            shareImage(it)
+            shareImageX(it)
         }
     }
 

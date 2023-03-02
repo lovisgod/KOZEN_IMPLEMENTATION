@@ -1,6 +1,8 @@
 package com.isw.iswkozen.core.data.dataInteractor
 
 import EmvMessage
+import com.isw.iswkozen.core.data.models.CardType
+import com.isw.iswkozen.core.data.models.EmvCardType
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
 
 interface EMVEvents {

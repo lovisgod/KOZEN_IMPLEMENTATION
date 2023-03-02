@@ -18,6 +18,7 @@ class IswDataConfig : IswConfigDataSource {
 
     override suspend fun loadTerminal(terminalData: TerminalInfo) {
         console.log("load terminal info", "load terminal info")
+        console.log("terminal country code ", "terminal currency code::::: ${terminalData.terminalCountryCode}")
         val emvCoreManager = getDefault()
         val bundle = Bundle()
 
@@ -249,6 +250,47 @@ class IswDataConfig : IswConfigDataSource {
         emvCoreManager.EmvSetAid(aid)
 
         aid = addAid("A0000003710001", "0001")
+        aid.dDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
+        aid.TACOnline = PosUtils.hexStringToBytes("f850acf800")
+        aid.TACDefault = PosUtils.hexStringToBytes("fc50aca000")
+        aid.ContactlessCVMLimit = 50000
+        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
+        emvCoreManager.EmvSetAid(aid)
+
+        // Afrigo
+        aid = addAid("A000000891010101", "0001")
+        aid.dDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.TACDenial = PosUtils.hexStringToBytes("0000008000")
+        aid.TACOnline = PosUtils.hexStringToBytes("BCF8049800")
+        aid.TACDefault = PosUtils.hexStringToBytes("BCF8049800")
+        aid.ContactlessCVMLimit = 50000
+        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("6C00800000000000")
+        emvCoreManager.EmvSetAid(aid)
+
+        aid = addAid("A000000891010102", "0001")
+        aid.dDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
+        aid.TACOnline = PosUtils.hexStringToBytes("f850acf800")
+        aid.TACDefault = PosUtils.hexStringToBytes("fc50aca000")
+        aid.ContactlessCVMLimit = 50000
+        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
+        emvCoreManager.EmvSetAid(aid)
+
+        aid = addAid("A000000891010103", "0001")
+        aid.dDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.TACDenial = PosUtils.hexStringToBytes("0000008000")
+        aid.TACOnline = PosUtils.hexStringToBytes("BCF8049800")
+        aid.TACDefault = PosUtils.hexStringToBytes("BCF8049800")
+        aid.ContactlessCVMLimit = 50000
+        aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("6C00800000000000")
+        emvCoreManager.EmvSetAid(aid)
+
+        aid = addAid("A000000891010104", "0001")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")
         aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
@@ -675,6 +717,14 @@ class IswDataConfig : IswConfigDataSource {
             "A000000371", "05",
             "B036A8CAE0593A480976BFE84F8A67759E52B3D9F4A68CCC37FE720E594E5694CD1AE20E1B120D7A18FA5C70E044D3B12E932C9BBD9FDEA4BE11071EF8CA3AF48FF2B5DDB307FC752C5C73F5F274D4238A92B4FCE66FC93DA18E6C1CC1AA3CFAFCB071B67DAACE96D9314DB494982F5C967F698A05E1A8A69DA931B8E566270F04EAB575F5967104118E4F12ABFF9DEC92379CD955A10675282FE1B60CAD13F9BB80C272A40B6A344EA699FB9EFA6867",
             "03", "676822D335AB0D2C3848418CB546DF7B6A6C32C0"
+        )
+        emvCoreManager.EmvSetCapk(capk)
+
+        // Afrigo capk
+        capk = addCapk(
+            "A000000891", "90",
+            "E2C471DA374BF87116AEFDEF9A8101A454E4BFB4352380609AC2B0C163AA7A5F8366A6AFB5D138A4B5AFC2D4F10CF68F8881B299890CEAA1AF4FA3C08597903FF35E789755A10DE1CA78680219CF5A7510BB4554D3CB7F0D8694401D865CA1074AF65D3A5F31FF84E82A956005CE3A2B477FB00BCF8AD041632DC9528EF11AAE7B441D27A08F6BAE65C314C02EE8CAF3CA245DCFFBEAB6E3FDECC8855DAFADD03BB7613EEEC14CCD6EB616545E29454DA1C4E97100112DB0C5B35EEE57786F9E9CB18634E17A13CBA3D70EF41D76A1ED57BF0DCE150C530D117026289A87576737233C1E10840647CA059EC1C632A0F699F109BB4DA2BCB7",
+            "03", "D9ECCD2EA52CC41C0D16F923BD15B76042C66FA7"
         )
         emvCoreManager.EmvSetCapk(capk)
     }

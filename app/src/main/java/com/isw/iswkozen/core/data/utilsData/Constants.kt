@@ -31,8 +31,12 @@ object Constants {
 
     //    internal const val KIMONO_END_POINT = "kmw/v2/kimonoservice"
     internal const val KIMONO_END_POINT = "kmw/kimonoservice"
+    internal const val KIMONO_END_POINTTest99 = "https://qa.interswitchng.com/kmw/kimonoservice"
+    internal const val KIMONO_END_POINTTest197 = "https://qa.interswitchng.com/kmw/kimonoservice/amex"
     internal const val KIMONO_MERCHANT_DETAILS_END_POINT = "kmw/serialid/{terminalSerialNo}.xml"
     internal const val KIMONO_MERCHANT_DETAILS_END_POINT_AUTO = "kmw/v2/serialid/{terminalSerialNo}"
+
+    internal const val KIMONO_MERCHANT_DETAILS_END_POINT_AUTOTest = "https://qa.interswitchng.com/kmw/v2/serialid/{terminalSerialNo}"
 
     // EMAIL
     internal const val EMAIL_END_POINT = "mail/send"

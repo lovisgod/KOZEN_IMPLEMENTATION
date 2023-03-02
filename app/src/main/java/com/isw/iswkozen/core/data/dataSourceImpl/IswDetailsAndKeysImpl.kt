@@ -24,6 +24,7 @@ import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTy
 class IswDetailsAndKeysImpl(val authInterface: AuthInterface,
                             val kimonoInterface: kimonoInterface): IswDetailsAndKeyDataSource {
     override suspend fun writeDukPtKey(keyIndex: Int, keyData: String, KsnData: String): Int {
+        Log.d("key", "KEY $keyData")
         Log.d("KSN", "KSN $KsnData")
         val kcvInfo = PedKcvInfo(0, ByteArray(5))
 //        Prefs.putString("IPEK", keyData)
