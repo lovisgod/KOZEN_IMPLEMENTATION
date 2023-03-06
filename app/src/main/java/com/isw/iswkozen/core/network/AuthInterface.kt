@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface AuthInterface
 {
     @Headers("Content-Type: application/xml")
-    @GET(Constants.KIMONO_MERCHANT_DETAILS_END_POINT_AUTO)
+    @GET(Constants.KIMONO_MERCHANT_DETAILS_END_POINT_AUTOTest)
     fun getMerchantDetails(@Path("terminalSerialNo") terminalSerialNo: String):
             Simple<ConfigResponse>
 
