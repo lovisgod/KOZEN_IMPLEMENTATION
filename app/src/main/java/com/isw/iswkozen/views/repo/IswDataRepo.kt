@@ -181,8 +181,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
             return withContext(dispatcher) {
                 iswDetailsAndKeySourceInteractor.writeDukPtKey(
                     keyIndex = KeysUtils.DUKPTKEY_INDEX,
-                    keyData = KeysUtils.productionIPEK(),
-                    KsnData = KeysUtils.productionKSN()
+                    keyData = KeysUtils.testIPEK(),
+                    KsnData = KeysUtils.testKSN()
                 )
             }
         } catch (e:Exception) {

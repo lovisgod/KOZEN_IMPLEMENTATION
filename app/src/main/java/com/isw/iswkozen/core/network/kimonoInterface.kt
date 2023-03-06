@@ -12,12 +12,12 @@ interface kimonoInterface {
             Simple<TokenConfigResponse>
 
     @Headers("Accept: application/xml")
-    @POST(Constants.KIMONO_END_POINT)
+    @POST(Constants.KIMONO_END_POINTTest197)
     fun makePurchase( @Body request: PurchaseRequest):
             Simple<PurchaseResponse>
 
     @Headers("Accept: application/xml")
-    @POST(Constants.KIMONO_END_POINT)
+    @POST(Constants.KIMONO_END_POINTTest197)
     fun makeCashout(@Body request: TransferRequest, @Header("Authorization") token: String ):
             Simple<PurchaseResponse>
 }
