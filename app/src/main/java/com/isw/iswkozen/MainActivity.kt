@@ -6,7 +6,11 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.TextClock
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -15,6 +19,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.isw.iswkozen.core.network.NetworkStatusChecker
+import com.isw.iswkozen.core.utilities.DeviceUtils
 import com.isw.iswkozen.core.utilities.DeviceUtils.requestPermissionsCompat
 import com.isw.iswkozen.core.utilities.DisplayUtils.hide
 import com.isw.iswkozen.core.utilities.DisplayUtils.show
@@ -36,10 +42,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
     private val blueviewmodel: BluetoothViewModel by viewModel()
     lateinit var tillBluetooth : TillBluetoothManager
 
+    lateinit var connectionLayout: FrameLayout
+    lateinit var connectionText: TextView
+
+    var handler : Handler = Handler()
+    var runnable: Runnable? = null
+    var delay  = 300000
+//    var delay = 1000
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        connectionLayout = findViewById(R.id.network_cont)
+        connectionText = findViewById(R.id.network_text)
 
         setupPage()
         checkPermission()
@@ -157,5 +173,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 
     override fun onResume() {
         super.onResume()
+        var status  = NetworkStatusChecker.isConnectedToInternet(this)
+//        var status = NetworkStatusChecker.networkConnectionState
+        runOnUiThread {
+            if (status) {
+                connectionText.text = "Connection is good"
+                connectionLayout.background = ContextCompat.getDrawable(this, R.drawable.success_bg)
+            } else {
+                connectionText.text = "Connection is not ok"
+                connectionLayout.background = ContextCompat.getDrawable(this, R.drawable.error_bg)
+            }
+        }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
     }
 }

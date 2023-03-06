@@ -8,6 +8,23 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".MainActivity">
+    <FrameLayout
+        android:id="@+id/network_cont"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:elevation="@dimen/_10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30dp">
+
+        <TextView
+            android:id="@+id/network_text"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
 
 <!--<androidx.constraintlayout.widget.ConstraintLayout-->
@@ -104,7 +121,8 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
         android:layout_height="match_parent"
-        app:navGraph="@navigation/nav_graph"/>
+        app:navGraph="@navigation/nav_graph"
+        tools:layout="@layout/fragment_payment_landing" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         app:layout_constraintBottom_toBottomOf="parent"
