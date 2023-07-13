@@ -205,6 +205,8 @@ class IswDataConfig : IswConfigDataSource {
         aid.TACDenial = PosUtils.hexStringToBytes("0000000000")
         aid.TACOnline = PosUtils.hexStringToBytes("c800000000")
         aid.TACDefault = PosUtils.hexStringToBytes("c800000000")
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 100
         emvCoreManager.EmvSetAid(aid)
 
         // RuPay
