@@ -95,7 +95,7 @@ object Constants {
 
     val ISW_TERMINAL_IP: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (!checkEnv()) Test.ISW_TERMINAL_IP_CTMS
+        return if (checkEnv()) Test.ISW_TERMINAL_IP_CTMS
         else Production.ISW_TERMINAL_IP_CTMS
     }
 

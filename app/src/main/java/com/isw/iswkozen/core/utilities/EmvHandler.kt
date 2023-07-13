@@ -299,12 +299,12 @@ class EmvHandler {
             when (result) {
                 PosEmvErrorCode.EMV_CANCEL, PosEmvErrorCode.EMV_TIMEOUT -> {
 //                    onTransEnd()
-                    println("transaction timed out")
+                    println("emv transaction timed out or Emv got canceled")
                     return
                 }
 
                 PosEmvErrorCode.EMV_TERMINATED, PosEmvErrorCode.EMV_COMMAND_FAIL -> {
-                    println("An emv error just occurred")
+                    println("emv terminated or command failed")
                     this@EmvHandler.emvEvents?.onRemoveCard()
 
                     return

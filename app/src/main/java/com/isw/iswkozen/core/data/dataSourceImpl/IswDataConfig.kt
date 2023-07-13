@@ -97,16 +97,16 @@ class IswDataConfig : IswConfigDataSource {
 
         // VISA
         aid = addAid("A0000000031010", "008C")
-        aid.ContactlessTransLimit = 200001
-        aid.ContactlessCVMLimit = 200001
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 500
         emvCoreManager.EmvSetAid(aid)
         aid = addAid("A0000000032010", "008C")
-        aid.ContactlessTransLimit = 200001
-        aid.ContactlessCVMLimit = 200001
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 500
         emvCoreManager.EmvSetAid(aid)
         aid = addAid("A0000000033010", "008C")
-        aid.ContactlessTransLimit = 200001
-        aid.ContactlessCVMLimit = 200001
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 500
         emvCoreManager.EmvSetAid(aid)
 
         // Unionpay
@@ -143,6 +143,8 @@ class IswDataConfig : IswConfigDataSource {
         aid = addAid("A00000000410", "0002")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 100
         aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
         aid.TACOnline = PosUtils.hexStringToBytes("f850acf800")
         aid.TACDefault = PosUtils.hexStringToBytes("fc50aca000")
@@ -154,7 +156,8 @@ class IswDataConfig : IswConfigDataSource {
         aid.TACDenial = PosUtils.hexStringToBytes("0400000000")
         aid.TACOnline = PosUtils.hexStringToBytes("f850acf800")
         aid.TACDefault = PosUtils.hexStringToBytes("fc50aca000")
-        aid.ContactlessCVMLimit = 50000
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 100
         aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
         emvCoreManager.EmvSetAid(aid)
 
@@ -164,12 +167,15 @@ class IswDataConfig : IswConfigDataSource {
         aid.TACDenial = PosUtils.hexStringToBytes("0000800000")
         aid.TACOnline = PosUtils.hexStringToBytes("fc50bcf800")
         aid.TACDefault = PosUtils.hexStringToBytes("fc50bca000")
-        aid.ContactlessCVMLimit = 50000
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 100
         aid.TerminalRiskManagementData = PosUtils.hexStringToBytes("4C00800000000000")
         emvCoreManager.EmvSetAid(aid)
         aid = addAid("A0000000041010", "0002")
         aid.dDOL = PosUtils.hexStringToBytes("9F3704")
         aid.tDOL = PosUtils.hexStringToBytes("9F3704")
+        aid.ContactlessTransLimit = 5000000
+        aid.ContactlessCVMLimit = 100
         aid.TACDenial = PosUtils.hexStringToBytes("0000000000")
         aid.TACOnline = PosUtils.hexStringToBytes("fc50808800")
         aid.TACDefault = PosUtils.hexStringToBytes("fc50b8a000")

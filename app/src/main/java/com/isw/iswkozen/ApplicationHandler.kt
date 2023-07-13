@@ -96,7 +96,7 @@ class ApplicationHandler: KoinComponent {
                 }
             }
         } catch (e: Exception) {
-            Log.e("omini terminal details error ==>", e.stackTraceToString())
+            Log.e("terminal details error:", e.stackTraceToString())
         }
     }
 
