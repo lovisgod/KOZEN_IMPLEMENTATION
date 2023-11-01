@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!---TERMINAL CONFIG SECTION-->
+<terminal>
+    <supportpse>true</supportpse>
+    <floorlimitcheck>true</floorlimitcheck>
+    <floorlimit>100000</floorlimit>
+    <tacdenial>0010000000</tacdenial>
+    <taconline>FCF8E4F880</taconline>
+    <tacdefault>FCF0E40800</tacdefault>
+    <ddol>9F3704</ddol>
+    <tdol>N/A</tdol>
+    <version>0002</version>
+    <riskdata></riskdata>
+    <terminalcountrycode>0566</terminalcountrycode>
+    <terminaltype>34</terminaltype>
+    <terminalcapability>E0B0C8</terminalcapability>
+    <extendedterminalcapability>E000F0A001</extendedterminalcapability>
+    <referercurrencycode>0566</referercurrencycode>
+    <merchantcatcode></merchantcatcode>
+    <terminalctlstransactionlimit>700000</terminalctlstransactionlimit>
+    <readerContactlessTransactionLimit>1000000</readerContactlessTransactionLimit>
+    <readerContactlessFloorLimit>0</readerContactlessFloorLimit>
+    <readerCVMRequiredLimit>0</readerCVMRequiredLimit>
+</terminal>
+

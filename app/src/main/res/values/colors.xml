@@ -41,4 +41,35 @@
     <color name="iswHintTextColor">#4D181B24</color>
     <color name="iswUssdBackground">#F0F7FF</color>
     <color name="iswPaymentOptionBg">#FFF</color>
+
+    <color name="iswColorTextSecondary">#B30938</color>
+    <color name="iswColorSecondaryIcon">#dfdfdf</color>
+    <color name="iswColorQrCodeBackground">#f8f8f9</color>
+    <color name="iswTextColorSuccess">#85e95d</color>
+    <color name="iswDarkBlue">#002140</color>
+    <color name="iswTextColorSuccessDark">#FF62A73E</color>
+    <color name="iswTextColorSecondary">#004570</color>
+    <color name="iswTextColorSecondaryDark">#00365b</color>
+    <color name="iswColorHighlight">#FFCBECFF</color>
+    <color name="iswTextColorSecondaryLight">#30B30938</color>
+    <color name="iswTextColorError">#EE312A</color>
+    <color name="iswGrey">#80B6B6B6</color>
+    <color name="iswSelectedTypeColor">#A2A7B8</color>
+    <color name="iswTransparent">#66000000</color>
+    <color name="iswSearchBg">#002140</color>
+    <color name="iswColorTopBackground">#B30938</color>
+    <color name="iswColorLightGrey">#B3FFFFFF</color>
+    <color name="iswTextColorBlack">#4E5053</color>
+    <color name="iswColorLightBlue">#8097B1</color>
+    <color name="iswlightBlue">#8089CFF0</color>
+    <color name="iswWhite">#FFFFFF</color>
+    <color name="iswFincaAccent">#ECAB12</color>
+    <color name="iswFincaLight">#B30938</color>
+    <color name="isw_main_black">#000000</color>
+    <color name="isw_input_grey_bg_color">#51C4C4C4</color>
+
+    <color name="alert_default_error_background">#F44336</color>
+    <color name="alert_default_icon_color">@android:color/white</color>
+    <color name="alert_default_text_color">@android:color/white</color>
+    <color name="alerter_default_success_background">#4CAF50</color>
 </resources>

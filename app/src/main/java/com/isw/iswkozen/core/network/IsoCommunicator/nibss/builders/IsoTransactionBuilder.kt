@@ -218,7 +218,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket) {
         val processCode = "00" + accountType.value + "00"
         var hasPin = transaction.haspin
         val stan = getNextStan()
-        val randomReference = "000000$stan"
+        val randomReference = "${Date().time}".substring(0, 12)
 
         val track2data =transaction.TRACK_2_DATA
         println("track2 data => ${track2data}")
@@ -257,14 +257,14 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket) {
             message.setValue(52, transaction.EMV_CARD_PIN_DATA.CardPinBlock)
                 .setValue(123, Constants.POS_DATA_CODE)
             // remove unset fields
-            message.message.removeFields(32, 59)
+            message.message.removeFields( 59)
         } else {
             message.setValue(123, Constants.POS_DATA_CODE)
             // remove unset fields
-            message.message.removeFields(32, 52, 59)
+            message.message.removeFields(52, 59)
         }
 
-        message.message.removeFields(53, 54, 56, 60, 62, 64, 124)
+//        message.message.removeFields(53, 54, 56, 60, 62, 64, 124)
 
         // set message hash
         val bytes = message.message.writeData()

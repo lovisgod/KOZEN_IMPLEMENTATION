@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="dimen_32dp">32dp</dimen>
     <dimen name="dimen_8dp">8dp</dimen>
     <dimen name="dimen_16dp">16dp</dimen>
@@ -15,4 +15,34 @@
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="_24dp">24dp</dimen>
     <dimen name="_70dp">70dp</dimen>
+    <dimen name="isw_content_margin">16dp</dimen>
+    <dimen name="isw_content_padding">16dp</dimen>
+    <dimen name="isw_corner_radius">5dp</dimen>
+    <dimen name="isw_big_corner_radius">25dp</dimen>
+    <dimen name="isw_elevation">5dp</dimen>
+    <dimen name="isw_content_small_margin">10dp</dimen>
+    <dimen name="isw_content_small_padding">5dp</dimen>
+    <dimen name="isw_content_text_size">18sp</dimen>
+    <dimen name="isw_payment_icon_length">64dp</dimen>
+    <dimen name="isw_guideline">32dp</dimen>
+    <dimen name="isw_guideline2">12dp</dimen>
+    <dimen name="design_navigation_padding_top_default" tools:override="true" tools:ignore="ResourceName">25dp</dimen>
+    <dimen name="design_navigation_padding_bottom" tools:override="true" tools:ignore="ResourceName">25dp</dimen>
+    <dimen name="design_navigation_item_horizontal_padding" tools:override="true" tools:ignore="ResourceName">25dp</dimen>
+    <dimen name="isw_font16">16sp</dimen>
+    <dimen name="alerter_activity_horizontal_margin">18dp</dimen>
+    <dimen name="alerter_activity_vertical_margin">16dp</dimen>
+    <dimen name="alerter_alert_icn_size">38dp</dimen>
+    <dimen name="alerter_alert_max_height">84dp</dimen>
+    <dimen name="alerter_alert_min_height">64dp</dimen>
+    <dimen name="alerter_alert_negative_margin_top">-28dp</dimen>
+    <dimen name="alerter_alert_padding">30dp</dimen>
+    <dimen name="alerter_alert_progress_size">32dp</dimen>
+    <dimen name="alerter_alert_view_padding_top">70dp</dimen>
+    <dimen name="alerter_padding_default">16dp</dimen>
+    <dimen name="alerter_padding_half">8dp</dimen>
+    <dimen name="alerter_padding_small">4dp</dimen>
+    <dimen name="alerter_progress_bar_size">2dp</dimen>
+    <dimen name="alerter_text_medium">18sp</dimen>
+    <dimen name="alerter_text_small">14sp</dimen>
 </resources>

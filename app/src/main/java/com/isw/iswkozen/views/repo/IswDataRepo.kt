@@ -38,24 +38,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
-                  val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
-                  val iswTransactionInteractor: IswTransactionInteractor,
-                  val context: Context,
-                  val kimonoInterface: kimonoInterface,
-                  val nibssIsoServiceImpl: NibssIsoServiceImpl,
-                  val cardlessService: HttpService,
-                  var iswKozenDao: IswKozenDao
-                    ) {
+open class IswDataRepo(
+    open val iswConfigSourceInteractor: IswConfigSourceInteractor,
+    open val iswDetailsAndKeySourceInteractor: IswDetailsAndKeySourceInteractor,
+    open val iswTransactionInteractor: IswTransactionInteractor,
+    open val context: Context,
+    open val kimonoInterface: kimonoInterface,
+    open val nibssIsoServiceImpl: NibssIsoServiceImpl,
+    open val cardlessService: HttpService,
+    open var iswKozenDao: IswKozenDao
+    ) {
 
 
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    open val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
 
     /**
      * CARD-LESS PAYMENT SECTIONS*/
 
-    suspend fun initiateTransfer(req: CardLessPaymentRequest):
+    open suspend fun initiateTransfer(req: CardLessPaymentRequest):
             Optional<CodeResponse> {
         try {
             return withContext(dispatcher) {
@@ -68,7 +69,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun initiateUssd(req: CardLessPaymentRequest):
+    open suspend fun initiateUssd(req: CardLessPaymentRequest):
             Optional<CodeResponse> {
         try {
             return withContext(dispatcher) {
@@ -80,7 +81,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun initiateQrcode(req: CardLessPaymentRequest):
+   open suspend fun initiateQrcode(req: CardLessPaymentRequest):
             Optional<CodeResponse> {
         try {
             return withContext(dispatcher) {
@@ -92,8 +93,8 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun checkPaymentStatus(transactionReference: String,
-                                   merchantCode: String, paymentType: CardLessPaymentType):
+    open suspend fun checkPaymentStatus(transactionReference: String,
+                                        merchantCode: String, paymentType: CardLessPaymentType):
             PaymentStatus? {
         try {
             return withContext(dispatcher) {
@@ -111,7 +112,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun loadUssdBanks():
+    open suspend fun loadUssdBanks():
             Optional<List<Bank>> {
         try {
             return withContext(dispatcher) {
@@ -129,7 +130,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
     // keys write, download and parameter downloads
 
-    suspend fun downLoadNibbsKey(): Boolean {
+    open suspend fun downLoadNibbsKey(): Boolean {
         try {
             return withContext(dispatcher) {
                 var terminalInfo = readterminalDetails()
@@ -161,7 +162,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun writePinKey(): Int {
+    open suspend fun writePinKey(): Int {
         try {
             return withContext(dispatcher) {
                 iswDetailsAndKeySourceInteractor.writePinKey(
@@ -176,7 +177,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun  writeDukptKey() : Int {
+    open suspend fun  writeDukptKey() : Int {
         try {
             return withContext(dispatcher) {
                 iswDetailsAndKeySourceInteractor.writeDukPtKey(
@@ -191,7 +192,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun readterminalDetails() : TerminalInfo? {
+    open suspend fun readterminalDetails() : TerminalInfo? {
         try {
             return withContext(dispatcher) {
               iswDetailsAndKeySourceInteractor.readTerminalInfo()
@@ -202,7 +203,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun downloadTerminalDetails(): Boolean {
+    open suspend fun downloadTerminalDetails(): Boolean {
         try {
             return withContext(dispatcher) {
                 println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
@@ -247,7 +248,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun downloadNibbsTerminalDetails(terminalId: String): Boolean {
+    open suspend fun downloadNibbsTerminalDetails(terminalId: String): Boolean {
         try {
             return withContext(dispatcher) {
                 println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
@@ -283,11 +284,11 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun startTransaction( hasContactless: Boolean = true,
-                                  hasContact: Boolean = true,
-                                  amount: Long,
-                                  amountOther: Long,
-                                  transType: Int, contextX: Context, emvEvents: EMVEvents): Boolean {
+    open suspend fun startTransaction(hasContactless: Boolean = true,
+                                      hasContact: Boolean = true,
+                                      amount: Long,
+                                      amountOther: Long,
+                                      transType: Int, contextX: Context, emvEvents: EMVEvents): Boolean {
         try {
             return withContext(dispatcher) {
                 println("transaction started")
@@ -307,7 +308,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun getTransactionData(): RequestIccData {
+    open suspend fun getTransactionData(): RequestIccData {
         try {
             return withContext(dispatcher) {
               iswTransactionInteractor.getTransactionData()
@@ -319,7 +320,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun makePayCodeRequest(
+    open suspend fun makePayCodeRequest(
         transactionName: String,
         amount: String,
         code: String,
@@ -408,7 +409,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun makeOnlineRequest(transactionName: String, iccData: RequestIccData, terminalData: TerminalInfo): PurchaseResponse {
+    open suspend fun makeOnlineRequest(transactionName: String, iccData: RequestIccData, terminalData: TerminalInfo): PurchaseResponse {
         try {
             return withContext(dispatcher) {
                var purchaseRequest = TransactionRequest.createPurchaseRequest(terminalInfoX = terminalData, requestData = iccData)
@@ -587,7 +588,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
 
 
-    suspend fun eraseKeys() : Int {
+    open suspend fun eraseKeys() : Int {
         try {
             return withContext(dispatcher) {
                iswDetailsAndKeySourceInteractor.eraseKey()
@@ -598,7 +599,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun loadTerminal(terminalData: TerminalInfo = TerminalInfo()): Boolean {
+    open suspend fun loadTerminal(terminalData: TerminalInfo = TerminalInfo()): Boolean {
 
         try {
             return withContext(dispatcher) {
@@ -613,7 +614,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
     }
 
 
-    suspend fun getISWToken(terminalData: TerminalInfo = TerminalInfo()): Boolean {
+    open suspend fun getISWToken(terminalData: TerminalInfo = TerminalInfo()): Boolean {
 
         try {
             return withContext(dispatcher) {
@@ -630,7 +631,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun loadAllConfig(): Boolean {
+    open suspend fun loadAllConfig(): Boolean {
         console.log("load all config", "Loading config")
        try {
            return withContext(dispatcher) {
@@ -656,7 +657,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
        }
     }
 
-    suspend fun resetConfig(): Boolean {
+    open suspend fun resetConfig(): Boolean {
         try {
             return withContext(dispatcher) {
                 // first download terminal parameters
@@ -674,7 +675,7 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
         }
     }
 
-    suspend fun loadAllkeys(): Int {
+    open suspend fun loadAllkeys(): Int {
         try {
             return withContext(dispatcher) {
                // run all the keys related functions
@@ -692,15 +693,15 @@ class IswDataRepo(val iswConfigSourceInteractor: IswConfigSourceInteractor,
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun saveTransactionResult(result: TransactionResultData) {
+    open suspend fun saveTransactionResult(result: TransactionResultData) {
         iswKozenDao.insert(resultData = result)
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun updateTransactionResult(result: TransactionResultData) {
+    open suspend fun updateTransactionResult(result: TransactionResultData) {
         iswKozenDao.updateTransaction(resultData = result)
     }
 
-    val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
+    open val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
 }

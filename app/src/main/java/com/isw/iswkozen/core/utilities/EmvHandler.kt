@@ -500,7 +500,7 @@ class EmvHandler {
                         if (iccData?.haspin!!) {
                             Constants.POS_DATA_CODE = Constants.CONTACT_POS_DATA_CODE_PIN
                         } else {
-                            Constants.POS_DATA_CODE = Constants.CONTACT_POS_DATA_CODE_PIN
+                            Constants.POS_DATA_CODE = Constants.CONTACT_POS_DATA_CODE_NO_PIN
                         }
                     } else {
                         Constants.POS_ENTRY_MODE = "071"

@@ -59,8 +59,11 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     compileOnly files('extern_libs/classes-2.1.14.jar')
-    compileOnly files('extern_libs/j8583.jar')
+//    compileOnly files('extern_libs/j8583.jar')
     compileOnly files('extern_libs/isw-smart-bluetooth-release.aar')
+//    compileOnly files('extern_libs/NeptuneLiteApi_V3.12.00_20200331.jar')
+    compileOnly files('extern_libs/smart-pos-core-release.aar')
+    compileOnly files('extern_libs/smart-pos-emv-pax-release.aar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 //    implementation 'androidx.core:core-ktx:1.7.0'
@@ -126,6 +129,9 @@ dependencies {
 
     // sentry
     implementation 'io.sentry:sentry-android:6.5.0'
+
+    implementation 'com.airbnb.android:lottie:3.6.1'
+
 
     // picasso
     api('com.squareup.picasso:picasso:2.71828') {

@@ -30,21 +30,21 @@ const val RETROFIT_PAYMENT = "payment_retrofit"
 
 
 
-val networkModule = module {
+val networkModule = module{
 
-    factory {
-
-
-        OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-    }
+//    factory(override = true) {
+//
+//
+//        OkHttpClient.Builder()
+//            .connectTimeout(60, TimeUnit.SECONDS)
+//            .readTimeout(60, TimeUnit.SECONDS)
+//            .writeTimeout(60, TimeUnit.SECONDS)
+//    }
 
     single<UserStore> { UserStoreImpl(get()) }
 
 
-    single {
+    single(override = true) {
 
         // set base url based on env
         val iswBaseUrl = Constants.ISW_TOKEN_BASE_URL
@@ -80,7 +80,7 @@ val networkModule = module {
     }
 
     // retrofit interceptor for authentication
-    single(AUTH_INTERCEPTOR) {
+    single(AUTH_INTERCEPTOR, override = true) {
 
         val userManager: UserStore = get()
         return@single Interceptor { chain ->
@@ -96,7 +96,7 @@ val networkModule = module {
     }
 
 
-    single {
+    single(override = true) {
 
 
         val inttrr = Interceptor { chain ->
@@ -143,7 +143,7 @@ val networkModule = module {
 
 
     // create Auth service with retrofit
-    single {
+    single(override = true) {
 
         // set base url based on env
         val iswBaseUrl = Constants.ISW_KIMONO_BASE_URL
@@ -173,7 +173,7 @@ val networkModule = module {
 
 
     // retrofit isw payment
-    single(RETROFIT_PAYMENT) {
+    single(RETROFIT_PAYMENT, override = true) {
         val iswBaseUrl = Constants.ISW_USSD_QR_BASE_URL
 
         val interceptor = HttpLoggingInterceptor()
@@ -201,7 +201,7 @@ val networkModule = module {
     }
 
     // create payment Http service with retrofit
-    single {
+    single(override = true) {
         val retrofit: Retrofit = get(RETROFIT_PAYMENT)
         return@single retrofit.create(IHttpService::class.java)
     }

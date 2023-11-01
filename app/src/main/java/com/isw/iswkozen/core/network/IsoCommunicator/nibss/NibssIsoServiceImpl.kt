@@ -44,8 +44,8 @@ class NibssIsoServiceImpl(
         val isDownloaded = isoTransactionBuilder.KeyTransactionBuilder(terminalId, ip, port, TMK, cms)?.let { masterKey ->
             Prefs.putString(Constants.KEY_MASTER_KEY, masterKey)
             // load master key into pos
-            val resultttt = iswDetailsAndKeyDataSource.loadMasterKey(masterKey)
-            println("masterKey ::: ${resultttt}")
+//            val resultttt = iswDetailsAndKeyDataSource.loadMasterKey(masterKey)
+//            println("masterKey ::: ${resultttt}")
 
             // getResult pin key & save
             val isSessionSaved =
@@ -59,8 +59,8 @@ class NibssIsoServiceImpl(
                 Prefs.putString(KEY_PIN_KEY, pinKey)
 
                 // load pin key into pos device
-                val resulttt = iswDetailsAndKeyDataSource.writePinKey(KeysUtils.PINKEY_INDEX, pinKey)
-                println("pinkey ::: ${resulttt}")
+//                val resulttt = iswDetailsAndKeyDataSource.writePinKey(KeysUtils.PINKEY_INDEX, pinKey)
+//                println("pinkey ::: ${resulttt}")
                 true
             }
 

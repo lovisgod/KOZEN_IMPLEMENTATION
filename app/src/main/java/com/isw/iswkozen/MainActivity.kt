@@ -154,13 +154,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
            runBlocking {
 //               viewmodel.eraseKeys()
 //               viewmodel.writePinKey()
-               viewmodel.writeDukptKey()
-               viewmodel.loadAllConfig()
+//               viewmodel.writeDukptKey()
+//               viewmodel.loadAllConfig()
 //               viewmodel.dowloadDetails()
            }
         }
 
-        viewmodel.checkKey()
+//        viewmodel.checkKey()
 
     }
 

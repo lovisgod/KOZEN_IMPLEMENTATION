@@ -95,7 +95,7 @@ object Constants {
 
     val ISW_TERMINAL_IP: String get() {
 //        val iswPos = IswPos.getInstance()
-        return if (checkEnv()) Test.ISW_TERMINAL_IP_CTMS
+        return if (!checkEnv()) Test.ISW_TERMINAL_IP_CTMS
         else Production.ISW_TERMINAL_IP_CTMS
     }
 
@@ -181,7 +181,7 @@ object Constants {
         const val ISW_TERMINAL_PORT_EPMS = 5043
 
         const val ISW_TERMINAL_IP_CTMS = "196.6.103.18"
-        const val ISW_TERMINAL_PORT_CTMS = 5008
+        const val ISW_TERMINAL_PORT_CTMS = 4008
         const val ISW_KEY_DOWNLOAD_URL = "http://kimono.interswitchng.com/kmw/keydownloadservice"
         const val PAYMENT_CODE = "04358001"
     }
