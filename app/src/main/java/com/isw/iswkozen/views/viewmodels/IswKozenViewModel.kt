@@ -55,8 +55,8 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
 
 
-    private val _terminalInfo = MutableLiveData<TerminalInfo>()
-    val terminalInfo: LiveData<TerminalInfo> = _terminalInfo
+    private val _terminalInfo = MutableLiveData<TerminalInfo?>()
+    val terminalInfo: LiveData<TerminalInfo?> = _terminalInfo
 
     private val _virtualAccount = MutableLiveData<Optional<CodeResponse>>()
     val virtualAccount :LiveData<Optional<CodeResponse>> = _virtualAccount
@@ -190,6 +190,14 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
 
     }
 
+    fun continuePaxTransaction () {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                dataRepo.continuePaxTransaction()
+            }
+        }
+    }
+
     fun getTransactionData( ) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
@@ -203,7 +211,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
     fun getAllTransactionHistory( ) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                dataRepo.allTransactions.collect {
+                dataRepo.allTransactions().collect {
                     _transactionDataList.postValue(it)
                 }
             }
@@ -246,7 +254,7 @@ class IswKozenViewModel(val dataRepo: IswDataRepo): ViewModel() {
                         " description: ${response?.description}," +
                         " responseMesssage: ${response?.responseMessage}")
 
-                _transactionResponse.postValue(response)
+                _transactionResponse.postValue(response!!)
             }
         }
 

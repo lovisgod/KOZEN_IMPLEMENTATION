@@ -2,6 +2,7 @@ package com.isw.iswkozen.core.data.models
 
 import android.os.Parcelable
 import androidx.versionedparcelable.VersionedParcelize
+import com.interswitchng.smartpos.BuildConfig
 import com.isw.iswkozen.core.data.utilsData.Constants
 import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.*
@@ -73,7 +74,7 @@ data class TerminalInfo(
         var cardAcceptorNameLocation: String = "",
 
         @field:Element(name = "merchantCategoryCode", required = false)
-        var merchantCategoryCode: String = "8099",
+        var merchantCategoryCode: String = "5411",
 
         var  terminalCountryCode: String = "0566",
         var  transCurrencyCode: String = "0566",
@@ -114,5 +115,30 @@ class TmsRouteTypeConfig(
 
         @field:Element(name = "name", required = false)
         var name: String = ""): Parcelable
+
+
+fun TerminalInfo.toPaxTerminalInfo() : com.interswitchng.smartpos.models.core.TerminalInfo {
+        return com.interswitchng.smartpos.models.core.TerminalInfo(
+                terminalId = this.terminalCode,
+                merchantId = this.merchantId,
+                merchantName = this.merchantName,
+                merchantAddress1 = this.merchantAddress1,
+                merchantAddress2 = this.merchantAddress2,
+                countryCode = "566",
+                currencyCode = "566",
+                merchantNameAndLocation = this.cardAcceptorNameLocation,
+                merchantCategoryCode = this.merchantCategoryCode,
+                serverUrl = Constants.ISW_KIMONO_BASE_URL,
+                serverIp = com.interswitchng.smartpos.shared.Constants.ISW_TERMINAL_IP,
+                serverPort = BuildConfig.ISW_TERMINAL_PORT,
+                isKimono = this.tmsRouteType == "KIMONO_DEFAULT",
+                isKimono3 = this.tmsRouteType == "KIMONO_DEFAULT",
+                capabilities = this.terminalCapabilities,
+                agentEmail = "",
+                agentId = "",
+                callHomeTimeInMin = 2,
+                serverTimeoutInSec = 6000
+        )
+}
 
 

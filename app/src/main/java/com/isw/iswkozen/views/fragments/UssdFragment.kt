@@ -150,7 +150,7 @@ class UssdFragment : Fragment(), AdapterView.OnItemSelectedListener  {
         viewmodel.readterminalDetails()
         viewmodel.terminalInfo.observe(viewLifecycleOwner,  {
             it.let {
-                terminalInfo = it
+                terminalInfo = it!!
                 loadBanks()
             }
         })

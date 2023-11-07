@@ -5,14 +5,19 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
+import com.interswitchng.smartpos.IswTxnHandler
+import com.interswitchng.smartpos.emv.pax.services.POSDeviceImpl
 import com.interswitchng.smartpos.shared.utilities.console
+import com.isw.iswkozen.IswApplication
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
+import com.isw.iswkozen.core.data.models.DeviceType
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
+import com.isw.iswkozen.core.data.models.toPaxTerminalInfo
 import com.isw.iswkozen.core.data.utilsData.*
 import com.isw.iswkozen.core.data.utilsData.Constants.EXCEPTION_CODE
 import com.isw.iswkozen.core.database.dao.IswKozenDao
@@ -34,6 +39,7 @@ import com.isw.iswkozen.core.utilities.DeviceUtils
 import com.pixplicity.easyprefs.library.Prefs
 import com.pos.sdk.security.POIHsmManage
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -53,6 +59,9 @@ class IswDataRepoPax(
 
 
     override val dispatcher: CoroutineDispatcher = Dispatchers.IO
+
+    val posDevice = POSDeviceImpl.create(context)
+    val paxMainHandler = IswTxnHandler(posDevice)
 
 
     /**
@@ -167,6 +176,15 @@ class IswDataRepoPax(
     override suspend fun writePinKey(): Int {
         try {
             return withContext(dispatcher) {
+                if (paxMainHandler != null) {
+                    var terminalInfo = readterminalDetails()
+                    val keyLoaded = paxMainHandler.nibssDownloadKeys(terminalId = terminalInfo?.terminalCode.toString(),
+                        ip = Constants.ISW_TERMINAL_IP, port = Constants.ISW_TERMINAL_PORT.toInt())
+                    if (keyLoaded) {
+                        paxMainHandler.downloadTmNibParam(terminalId = terminalInfo?.terminalCode.toString(),
+                            ip = Constants.ISW_TERMINAL_IP, port = Constants.ISW_TERMINAL_PORT.toInt())
+                    }
+                }
                0
             }
         } catch (e: Exception) {
@@ -179,6 +197,10 @@ class IswDataRepoPax(
     override suspend fun  writeDukptKey() : Int {
         try {
             return withContext(dispatcher) {
+             if (paxMainHandler != null) {
+                 var terminalInfo = readterminalDetails()
+                 paxMainHandler.downloadKeys(terminalId = terminalInfo?.terminalCode.toString(), ip = "", port = 0)
+             }
              0
             }
         } catch (e:Exception) {
@@ -201,6 +223,9 @@ class IswDataRepoPax(
     override suspend fun downloadTerminalDetails(): Boolean {
         try {
             return withContext(dispatcher) {
+                println("device serial => ${com.interswitchng.smartpos.shared.Constants.DEVICE_SERIAL_NUMBER}")
+                var data = IswTerminalModel("", "${com.interswitchng.smartpos.shared.Constants.DEVICE_SERIAL_NUMBER}", false)
+                iswDetailsAndKeySourceInteractor.downloadTerminalDetails(data)
 
                 // read the data from saved pref
                 var info = readterminalDetails()
@@ -220,10 +245,26 @@ class IswDataRepoPax(
                     if (info.tmsRouteType != "KIMONO_DEFAULT" ) {
                         Prefs.putString("NIBSS_KEY", info.nibbsKey)
                         Prefs.putBoolean("ISNIBSS", true)
-                        downLoadNibbsKey()
+                        if (IswApplication.DEVICE_TYPE == DeviceType.PAX) {
+                            info.merchantCategoryCode = "5411"
+                            iswDetailsAndKeySourceInteractor.saveTerminalInfo(info)
+                            val terminalLoaded = loadTerminal(info)
+                            if (terminalLoaded) {
+                                println("this got here for downloading nibss keys")
+                               writePinKey()
+                            }
+                        } else {
+                            downLoadNibbsKey()
+                        }
                     } else {
                         Prefs.putBoolean("ISNIBSS", false)
-                        loadTerminal(info)
+                        // load dukpt key
+                        iswDetailsAndKeySourceInteractor.saveTerminalInfo(info)
+                        val terminalLoaded = loadTerminal(info)
+                        if (terminalLoaded) {
+                            println("this got here for downloading kimono keys")
+                            writeDukptKey()
+                        }
                         getISWToken(info)
                     }
 
@@ -279,16 +320,25 @@ class IswDataRepoPax(
         try {
             return withContext(dispatcher) {
                 println("transaction started")
-                if (Prefs.getBoolean("ISNIBSS", false)) {
-
-                } else {
-
-                }
-                   true
+                iswTransactionInteractor.setEmvContect(contextX)
+                iswTransactionInteractor.setPaxDao(iswKozenDao)
+//                if (Prefs.getBoolean("ISNIBSS", false)) {
+//
+//                } else {
+//
+//                }
+                iswTransactionInteractor.startTransaction(hasContactless, hasContact, amount, amountOther, transType, emvEvents)
+                true
             }
         } catch (e:Exception) {
             Log.e("startTransaction error", e.stackTraceToString())
             return  false
+        }
+    }
+
+    override suspend fun continuePaxTransaction() {
+        withContext(dispatcher) {
+            iswTransactionInteractor.continuePaxTransaction()
         }
     }
 
@@ -587,8 +637,8 @@ class IswDataRepoPax(
 
         try {
             return withContext(dispatcher) {
-
-                return@withContext true
+               paxMainHandler.saveTerminalInfo(terminalData.toPaxTerminalInfo())
+               return@withContext true
             }
         } catch (e:Exception) {
             Log.e("loadTerminalError", e.stackTraceToString())
@@ -601,11 +651,12 @@ class IswDataRepoPax(
 
         try {
             return withContext(dispatcher) {
-                var terminalInformationRequest =
-                    TerminalInformationRequest().fromTerminalInfo("", terminalData, false)
-                var tokenRequestModel = TokenRequestModel()
-                tokenRequestModel.terminalInformation = terminalInformationRequest
-                iswDetailsAndKeySourceInteractor.getISWToken(tokenRequestModel)
+                paxMainHandler.getKimonoToken(terminalData.toPaxTerminalInfo())
+//                var terminalInformationRequest =
+//                    TerminalInformationRequest().fromTerminalInfo("", terminalData, false)
+//                var tokenRequestModel = TokenRequestModel()
+//                tokenRequestModel.terminalInformation = terminalInformationRequest
+//                iswDetailsAndKeySourceInteractor.getISWToken(tokenRequestModel)
                 return@withContext true
             }
         } catch (e:Exception) {
@@ -619,19 +670,6 @@ class IswDataRepoPax(
        try {
            return withContext(dispatcher) {
 
-               iswConfigSourceInteractor.loadAid()
-               iswConfigSourceInteractor.loadCapk()
-               iswConfigSourceInteractor.loadVisa()
-               iswConfigSourceInteractor.loadExceptionFile()
-               iswConfigSourceInteractor.loadRevocationIPK()
-               iswConfigSourceInteractor.loadUnionPay()
-               iswConfigSourceInteractor.loadMasterCard()
-               iswConfigSourceInteractor.loadDiscover()
-               iswConfigSourceInteractor.loadAmex()
-               iswConfigSourceInteractor.loadMir()
-               iswConfigSourceInteractor.loadVisaDRL()
-               iswConfigSourceInteractor.loadAmexDRL()
-               iswConfigSourceInteractor.loadService()
                return@withContext true
            }
        } catch (e: Exception) {
@@ -686,5 +724,5 @@ class IswDataRepoPax(
         iswKozenDao.updateTransaction(resultData = result)
     }
 
-    override val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
+    override suspend fun allTransactions(): Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
 }

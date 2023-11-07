@@ -4,6 +4,7 @@ import android.content.Context
 import com.isw.iswkozen.core.data.datasource.IswTransactionDataSource
 import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
+import com.isw.iswkozen.core.database.dao.IswKozenDao
 
 class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionDataSource) {
 
@@ -20,6 +21,14 @@ class IswTransactionInteractor( val iswTransactionDataSource: IswTransactionData
         amountOther,
         transType,
         emvEvents)
+
+    suspend fun continuePaxTransaction() {
+        iswTransactionDataSource.continuePaxTransaction()
+    }
+
+    suspend fun setPaxDao(dao: IswKozenDao) {
+        iswTransactionDataSource.setDaoForPaxHandler(dao)
+    }
     suspend fun getTransactionData(): RequestIccData =
         iswTransactionDataSource.getTransactionData()
 

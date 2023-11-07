@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:id="@+id/container">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/isw_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/isw_guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/isw_guideline" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/isw_guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/isw_guideline" />
+
+        <TextView
+            android:id="@+id/isw_pin_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/isw_round_handle_gray"
+            android:padding="10dp"
+            android:text="Enter pin"
+            android:textColor="@color/colorPrimary"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toTopOf="@id/isw_guideline"
+            app:layout_constraintEnd_toStartOf="@+id/isw_guideline3"
+            app:layout_constraintStart_toStartOf="@+id/isw_guideline2" />
+
+        <View
+            android:id="@+id/isw_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/isw_card_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/isw_guideline"/>
+
+        <View
+            android:id="@+id/isw_view2"
+            android:visibility="invisible"
+            android:layout_width="80dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/isw_round_handle_blue"
+            app:layout_constraintEnd_toEndOf="@id/isw_guideline3"
+            app:layout_constraintStart_toStartOf="@id/isw_guideline2"
+            app:layout_constraintTop_toTopOf="@id/isw_view" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/isw_guideline3"
+            app:layout_constraintStart_toStartOf="@id/isw_guideline2"
+            app:layout_constraintTop_toBottomOf="@id/isw_view2">
+
+            <TextView
+                android:id="@+id/isw_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="normal"/>
+
+            <com.interswitchng.smartpos.utils.PinEditText
+                android:layout_marginTop="32dp"
+                android:id="@+id/cardPin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:digits="0123456789"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:textIsSelectable="false"
+                android:textSize="20sp"
+                tools:text="444459"/>
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/isw_logo"
+            layout="@layout/isw_powered_by_reuseable"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

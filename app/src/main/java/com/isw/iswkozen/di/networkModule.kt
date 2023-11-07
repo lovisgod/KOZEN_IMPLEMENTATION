@@ -20,8 +20,8 @@ import org.koin.dsl.module.module
 import org.simpleframework.xml.convert.AnnotationStrategy
 import org.simpleframework.xml.core.Persister
 import retrofit2.Retrofit
+import retrofit2.SimpleXmlConverterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_KIMONO = "kimono_retrofit"
@@ -122,6 +122,8 @@ val networkModule = module{
         val builder = Retrofit.Builder()
             .baseUrl(iswBaseUrl)
             .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(serializer))
+            .addConverterFactory(GsonConverterFactory.create())
+//            .addConverterFactory(SimpleXmlConverterFactory.create())
             .addCallAdapterFactory(SimpleCallAdapterFactory.create())
 
         // getResult the okhttp client for the retrofit

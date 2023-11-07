@@ -76,7 +76,7 @@ dependencies {
 
     // retrofit xml converter
     // retrofit xml converter
-    api("com.squareup.retrofit2:converter-simplexml:$retrofit_version") {
+    implementation('com.squareup.retrofit2:converter-simplexml:2.0.0-beta3') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
@@ -86,10 +86,11 @@ dependencies {
     // retrofit
 
     // retrofit http library
-    api "com.squareup.retrofit2:retrofit:$retrofit_version"
-    api "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
 
     api 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
     // retrofit gson converter
     api "com.squareup.retrofit2:converter-gson:$retrofit_version"
 

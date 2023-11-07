@@ -3,6 +3,8 @@ package com.isw.iswkozen.core.database.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.interswitchng.smartpos.models.PaymentModel
+import com.interswitchng.smartpos.models.transaction.CardReadTransactionResponse
 import com.interswitchng.smartpos.shared.services.utils.IsoUtils
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.CardLessTransactionType
@@ -60,7 +62,7 @@ fun createTransResultData(purchaseResponse: PurchaseResponse,
                           transactionName: String,
                           transactionType: TransactionType,
                           terminalData: TerminalInfo): TransactionResultData {
-    return purchaseResponse?.let {
+    return purchaseResponse.let {
         return@let TransactionResultData(
             AID = iccData.DEDICATED_FILE_NAME,
             stan = it?.stan,
@@ -81,6 +83,43 @@ fun createTransResultData(purchaseResponse: PurchaseResponse,
             txnDate = Date().time
         )
     }
+
+
+}
+
+
+fun convertPaxTransType(transactionType: com.interswitchng.smartpos.models.transaction.PaymentType): TransactionType {
+    return when(transactionType) {
+      com.interswitchng.smartpos.models.transaction.PaymentType.Card -> TransactionType.Card
+       com.interswitchng.smartpos.models.transaction.PaymentType.PayCode -> TransactionType.PayCode
+       com.interswitchng.smartpos.models.transaction.PaymentType.QR -> TransactionType.QR
+       com.interswitchng.smartpos.models.transaction.PaymentType.USSD -> TransactionType.Ussd
+       else -> TransactionType.Transfer
+    }
+}
+fun createpaxTransactionData(
+                          data: CardReadTransactionResponse,
+                          terminalData: com.interswitchng.smartpos.models.core.TerminalInfo): TransactionResultData {
+        return TransactionResultData(
+            AID = data.emvData?.AID.toString(),
+            stan = data.transactionResult?.stan.toString(),
+            dateTime = data.transactionResult?.dateTime.toString(),
+            cardExpiry = "",
+            cardPan = data.emvData?.cardPAN?.let { it1 -> DisplayUtils.maskPan(it1) }
+                .toString(),
+            paymentType = data.transactionResult?.paymentType?.name.toString(),
+            cardHolderName = data.emvData?.icc?.CARD_HOLDER_NAME.toString(),
+            type = convertPaxTransType(transactionType = data.transactionResult?.paymentType!!),
+            amount = data.transactionResult?.amount.toString(),
+            tid = terminalData.terminalId,
+            merchantId = terminalData.merchantId,
+            merchantName = terminalData.merchantNameAndLocation.toString(),
+            merchantLocation = terminalData.merchantAddress1 + terminalData.merchantAddress2,
+            responseMessage = data.transactionResult?.responseMessage.toString(),
+            responseCode = data.transactionResult?.responseCode.toString(),
+            txnDate = Date().time
+        )
+
 
 
 }

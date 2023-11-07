@@ -3,11 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="500dp">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10dp">
 
         <TextView
             android:id="@+id/account_type_text"
@@ -15,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Select Payment Option"
             android:textColor="@android:color/black"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
@@ -26,8 +27,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/isw_card_payment"
             style="@style/Theme.MaterialComponents.Light"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="15dp"
@@ -54,14 +55,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:srcCompat="@drawable/ic_baseline_credit_card_24"
-                    android:layout_width="@dimen/_50dp"
-                    android:layout_height="@dimen/_50dp"/>
+                    android:layout_width="@dimen/_30dp"
+                    android:layout_height="@dimen/_30dp"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/card_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginTop="@dimen/_10dp"
                     android:text="Pay with card"
                     android:gravity="center_horizontal"
                     android:fontFamily="sans-serif"
@@ -96,8 +97,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_transfer"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
@@ -124,14 +125,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/money_transfer"
-                android:layout_width="@dimen/_50dp"
-                android:layout_height="@dimen/_50dp"/>
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/transfer_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/_10dp"
                 android:text="Pay with Transfer"
                 android:gravity="center_horizontal"
                 android:fontFamily="sans-serif"
@@ -166,8 +167,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_ussd"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
@@ -192,14 +193,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_baseline_qr_code_24"
-                android:layout_width="@dimen/_50dp"
-                android:layout_height="@dimen/_50dp"/>
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/ussd_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/_10dp"
                 android:text="Pay with USSD"
                 android:gravity="center_horizontal"
                 android:fontFamily="sans-serif"
@@ -234,8 +235,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_paycode"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
@@ -260,8 +261,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/pay_code_icon"
-                android:layout_width="@dimen/_50dp"
-                android:layout_height="@dimen/_50dp"/>
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/paycode_text"
@@ -302,8 +303,8 @@
         <androidx.cardview.widget.CardView
         android:id="@+id/pay_with_qr"
         style="@style/Theme.MaterialComponents.Light"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
@@ -329,14 +330,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_baseline_qr_code_24"
                 android:tint="@color/colorBlack"
-                android:layout_width="@dimen/_50dp"
+                android:layout_width="@dimen/_30dp"
                 android:layout_height="@dimen/_50dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/qr_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/_10dp"
                 android:text="Pay with QR"
                 android:gravity="center_horizontal"
                 android:fontFamily="sans-serif"

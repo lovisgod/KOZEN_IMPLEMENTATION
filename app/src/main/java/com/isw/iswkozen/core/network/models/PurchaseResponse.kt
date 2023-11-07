@@ -2,7 +2,10 @@ package com.isw.iswkozen.core.network.models
 
 import android.os.Parcelable
 import androidx.room.Entity
+import com.interswitchng.smartpos.models.core.TerminalInfo
+import com.interswitchng.smartpos.models.transaction.CardReadTransactionResponse
 import com.isw.iswkozen.core.database.entities.TransactionResultData
+import com.isw.iswkozen.core.database.entities.createpaxTransactionData
 import kotlinx.android.parcel.Parcelize
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace
@@ -92,4 +95,22 @@ data class PurchaseResponse(
                 )
             }
         }
+
+fun fromPaxResponse(transactionResultData: CardReadTransactionResponse, terminalInfo: TerminalInfo): PurchaseResponse {
+    return transactionResultData.let { responsex ->
+        val response = responsex.transactionResult!!
+        return@let PurchaseResponse(
+            description = response.responseMessage.toString(),
+            responseCode = response.responseCode.toString(),
+            referenceNumber = response.ref.toString(),
+            stan = response.stan.toString(),
+            date = response.time,
+            responseDescription = response.responseMessage,
+            transTYpe = response.type.name,
+            paymentType = response.paymentType.name,
+            authCode = response.authorizationCode,
+            transactionResultData = createpaxTransactionData(transactionResultData, terminalInfo)
+        )
+    }
+}
 

@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.interswitchng.smartpos.IswPos
+import com.interswitchng.smartpos.IswTxnHandler
 import com.interswitchng.smartpos.emv.pax.services.POSDeviceImpl
 import com.interswitchng.smartpos.models.core.Environment
 import com.interswitchng.smartpos.models.core.IswLocal
@@ -22,9 +23,7 @@ import org.koin.standalone.StandAloneContext
 
 
 class IswApplication: Application() {
-
-
-
+    var paxHandler: IswTxnHandler ? = null
     override fun onCreate() {
         super.onCreate()
         setUpPax()
@@ -70,17 +69,21 @@ class IswApplication: Application() {
         }
         device = service
 
+
         val clientId = "IKIA4733CE041F41ED78E52BD3B157F3AAE8E3FE153D"
         val clientSecret = "t1ll73stS3cr3t"
         val alias = "000001"
         val merchantCode = "MX1065"
         val merchantPhone = "080311402392"
         val config =
-            POSConfig(alias, clientId, clientSecret, merchantCode, merchantPhone, Environment.Test)
+            POSConfig(alias, clientId, clientSecret, merchantCode, merchantPhone, Environment.Production)
         config.withPurchaseConfig(PurchaseConfig(1, "tech@isw.ng", IswLocal.NIGERIA))
         IswPos.setDeviceSetialNumber(getDeviceSerialNew(device)!!)
         // setup terminal
         IswPos.setupTerminal(this, device, null, config, false, true)
+
+
+        paxHandler = IswTxnHandler(posDevice = device)
     }
 
     private fun getDeviceSerialNew(posDevice: POSDevice): String? {
@@ -103,5 +106,6 @@ class IswApplication: Application() {
         val clientId: String = "IKIA4733CE041F41ED78E52BD3B157F3AAE8E3FE153D"
         val clientSecret: String = "t1ll73stS3cr3t"
         val DEVICE_TYPE = DeviceType.PAX
+        val paxHandler = IswApplication().paxHandler
     }
 }

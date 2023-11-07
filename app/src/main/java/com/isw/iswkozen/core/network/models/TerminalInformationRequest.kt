@@ -78,7 +78,7 @@ data class TerminalInformationRequest (
               posEntryMode = "051"
               terminalId = terminalInfo.terminalCode
               transmissionDate = date
-              uniqueId = DeviceUtils.getDeviceSerialKozen().toString()
+              uniqueId = com.interswitchng.smartpos.shared.Constants.DEVICE_SERIAL_NUMBER.toString()
               terminalType = deviceName.toUpperCase()
               posDataCode = if (haspin) "510101511344101" else "511101511344101"
               cellStationId = "00"

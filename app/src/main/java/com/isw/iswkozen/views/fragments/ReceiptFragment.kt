@@ -144,7 +144,7 @@ class ReceiptFragment : Fragment() {
         viewmodel.readterminalDetails()
         viewmodel.terminalInfo.observe(viewLifecycleOwner, Observer {
             it.let {
-                terminalInfo = it
+                terminalInfo = it!!
                 this.requireActivity().runOnUiThread {
                     setupUI()
                 }

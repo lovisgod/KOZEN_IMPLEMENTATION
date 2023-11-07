@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, KoinComponent {
 //               viewmodel.writePinKey()
 //               viewmodel.writeDukptKey()
 //               viewmodel.loadAllConfig()
-//               viewmodel.dowloadDetails()
+               viewmodel.dowloadDetails()
            }
         }
 

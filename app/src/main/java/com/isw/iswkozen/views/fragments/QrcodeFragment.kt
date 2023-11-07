@@ -158,7 +158,7 @@ class QrcodeFragment : Fragment() {
         viewmodel.readterminalDetails()
         viewmodel.terminalInfo.observe(viewLifecycleOwner, Observer {
             it.let {
-                terminalInfo = it
+                terminalInfo = it!!
                 startTheTransaction()
             }
         })

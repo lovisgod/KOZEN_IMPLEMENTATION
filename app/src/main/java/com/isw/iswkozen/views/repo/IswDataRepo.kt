@@ -6,11 +6,13 @@ import androidx.annotation.WorkerThread
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
 import com.interswitchng.smartpos.shared.utilities.console
+import com.isw.iswkozen.IswApplication
 import com.isw.iswkozen.core.network.IsoCommunicator.nibss.NibssIsoServiceImpl
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.dataInteractor.IswConfigSourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswDetailsAndKeySourceInteractor
 import com.isw.iswkozen.core.data.dataInteractor.IswTransactionInteractor
+import com.isw.iswkozen.core.data.models.DeviceType
 import com.isw.iswkozen.core.data.models.IswTerminalModel
 import com.isw.iswkozen.core.data.models.TerminalInfo
 import com.isw.iswkozen.core.data.utilsData.*
@@ -34,6 +36,7 @@ import com.isw.iswkozen.core.utilities.DeviceUtils
 import com.pixplicity.easyprefs.library.Prefs
 import com.pos.sdk.security.POIHsmManage
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -203,15 +206,17 @@ open class IswDataRepo(
         }
     }
 
+    open suspend fun continuePaxTransaction() {
+        // do nothing here for kozen device
+        println("kozen device and this should not get here")
+    }
+
     open suspend fun downloadTerminalDetails(): Boolean {
         try {
             return withContext(dispatcher) {
                 println("device serial => ${DeviceUtils.getDeviceSerialKozen().toString()}")
                 var data = IswTerminalModel("", "${DeviceUtils.getDeviceSerialKozen().toString()}", false)
                 iswDetailsAndKeySourceInteractor.downloadTerminalDetails(data)
-
-
-
 
                 // read the data from saved pref
                 var info = readterminalDetails()
@@ -230,7 +235,7 @@ open class IswDataRepo(
                     // load the details into the terminal
                     if (info.tmsRouteType != "KIMONO_DEFAULT" ) {
                         Prefs.putString("NIBSS_KEY", info.nibbsKey)
-                        Prefs.putBoolean("ISNIBSS", true)
+
                         downLoadNibbsKey()
                     } else {
                         Prefs.putBoolean("ISNIBSS", false)
@@ -703,5 +708,5 @@ open class IswDataRepo(
         iswKozenDao.updateTransaction(resultData = result)
     }
 
-    open val allTransactions: Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
+    open suspend fun allTransactions(): Flow<List<TransactionResultData>> = iswKozenDao.getAllTransaction()
 }

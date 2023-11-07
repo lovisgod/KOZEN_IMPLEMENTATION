@@ -243,6 +243,7 @@ class IsoTransactionBuilder(val context: Context, val socket: IsoSocket) {
             .setValue(25, "00")
             .setValue(26, "06")
             .setValue(28, "C00000000")
+            .setValue(32, IsoUtils.getBINFromPAN(panX))
             .setValue(35, transaction.TRACK_2_DATA)
             .setValue(37, randomReference)
             .setValue(40, src)

@@ -4,6 +4,7 @@ import android.content.Context
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
 import com.isw.iswkozen.core.data.models.TransactionData
 import com.isw.iswkozen.core.data.utilsData.RequestIccData
+import com.isw.iswkozen.core.database.dao.IswKozenDao
 
 interface IswTransactionDataSource {
 
@@ -20,4 +21,12 @@ interface IswTransactionDataSource {
     suspend fun setEmvContect(context: Context)
 
     suspend fun setEmvPINMODE(pinMode: Int)
+
+    suspend fun continuePaxTransaction() {
+        println("continue pax transaction here")
+    }
+
+    suspend fun setDaoForPaxHandler(dao: IswKozenDao){
+        println("setting dao for pax handler")
+    }
 }

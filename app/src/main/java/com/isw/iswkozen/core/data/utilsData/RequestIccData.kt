@@ -2,6 +2,7 @@ package com.isw.iswkozen.core.data.utilsData
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.interswitchng.smartpos.models.transaction.CardReadTransactionResponse
 import com.isw.iswkozen.core.data.models.EmvCard
 import com.isw.iswkozen.core.data.models.EmvPinData
 import org.simpleframework.xml.Element
@@ -127,5 +128,34 @@ class RequestIccData(
                 }
         }
 
+}
+
+fun paxDataToRequestIccData(data: CardReadTransactionResponse): RequestIccData {
+        return RequestIccData(
+                TRANSACTION_AMOUNT = data.emvData?.icc?.TRANSACTION_AMOUNT.toString(),
+                ANOTHER_AMOUNT = data.emvData?.icc?.ANOTHER_AMOUNT.toString(),
+                APPLICATION_INTERCHANGE_PROFILE = data.emvData?.icc?.APPLICATION_INTERCHANGE_PROFILE.toString(),
+                APPLICATION_TRANSACTION_COUNTER = data.emvData?.icc?.APPLICATION_TRANSACTION_COUNTER.toString(),
+               AUTHORIZATION_REQUEST = data.emvData?.icc?.AUTHORIZATION_REQUEST.toString(),
+                CRYPTOGRAM_INFO_DATA = data.emvData?.icc?.CRYPTOGRAM_INFO_DATA.toString(),
+               CARD_HOLDER_VERIFICATION_RESULT = data.emvData?.icc?.CARD_HOLDER_VERIFICATION_RESULT.toString(),
+               ISSUER_APP_DATA = data.emvData?.icc?.ISSUER_APP_DATA.toString(),
+               TRANSACTION_CURRENCY_CODE = data.emvData?.icc?.TRANSACTION_CURRENCY_CODE.toString(),
+                TERMINAL_VERIFICATION_RESULT = data.emvData?.icc?.TERMINAL_VERIFICATION_RESULT.toString(),
+               TERMINAL_COUNTRY_CODE = data.emvData?.icc?.TERMINAL_COUNTRY_CODE.toString(),
+               TERMINAL_TYPE = data.emvData?.icc?.TERMINAL_TYPE.toString(),
+               TERMINAL_CAPABILITIES = data.emvData?.icc?.TERMINAL_CAPABILITIES.toString(),
+                TRANSACTION_DATE = data.emvData?.icc?.TRANSACTION_DATE.toString(),
+                TRANSACTION_TYPE = data.emvData?.icc?.TRANSACTION_TYPE.toString(),
+                UNPREDICTABLE_NUMBER = data.emvData?.icc?.UNPREDICTABLE_NUMBER.toString(),
+               DEDICATED_FILE_NAME = data.emvData?.icc?.DEDICATED_FILE_NAME.toString()
+        ).apply {
+                iccAsString = data.emvData?.icc?.iccAsString.toString()
+                INTERFACE_DEVICE_SERIAL_NUMBER = data.emvData?.icc?.INTERFACE_DEVICE_SERIAL_NUMBER.toString()
+                APP_VERSION_NUMBER = data.emvData?.icc?.APP_VERSION_NUMBER.toString()
+                APP_PAN_SEQUENCE_NUMBER = data.emvData?.icc?.APP_PAN_SEQUENCE_NUMBER.toString()
+                CARD_HOLDER_NAME = data.emvData?.icc?.CARD_HOLDER_NAME.toString()
+
+        }
 }
 
