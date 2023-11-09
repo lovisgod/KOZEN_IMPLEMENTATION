@@ -8,7 +8,6 @@ import com.isw.iswkozen.views.repo.IswDataRepo
 import com.isw.iswkozen.views.repo.IswDataRepoPax
 import com.isw.iswkozen.views.viewmodels.BluetoothViewModel
 import com.isw.iswkozen.views.viewmodels.IswKozenViewModel
-import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module

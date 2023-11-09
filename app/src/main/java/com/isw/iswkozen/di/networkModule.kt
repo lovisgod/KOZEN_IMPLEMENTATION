@@ -3,6 +3,7 @@ package com.isw.iswkozen.di
 
 import android.util.Base64
 import com.isw.iswkozen.IswApplication
+import com.isw.iswkozen.core.data.models.DeviceType
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.network.AuthInterface
 import com.isw.iswkozen.core.network.CardLess.*
@@ -32,14 +33,15 @@ const val RETROFIT_PAYMENT = "payment_retrofit"
 
 val networkModule = module{
 
-//    factory(override = true) {
-//
-//
-//        OkHttpClient.Builder()
-//            .connectTimeout(60, TimeUnit.SECONDS)
-//            .readTimeout(60, TimeUnit.SECONDS)
-//            .writeTimeout(60, TimeUnit.SECONDS)
-//    }
+    if (IswApplication.DEVICE_TYPE == DeviceType.KOZEN) {
+        factory(override = true) {
+
+            OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+    }
+    }
 
     single<UserStore> { UserStoreImpl(get()) }
 

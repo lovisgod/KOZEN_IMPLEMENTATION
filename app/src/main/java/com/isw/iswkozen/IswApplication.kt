@@ -82,7 +82,6 @@ class IswApplication: Application() {
         // setup terminal
         IswPos.setupTerminal(this, device, null, config, false, true)
 
-
         paxHandler = IswTxnHandler(posDevice = device)
     }
 

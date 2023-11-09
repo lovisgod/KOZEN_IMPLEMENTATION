@@ -13,8 +13,10 @@ import androidx.navigation.fragment.navArgs
 import com.interswitchng.smartpos.models.transaction.CardReadTransactionResponse
 import com.interswitchng.smartpos.models.transaction.cardpaycode.CardType
 import com.interswitchng.smartpos.shared.utilities.hide
+import com.isw.iswkozen.IswApplication
 import com.isw.iswkozen.R
 import com.isw.iswkozen.core.data.dataInteractor.EMVEvents
+import com.isw.iswkozen.core.data.models.DeviceType
 import com.isw.iswkozen.core.data.utilsData.AccountType
 import com.isw.iswkozen.core.data.utilsData.Constants
 import com.isw.iswkozen.core.data.utilsData.PaymentType
@@ -124,7 +126,10 @@ class ProcessingFragment : Fragment(), EMVEvents {
         if (isAdded) {
             this.requireActivity().runOnUiThread {
                 binding.introText.changeText(getString(R.string.input_pin))
-                binding.iswCardPaymentViewAnimator.displayedChild = 1
+                if (IswApplication.DEVICE_TYPE == DeviceType.PAX) {
+                    binding.iswCardPaymentViewAnimator.displayedChild = 1
+                }
+
             }
         }
     }
