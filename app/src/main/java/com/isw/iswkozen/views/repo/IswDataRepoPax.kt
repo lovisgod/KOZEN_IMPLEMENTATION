@@ -155,15 +155,17 @@ class IswDataRepoPax(
 
                 // getResult clear master key
                 val cms = Constants.getCMS(false)
-                val success = nibssIsoServiceImpl.downloadKey(
-                    terminalInfo?.terminalCode.toString(),
-//                    "2ISW0001",
-                    ip, port, cms, "9A0000",
-                    "9B0000",
-                    "9G0000"
-                )
+                val success = paxMainHandler.nibssDownloadKeys(terminalId = terminalInfo?.terminalCode.toString(),
+                    ip = Constants.ISW_TERMINAL_IP, port = Constants.ISW_TERMINAL_PORT.toInt())
+//                val success = nibssIsoServiceImpl.downloadKey(
+//                    terminalInfo?.terminalCode.toString(),
+////                    "2ISW0001",
+//                    ip, port, cms, "9A0000",
+//                    "9B0000",
+//                    "9G0000"
+//                )
                 if (success) {
-                    downloadNibbsTerminalDetails(terminalInfo?.terminalCode.toString())
+                   val result = downloadNibbsTerminalDetails(terminalInfo?.terminalCode.toString())
                 }
                 return@withContext success
             }
@@ -180,6 +182,7 @@ class IswDataRepoPax(
                     var terminalInfo = readterminalDetails()
                     val keyLoaded = paxMainHandler.nibssDownloadKeys(terminalId = terminalInfo?.terminalCode.toString(),
                         ip = Constants.ISW_TERMINAL_IP, port = Constants.ISW_TERMINAL_PORT.toInt())
+                    println("Nibss key loaded::::: $keyLoaded")
                     if (keyLoaded) {
                         paxMainHandler.downloadTmNibParam(terminalId = terminalInfo?.terminalCode.toString(),
                             ip = Constants.ISW_TERMINAL_IP, port = Constants.ISW_TERMINAL_PORT.toInt())

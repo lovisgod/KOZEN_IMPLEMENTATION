@@ -13,7 +13,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.isw.iswkozen.IswApplication
 import com.isw.iswkozen.R
+import com.isw.iswkozen.core.data.models.DeviceType
 import com.isw.iswkozen.core.data.utilsData.PaymentType
 import com.isw.iswkozen.databinding.FragmentPaymentLandingBinding
 import com.isw.iswkozen.views.viewmodels.BluetoothViewModel
@@ -62,8 +64,8 @@ class PaymentLandingFragment : Fragment() {
 
         binding.withdrawal.setOnClickListener {
             if (isNibbs) {
-                Toast.makeText(this.requireContext(), "Transactions not allowed on this terminal", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
+               Toast.makeText(this.requireContext(), "Transactions not allowed on this terminal", Toast.LENGTH_LONG).show()
+               return@setOnClickListener
             }
             val direction = PaymentLandingFragmentDirections.actionPaymentLandingFragmentToAmountFragment("CASHOUT")
             findNavController().navigate(direction)
@@ -73,17 +75,32 @@ class PaymentLandingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (Prefs.getBoolean("ISNIBSS", false)) {
-            println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
+        if (IswApplication.DEVICE_TYPE == DeviceType.KOZEN) {
+            if (Prefs.getBoolean("ISNIBSS", false)) {
+                println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
 //            binding.withdrawal.visibility = View.GONE
-            isNibbs = true
-            if (!Prefs.getBoolean("NIBSSKEYSUCCESS", false)) {
-               println("NIBBS key already downloaded")
+                isNibbs = true
+                if (!Prefs.getBoolean("NIBSSKEYSUCCESS", false)) {
+                    println("NIBBS key already downloaded")
+                } else {
+                    viewModel.downloadNibbsKey()
+                }
             } else {
-                viewModel.downloadNibbsKey()
+                isNibbs = false
             }
         } else {
-            isNibbs = false
+            if (Prefs.getBoolean("ISNIBSS", false)) {
+                    println("is nibbs =< ${Prefs.getBoolean("ISNIBSS", false)}")
+//            binding.withdrawal.visibility = View.GONE
+                    isNibbs = true
+                    if (!Prefs.getBoolean("NIBSSKEYSUCCESS", false)) {
+                        println("NIBBS key already downloaded")
+                    } else {
+//                        viewModel.downloadNibbsKey()
+                    }
+                } else {
+                    isNibbs = false
+                }
         }
     }
 

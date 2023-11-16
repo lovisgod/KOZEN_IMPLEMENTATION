@@ -223,11 +223,13 @@ class IswTransactionHandlerPax(): IswTransactionDataSource {
                     originalDateAndTime = date
                 )
                 this.terminalInfo?.let {
+                    println("it is kimono transactions :::: ${it.isKimono}")
                     val response = this.paxMainHandler?.processCardTransaction(
                         paymentModel = paymentModel,
                         accountType = accounttype,
                         terminalInfo = it,
-                        purchaseType = PurchaseType.Card
+                        purchaseType = PurchaseType.Card,
+                        isKimonoTrans = it.isKimono
                         )
                     val purchaseResponse = response?.let { it1 -> fromPaxResponse(transactionResultData = it1, terminalInfo = it) }
                     if (purchaseResponse != null) {
@@ -253,6 +255,7 @@ class IswTransactionHandlerPax(): IswTransactionDataSource {
     }
 
     override suspend fun setEmvContect(context: Context) {
+        println("got here for set context for pax")
         this.context = context
         posDevice = POSDeviceImpl.create(context)
         val info = readTerminalInfo()
