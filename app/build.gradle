@@ -26,12 +26,42 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        kozenConfig {
+            keyAlias 'KozenOSSign'
+            keyPassword 'Kozen2022'
+            storeFile file(rootDir.absolutePath + '/KozenOSSign.jks')
+            storePassword 'Kozen2022'
+            enableV2Signing true
+//        }
+//
+//        kozenConfig {
+//            keyAlias 'KozenOSSign'
+//            keyPassword 'Kozen2022'
+//            storeFile file('KozenOSSign.jks')
+//            storePassword 'Kozen2022'
+//        }
+        }
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.kozenConfig
+            applicationIdSuffix '.v2.release'
+            buildConfigField("boolean", "MOCK", "false") // mock device
+        }
+        debug {
+            buildConfigField("boolean", "MOCK", "false") // mock device
+            applicationIdSuffix '.v2.debug'
+            // add this for kozen
+            // remove this when not building for kozen
+            signingConfig signingConfigs.kozenConfig
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -76,7 +106,7 @@ dependencies {
 
     // retrofit xml converter
     // retrofit xml converter
-    implementation('com.squareup.retrofit2:converter-simplexml:2.0.0-beta3') {
+    implementation('com.squareup.retrofit2:converter-simplexml:2.5.0') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }

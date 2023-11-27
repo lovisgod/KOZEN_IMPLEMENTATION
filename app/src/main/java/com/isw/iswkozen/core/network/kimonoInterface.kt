@@ -11,7 +11,7 @@ interface kimonoInterface {
     fun getISWToken( @Body request: TokenRequestModel):
             Simple<TokenConfigResponse>
 
-    @Headers("Accept: application/xml")
+    @Headers("Content-Type: text/xml", "Accept: application/xml", "Accept-Charset: utf-8")
     @POST(Constants.KIMONO_END_POINT)
     fun makePurchase( @Body request: PurchaseRequest):
             Simple<PurchaseResponse>
