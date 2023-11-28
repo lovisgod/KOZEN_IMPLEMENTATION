@@ -104,7 +104,7 @@ class IswApplication: Application() {
     companion object {
         val clientId: String = "IKIA4733CE041F41ED78E52BD3B157F3AAE8E3FE153D"
         val clientSecret: String = "t1ll73stS3cr3t"
-        val DEVICE_TYPE = DeviceType.KOZEN
+        val DEVICE_TYPE = DeviceType.PAX
         val paxHandler = IswApplication().paxHandler
     }
 }

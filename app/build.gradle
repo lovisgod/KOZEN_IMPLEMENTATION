@@ -106,7 +106,14 @@ dependencies {
 
     // retrofit xml converter
     // retrofit xml converter
-    implementation('com.squareup.retrofit2:converter-simplexml:2.5.0') {
+    //kozen
+//    implementation('com.squareup.retrofit2:converter-simplexml:2.5.0') {
+//        exclude group: 'stax', module: 'stax-api'
+//        exclude group: 'stax', module: 'stax'
+//    }
+
+    // pax
+    implementation('com.squareup.retrofit2:converter-simplexml:2.0.0-beta3') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
