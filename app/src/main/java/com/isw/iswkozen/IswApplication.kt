@@ -1,6 +1,7 @@
 package com.isw.iswkozen
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -20,7 +21,6 @@ import com.pixplicity.easyprefs.library.Prefs
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import org.koin.standalone.StandAloneContext
-
 
 class IswApplication: Application() {
     var paxHandler: IswTxnHandler ? = null
@@ -104,7 +104,7 @@ class IswApplication: Application() {
     companion object {
         val clientId: String = "IKIA4733CE041F41ED78E52BD3B157F3AAE8E3FE153D"
         val clientSecret: String = "t1ll73stS3cr3t"
-        val DEVICE_TYPE = DeviceType.PAX
+        val DEVICE_TYPE = DeviceType.KOZEN
         val paxHandler = IswApplication().paxHandler
     }
 }

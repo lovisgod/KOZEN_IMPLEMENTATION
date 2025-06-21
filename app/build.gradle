@@ -28,11 +28,11 @@ android {
 
     signingConfigs {
         kozenConfig {
-            keyAlias 'KozenOSSign'
-            keyPassword 'Kozen2022'
-            storeFile file(rootDir.absolutePath + '/KozenOSSign.jks')
-            storePassword 'Kozen2022'
-            enableV2Signing true
+            keyAlias 'ISWKozenOSSignature'
+            keyPassword 'ISWKozen2024'
+            storeFile file(rootDir.absolutePath + '/Kozen2024.jks')
+            storePassword 'ISWKozen2024'
+//            enableV2Signing true
 //        }
 //
 //        kozenConfig {
